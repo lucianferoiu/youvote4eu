@@ -9,15 +9,71 @@
 	<properties>
 		<jdbc.driver>org.postgresql.Driver</jdbc.driver>
 	</properties>
+	
+	<!-- profiles for the different environments -->
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env.BUILD_ENV</name>
+					<value>dev</value>
+				</property>
+			</activation>
+			<properties>
+				<jdbc.url>dbc:postgresql://localhost/youvote4eu_d</jdbc.url>
+				<jdbc.user>lucian</jdbc.user>
+				<jdbc.password></jdbc.password>
+				<jdbc.test.url>dbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
+				<jdbc.test.user>lucian</jdbc.test.user>
+				<jdbc.test.password></jdbc.test.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>staging</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env.BUILD_ENV</name>
+					<value>staging</value>
+				</property>
+			</activation>
+			<properties>
+				<jdbc.url>dbc:postgresql://localhost/youvote4eu_d</jdbc.url>
+				<jdbc.user>lucian</jdbc.user>
+				<jdbc.password></jdbc.password>
+				<jdbc.test.url>dbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
+				<jdbc.test.user>lucian</jdbc.test.user>
+				<jdbc.test.password></jdbc.test.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>env.DATABASE_URL</name> <!-- Heroku sets this -->
+				</property>
+			</activation>
+			<properties>
+				<jdbc.url>${env.DATABASE_URL}</jdbc.url>
+				<jdbc.user></jdbc.user>
+				<jdbc.password></jdbc.password>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
 		<plugins>
+			<!-- not a good idea...
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
 				<version>1.0-alpha-2</version>
 				<executions>
 					<execution>
-						<phase>initialize</phase>
+						<phase>validate</phase>
 						<goals>
 							<goal>read-project-properties</goal>
 						</goals>
@@ -29,6 +85,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -175,7 +232,7 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<!-- <updatePolicy>always</updatePolicy> -->
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</repository>
@@ -185,7 +242,7 @@
 			<url>file:///Users/lucian/var/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<!-- <updatePolicy>always</updatePolicy> -->
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</repository>
@@ -197,7 +254,7 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<!-- <updatePolicy>always</updatePolicy> -->
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</pluginRepository>
@@ -207,7 +264,7 @@
 			<url>file:///Users/lucian/var/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
+				<!-- <updatePolicy>always</updatePolicy> -->
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</pluginRepository>
