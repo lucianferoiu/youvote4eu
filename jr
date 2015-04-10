@@ -1,1 +1,0 @@
-mvn clean jetty:run
