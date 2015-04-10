@@ -6,4 +6,5 @@ target/
 .project
 .DS_Store
 .bin
+_bin
 .autorun
