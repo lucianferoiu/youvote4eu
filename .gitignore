@@ -2,9 +2,11 @@ tmp/
 target/
 *.class
 .settings/
+.externalToolBuilders/
 .classpath
 .project
 .DS_Store
 .bin
 _bin
 .autorun
+

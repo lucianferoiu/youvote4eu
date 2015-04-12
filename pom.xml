@@ -9,7 +9,8 @@
 	<properties>
 		<jdbc.driver>org.postgresql.Driver</jdbc.driver>
 	</properties>
-	
+
+
 	<!-- profiles for the different environments -->
 	<profiles>
 		<profile>
@@ -22,10 +23,10 @@
 				</property>
 			</activation>
 			<properties>
-				<jdbc.url>dbc:postgresql://localhost/youvote4eu_d</jdbc.url>
+				<jdbc.url>jdbc:postgresql://localhost/youvote4eu_d</jdbc.url>
 				<jdbc.user>lucian</jdbc.user>
 				<jdbc.password></jdbc.password>
-				<jdbc.test.url>dbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
+				<jdbc.test.url>jdbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
 				<jdbc.test.user>lucian</jdbc.test.user>
 				<jdbc.test.password></jdbc.test.password>
 			</properties>
@@ -40,12 +41,9 @@
 				</property>
 			</activation>
 			<properties>
-				<jdbc.url>dbc:postgresql://localhost/youvote4eu_d</jdbc.url>
+				<jdbc.url>jdbc:postgresql://localhost/youvote4eu_s</jdbc.url>
 				<jdbc.user>lucian</jdbc.user>
 				<jdbc.password></jdbc.password>
-				<jdbc.test.url>dbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
-				<jdbc.test.user>lucian</jdbc.test.user>
-				<jdbc.test.password></jdbc.test.password>
 			</properties>
 		</profile>
 		<profile>
@@ -205,7 +203,7 @@
 		<dependency>
 			<groupId>org.javalite</groupId>
 			<artifactId>activejdbc</artifactId>
-			<version>1.4.11-SNAPSHOT</version>
+			<version>1.4.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

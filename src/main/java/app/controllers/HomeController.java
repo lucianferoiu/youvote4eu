@@ -1,8 +1,9 @@
 package app.controllers;
 
-import org.javalite.activeweb.AppController;
+import app.base.AuthenticatedController;
 
-public class HomeController extends AppController {
+public class HomeController extends AuthenticatedController {
 	public void index() {
+				
 	}
 }
