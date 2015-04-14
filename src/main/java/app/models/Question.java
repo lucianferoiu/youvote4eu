@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.javalite.activejdbc.Model;
 
+/**
+ * The question subject to voting by citizens. Class acts also as a façade for
+ * some statistical queries regarding the status of the question.
+ */
 public class Question extends Model {
 
 	public String getDescription(String lang) {
