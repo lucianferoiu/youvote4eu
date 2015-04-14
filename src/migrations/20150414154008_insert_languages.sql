@@ -1,0 +1,25 @@
+/* Add the EU languages to the database */
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 1,'bg','български','Bulgarian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 2,'cs','Čeština','Czech',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 3,'da','Dansk','Danish',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 4,'de','Deutsch','German',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 5,'et','Eesti keel','Estonian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 6,'el','Ελληνικά','Greek',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 7,'en','English','English',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 8,'es','Español','Spanish',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES( 9,'fr','Français','French',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(10,'ga','Gaeilge','Gaelic',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(11,'hr','Hrvatski','Croatian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(12,'it','Italiano','Italian',current_timestamp);	
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(13,'lv','Latviešu valoda','Latvian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(14,'lt','Lietuvių kalba','Lithuanian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(15,'hu','Magyar','Hungarian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(16,'mt','Malti','Maltese',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(17,'nl','Nederlands','Dutch',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(18,'pl','Polski','Polish',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(19,'pt','Português','Purtuguese',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(20,'ro','Română','Romanian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(21,'sk','Slovenčina','Slovenian',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(22,'sl','Slovenščina','Slovac',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(23,'fi','Suomi','Finnish',current_timestamp);
+INSERT INTO langs(id,code,label_native,label_en,created_at) VALUES(24,'sv','Svenska','Sweedish',current_timestamp);
