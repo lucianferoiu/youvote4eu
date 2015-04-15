@@ -7,6 +7,9 @@ package app.services;
  */
 public interface TokenGenerator {
 
+	/**
+	 * Generates a random string of ~36 characters long
+	 */
 	public String generateToken();
 
 }
