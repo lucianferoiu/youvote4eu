@@ -8,6 +8,7 @@
 	<name>You Vote for Europe WebApp</name>
 	<properties>
 		<jdbc.driver>org.postgresql.Driver</jdbc.driver>
+		<jetty.scan-interval>10000</jetty.scan-interval>
 	</properties>
 
 
@@ -29,6 +30,7 @@
 				<jdbc.test.url>jdbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
 				<jdbc.test.user>lucian</jdbc.test.user>
 				<jdbc.test.password></jdbc.test.password>
+				<jetty.scan-interval>5</jetty.scan-interval>
 			</properties>
 		</profile>
 		<profile>
@@ -150,7 +152,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.2.1.v20140609</version>
 				<configuration>
-					<scanIntervalSeconds>10000</scanIntervalSeconds>
+					<scanIntervalSeconds>${jetty.scan-interval}</scanIntervalSeconds>
 					<systemProperties>
 						<systemProperty>
 							<name>activejdbc.log</name>
