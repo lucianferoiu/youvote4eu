@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS questions (
 	html_content_id BIGINT,							/* link to the multi-language labes of the HTML content of the question body - pseudo-FK on labels.label_group */
 	picture_path VARCHAR(120),						/* relative server path for picture accompanying the question */
 	is_public_agenda BOOLEAN,						/* is this question a public-agenda topic (i.e. EU Parliament, etc.)? or an ancilary question */
+	is_approved BOOLEAN DEFAULT false,				/* is this question approved (assuming it comes from individual partners) */
+	created_by BIGINT,								/* the platform partner that introduced this question */
 	tags_bitmap BIT VARYING,						/* bitmap of the question tags [PSQL speciffic]: nth bit correspond to the tag with ID=n */
 	open_at TIMESTAMP WITH TIME ZONE,				/* the question become open for voting at the specified date/time */
 	closed_at TIMESTAMP WITH TIME ZONE,				/* the question become closed for voting at the specified date/time */

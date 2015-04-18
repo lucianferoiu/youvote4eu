@@ -8,7 +8,7 @@ import org.javalite.activejdbc.Model;
  */
 public class Partner extends Model {
 	static {
-		validatePresenceOf("email", "password");
+		validatePresenceOf("email");
 		validateEmailOf("email");
 	}
 
