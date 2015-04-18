@@ -2,3 +2,4 @@
 [@content for="title"]You Vote For Europe - Platform Management[/@content]
 [@content for="app_path"]platform/home[/@content]
 
+

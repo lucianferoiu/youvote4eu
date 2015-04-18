@@ -8,7 +8,6 @@
 		<link rel="shortcut icon" href="${context_path}/img/favicon.ico" type="image/x-icon">
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/flatstrap.min.css' rel="stylesheet" media="screen">
-		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="${context_path}/js/html5.js"></script>
 			<script src="${context_path}/js/json2.js"></script>

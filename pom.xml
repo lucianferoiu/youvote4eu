@@ -30,7 +30,7 @@
 				<jdbc.test.url>jdbc:postgresql://localhost/youvote4eu_t</jdbc.test.url>
 				<jdbc.test.user>lucian</jdbc.test.user>
 				<jdbc.test.password></jdbc.test.password>
-				<jetty.scan-interval>5</jetty.scan-interval>
+				<jetty.scan-interval>60</jetty.scan-interval>
 			</properties>
 		</profile>
 		<profile>
