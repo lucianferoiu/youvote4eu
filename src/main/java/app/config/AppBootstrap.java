@@ -12,7 +12,6 @@ public class AppBootstrap extends Bootstrap {
 
 	@Override
 	public void init(AppContext context) {
-		setInjector(Guice.createInjector(new CryptoModule()));
-		setInjector(Guice.createInjector(new CommModule()));
+		setInjector(Guice.createInjector(new CryptoModule(), new CommModule()));
 	}
 }
