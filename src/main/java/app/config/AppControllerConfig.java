@@ -17,5 +17,6 @@ public class AppControllerConfig extends AbstractControllerConfig {
 		// addGlobalFilters(new RequestPropertiesLogFilter());
 		// add(new DBConnectionFilter()).to(XYZController.class);
 		addGlobalFilters(new AuthCookieFilter());
+		// add(new AuthCookieFilter(Const.PARTNER_AUTH_COOKIE_NAME, 60 * 60 * 24 * 14)).to(HomeController.class);
 	}
 }

@@ -19,12 +19,25 @@ public class AuthCookieFilter extends HttpSupportFilter {
 
 	static final Logger log = LoggerFactory.getLogger(AuthCookieFilter.class);
 
+	private int maxAge;
+	private String cookieName;
+
 	@Inject
 	protected TokenGenerator tokenGenerator;
 
+	public AuthCookieFilter() {
+		setCookieName(Const.AUTH_COOKIE_NAME);
+		setMaxAge(60 * 60 * 24 * 365 * 3);//lives for 3 years
+	}
+
+	public AuthCookieFilter(String cookieName, int maxAge) {
+		setCookieName(cookieName);
+		setMaxAge(maxAge);
+	}
+
 	@Override
 	public void before() {
-		Cookie c = cookie(Const.AUTH_COOKIE_NAME);
+		Cookie c = cookie(getCookieName());
 		if (c == null) {
 			setAuthCookie();
 		} else {
@@ -39,12 +52,28 @@ public class AuthCookieFilter extends HttpSupportFilter {
 	protected void setAuthCookie() {
 		Cookie c;
 		String token = tokenGenerator.generateToken();
-		c = new Cookie(Const.AUTH_COOKIE_NAME, token, true);
-		c.setMaxAge(60 * 60 * 24 * 365 * 3);//lives for 3 years
+		c = new Cookie(getCookieName(), token, true);
+		c.setMaxAge(getMaxAge());
 		c.setVersion(1);
 		c.setSecure(true);
 		log.debug("Setting cookie {} to client ", c.toString());
 		sendCookie(c);
+	}
+
+	public int getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	public String getCookieName() {
+		return cookieName;
+	}
+
+	public void setCookieName(String cookieName) {
+		this.cookieName = cookieName;
 	}
 
 }
