@@ -16,4 +16,8 @@ public class Partner extends Model {
 		return getBoolean("enabled") && getBoolean("verified");
 	}
 
+	public static Partner findByAuthToken(String value) {
+		return Partner.findFirst("auth_token=?", value);
+	}
+
 }

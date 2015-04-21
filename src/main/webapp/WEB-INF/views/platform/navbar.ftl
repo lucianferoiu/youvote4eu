@@ -44,13 +44,24 @@
 	</div>
 </nav>
 
+[#include "../platform/flash-messages.ftl"]
 
 
+[#-- =================== --]
 [#if !partner??]
 
 [@content for="footer_script"]
-	<script src='${context_path}/js/validator.js'></script>
+	<script src='${context_path}/js/bsvalidator.min.js'></script>
 [/@content]
+
+[#if ((flasher.should_sign_up)=="true") ??]
+[@content for="footer_script"]
+<script>
+$('#sign-in-modal').modal('show');
+</script>
+[/@content]
+[/#if]
+
 
 <div class="modal fade" role="dialog" id="sign-in-modal" aria-labelledby="sign-in-modal-label" aria-hidden="true">
 	<div class="modal-dialog">
@@ -89,7 +100,7 @@
 										<div class="checkbox col-sm-offset-3">
 											<label class="col-sm-6"><input name="pp-signin-remember" type="checkbox"> Remember me</label>
 											<div class="">
-												<a href="${context_path}/platform/home/reset-password">Forgot your password ?</a>
+												<a href="${context_path}/platform/home/reset_password">Forgot your password ?</a>
 											</div>
 										</div>
 										<hr/>

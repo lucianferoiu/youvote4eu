@@ -1,4 +1,4 @@
-package app.controllers;
+package app.controllers.filters;
 
 import org.javalite.activeweb.Cookie;
 import org.javalite.activeweb.controller_filters.HttpSupportFilter;
@@ -21,6 +21,7 @@ public class AuthCookieFilter extends HttpSupportFilter {
 
 	private int maxAge;
 	private String cookieName;
+	private String path = "/";
 
 	@Inject
 	protected TokenGenerator tokenGenerator;
@@ -55,7 +56,8 @@ public class AuthCookieFilter extends HttpSupportFilter {
 		c = new Cookie(getCookieName(), token, true);
 		c.setMaxAge(getMaxAge());
 		c.setVersion(1);
-		c.setSecure(true);
+		//		c.setSecure(true); // TODO: uncomment this after setting up the SSL
+		c.setPath(getPath());
 		log.debug("Setting cookie {} to client ", c.toString());
 		sendCookie(c);
 	}
@@ -74,6 +76,14 @@ public class AuthCookieFilter extends HttpSupportFilter {
 
 	public void setCookieName(String cookieName) {
 		this.cookieName = cookieName;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 }
