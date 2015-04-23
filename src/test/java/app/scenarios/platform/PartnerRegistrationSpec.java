@@ -11,7 +11,7 @@ public class PartnerRegistrationSpec extends AppIntegrationSpec {
 
 	@Test
 	public void dummy() {
-
+		controller("/platform/home").post("register");
 	}
 
 }

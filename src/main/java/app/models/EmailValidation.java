@@ -10,4 +10,9 @@ public class EmailValidation extends Model {
 		validatePresenceOf("email", "token");
 		validateEmailOf("email");
 	}
+
+	public static EmailValidation findValidation(String code) {
+		return EmailValidation.findFirst(
+				"token=? and validated=false and is_registration=true and valid_until>=current_timestamp ", code);
+	}
 }

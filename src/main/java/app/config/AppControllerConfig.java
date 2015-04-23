@@ -3,6 +3,7 @@ package app.config;
 import org.javalite.activeweb.AbstractControllerConfig;
 import org.javalite.activeweb.AppContext;
 import org.javalite.activeweb.controller_filters.AbstractLoggingFilter.Level;
+import org.javalite.activeweb.controller_filters.DBConnectionFilter;
 import org.javalite.activeweb.controller_filters.HeadersLogFilter;
 import org.javalite.activeweb.controller_filters.TimingFilter;
 
@@ -16,7 +17,7 @@ public class AppControllerConfig extends AbstractControllerConfig {
 		addGlobalFilters(new TimingFilter());
 		addGlobalFilters(new HeadersLogFilter(Level.DEBUG, true));
 		// addGlobalFilters(new RequestPropertiesLogFilter());
-		// add(new DBConnectionFilter()).to(XYZController.class);
+		addGlobalFilters(new DBConnectionFilter());
 		addGlobalFilters(new AuthCookieFilter());
 		addGlobalFilters(new PlatformAuthFilter());
 	}

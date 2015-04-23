@@ -20,4 +20,8 @@ public class Partner extends Model {
 		return Partner.findFirst("auth_token=?", value);
 	}
 
+	public static Partner findByEmail(String email) {
+		return Partner.findFirst("email=?", email);
+	}
+
 }

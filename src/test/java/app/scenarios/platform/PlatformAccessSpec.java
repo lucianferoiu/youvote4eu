@@ -28,7 +28,7 @@ public class PlatformAccessSpec extends AppIntegrationSpec {
 		Cookie c = cookie(Const.PARTNER_AUTH_COOKIE_NAME);
 		a(c).shouldBeNull();
 		a(sessionObject(Const.AUTHENTICATED_PARTNER)).shouldBeNull();
-		controller("/platform/statistics").get("some/random/page/index");
+		controller("/platform/statistics").get("index");
 		it(redirected()).shouldBeTrue();
 		a(redirectValue()).shouldBeEqual("/platform/home");
 		Cookie initialCookie = cookie(Const.PARTNER_AUTH_COOKIE_NAME);

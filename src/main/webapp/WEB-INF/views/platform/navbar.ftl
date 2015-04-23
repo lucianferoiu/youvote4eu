@@ -1,4 +1,7 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
+
+
+
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -10,7 +13,7 @@
 			</button>
 			<a class="navbar-brand" href="${context_path}/platform/home">You Vote for Europe - Platform Partners</a>
 		</div>
-[#if partner??]
+[#if (session.authPartner)??]
 		<!-- authenticated partner -->
 		<div id="navbar" class="navbar-collapse collapse pull-right">
 			<ul class="nav navbar-nav">
@@ -20,7 +23,7 @@
 				<li><a href="${context_path}/platform/poposed_questions">Proposed Questions</a></li>
 				<li><a href="${context_path}/platform/statistics">Statistics</a></li>				
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello ${partner.email} <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello ${session.authPartner.email} <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="${context_path}/platform/home/my_questions">My Questions</a></li>
 							<li><a href="${context_path}/platform/home/preferences">Preferences</a></li>
@@ -48,7 +51,7 @@
 
 
 [#-- =================== --]
-[#if !partner??]
+[#if !(session.authPartner)??]
 
 [@content for="footer_script"]
 	<script src='${context_path}/js/bsvalidator.min.js'></script>
@@ -66,12 +69,6 @@ $('#sign-in-modal').modal('show');
 <div class="modal fade" role="dialog" id="sign-in-modal" aria-labelledby="sign-in-modal-label" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			[#-- <div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title" id="sign-in-modal-label">
-					Sign in or Register..
-				</h4>
-			</div> --]
 			<div class="modal-body modal-no-gutter">
 				<div class="container-fluid modal-no-gutter">
 
@@ -100,7 +97,7 @@ $('#sign-in-modal').modal('show');
 										<div class="checkbox col-sm-offset-3">
 											<label class="col-sm-6"><input name="pp-signin-remember" type="checkbox"> Remember me</label>
 											<div class="">
-												<a href="${context_path}/platform/home/reset_password">Forgot your password ?</a>
+												<a href="#reset-password-modal" data-dismiss="modal" data-toggle="modal" data-target="#reset-password-modal">Forgot your password ?</a>
 											</div>
 										</div>
 										<hr/>
@@ -131,12 +128,6 @@ $('#sign-in-modal').modal('show');
 											<label for="pp-register-password" class="col-sm-4">Type a password</label> 
 											<div class="col-sm-8">
 												<input id="pp-register-password" name="pp-register-password" type="password" class="form-control input-sm" placeholder="password" required>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="pp-register-password2" class="col-sm-4">Re-type the password</label> 
-											<div class="col-sm-8">
-												<input id="pp-register-password2" name="pp-register-password2" type="password" class="form-control input-sm" placeholder="password" required>
 											</div>
 										</div>
 										<div class="form-group">
@@ -186,4 +177,39 @@ $('#sign-in-modal').modal('show');
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<div class="modal fade" role="dialog" id="reset-password-modal" aria-labelledby="reset-password-modal-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h4 class="panel-title">Reset Your Password..</h4>
+				<hr/>
+				<div class="panel-body">
+					<form class="form-horizontal" action="${context_path}/platform/home/reset_password" method="post" data-toggle="validator" role="form">
+						<div class="form-group">
+							<label for="pp-signin-email" class="col-sm-4">Your Email address</label> 
+							<div class="col-sm-8">
+								<input id="pp-signin-email" name="pp-reset-email" type="text" class="form-control" placeholder="email@address" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="pp-signin-password" class="col-sm-4">New Password</label> 
+							<div class="col-sm-8">
+								<input id="pp-signin-password" name="pp-reset-password" type="password" class="form-control" placeholder="password" required>
+							</div>
+						</div>
+						<hr/>
+						<div class="form-group">
+							<button type="submit" class="col-sm-3 btn btn-primary">Reset Password</button>
+							<button type="button" class="col-sm-2 btn btn-default pull-right" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+			</div><!-- modal body -->
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 [/#if]
