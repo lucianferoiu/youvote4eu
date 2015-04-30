@@ -19,9 +19,9 @@
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="${context_path}/platform/home">Home</a></li>
 				<li><a href="${context_path}/platform/questions">Questions</a></li>
-				<li><a href="${context_path}/platform/partners">Partners</a></li>
-				<li><a href="${context_path}/platform/poposed_questions">Proposed Questions</a></li>
 				<li><a href="${context_path}/platform/statistics">Statistics</a></li>				
+				<li><a href="${context_path}/platform/poposed_questions">Proposed Questions</a></li>
+				<li><a href="${context_path}/platform/partners">Partners</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello ${session.authPartner.email} <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">

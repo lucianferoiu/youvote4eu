@@ -34,8 +34,10 @@ ${page_content}
 	<script src='${context_path}/js/aw.js'></script>
 	<script src='${context_path}/js/bootstrap.min.js'></script>
 	<script src='${context_path}/js/underscore.min.js'></script>
+[#--
 	<script src='${context_path}/js/backbone.min.js'></script>
 	<script src='${context_path}/app/[@yield to="app_path"/].js'></script>
+--]
 	[@yield to="footer_script"/]
 </body>
 </html>
