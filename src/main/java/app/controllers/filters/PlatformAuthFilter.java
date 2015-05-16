@@ -47,6 +47,9 @@ public class PlatformAuthFilter extends HttpSupportFilter {
 		if (path.startsWith("/platform/statistics") && !authenticatedPartner.getBoolean("can_view_statistics")) {
 			notAuthorized();
 		}
+		if (path.startsWith("/platform/partners") && !authenticatedPartner.getBoolean("can_manage_partners")) {
+			notAuthorized();
+		}
 		// TODO restrict access only to authorized sections
 
 	}
