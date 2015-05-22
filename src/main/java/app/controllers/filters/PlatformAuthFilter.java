@@ -27,10 +27,10 @@ public class PlatformAuthFilter extends HttpSupportFilter {
 			}
 
 			Cookie authToken = cookie(Const.PARTNER_AUTH_COOKIE_NAME);
-			if (authToken != null && (!"/platform/home/autosignin".equals(path))) {//"remember me" cookie but no session partner? autosignin!
+			if (authToken != null && (!"/platform/auth/autosignin".equals(path))) {//"remember me" cookie but no session partner? autosignin!
 				log.debug("Auth filter: push URL {} for later redirect - now going for the autosignin", path);
 				session(Const.REDIRECT_TO_URL, path);//let's be nice and redirect here after authentication
-				redirect("/platform/home/autosignin");
+				redirect("/platform/auth/autosignin");
 				return;
 			}
 
@@ -56,24 +56,24 @@ public class PlatformAuthFilter extends HttpSupportFilter {
 
 	protected void notAuthorized() {
 		flash("access_denied", "not_authorized");
-		redirect("/platform/home");
+		redirect("/platform/auth");
 	}
 
 	protected void authenticationRequired() {
 		flash("access_denied", "authentication_required");
 		session(Const.REDIRECT_TO_URL, path());//let's be nice and redirect here after authentication
 		flash("should_sign_up", "true");//homepage should already show the sign up form...
-		redirect("/platform/home");
+		redirect("/platform/auth");
 	}
 
 	public boolean pathExemptFromAuthentication(String path) {
-		if (path.equalsIgnoreCase("/platform/home")) return true;
-		if (path.equalsIgnoreCase("/platform/home/index")) return true;
-		if (path.equalsIgnoreCase("/platform/home/autosignin")) return true;
-		if (path.equalsIgnoreCase("/platform/home/validate")) return true;
-		if (path.equalsIgnoreCase("/platform/home/reset_password") && method().equalsIgnoreCase("POST")) return true;
-		if (path.equalsIgnoreCase("/platform/home/signin") && method().equalsIgnoreCase("POST")) return true;
-		if (path.equalsIgnoreCase("/platform/home/register") && method().equalsIgnoreCase("POST")) return true;
+		if (path.equalsIgnoreCase("/platform/auth")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/index")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/autosignin")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/validate")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/reset_password") && method().equalsIgnoreCase("POST")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/signin") && method().equalsIgnoreCase("POST")) return true;
+		if (path.equalsIgnoreCase("/platform/auth/register") && method().equalsIgnoreCase("POST")) return true;
 		return false;
 	}
 

@@ -103,7 +103,7 @@
 		
 		[#if (flasher.pwd_reset_failure=="wrong_params") ]
 		<p>The values you entered in the form were not correct... Please try again.</p>
-		[/#if]nonexisting
+		[/#if]
 		
 		[#if (flasher.pwd_reset_failure=="nonexisting") ]
 		<p>The email that you provided doesn't belong to a registered Partner...</p>
@@ -135,13 +135,18 @@
 		<h2 class="text-success">Email verification successful!</h2>
 		<p>Congratulations on your civic spirit and thank you for joining our efforts!</p>
 		<p>You are now a registered <em>Platform Partner</em> and as such you may propose questions, help in the translation of the questions and support the questions proposed by other Partners that you would like to become public.</p>
-		<p>Now you may <em>Sign in</em> and start.</p>
+		<p>Now you may <a href="#sign-in-modal" data-dismiss="modal" data-toggle="modal" data-target="#sign-in-modal"><em>Sign in</em></a> and start.</p>
 		[/#if]
 
 		[#if (flasher.success_message=="pwd_reset_successful") ]
 		<h2 class="text-success">Your password was reset!</h2>
 		<p>We have sent you a verification email in which you will find a link needed to confirm the reset.</p>
-		<p>Please validate the password reset sometimes in the next 24 hours and then you can <em>Sign In</em> as usual. Thank you.</p>
+		<p>Please validate the password reset sometimes in the next 24 hours and then you can <em>Sign in</em> as usual. Thank you.</p>
+		[/#if]
+		
+		[#if (flasher.success_message=="new_pwd_verified") ]
+		<h2 class="text-success">Your new password was verified!</h2>
+		<p>The successful validation via email of the password means that now you can <a href="#sign-in-modal" data-dismiss="modal" data-toggle="modal" data-target="#sign-in-modal"><em>Sign in</em></a> as usual. Thank you.</p>
 		[/#if]
 		
 	</div>

@@ -29,7 +29,7 @@ public abstract class PlatformController extends AppController {
 
 	@Override
 	protected String getLayout() {
-		return "layouts/platform_layout";
+		return "platform/layout";
 	}
 
 	protected String hostname() {

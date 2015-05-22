@@ -1,3 +1,4 @@
+[#ftl]
 <nav class="navbar navbar-default navbar-fixed-bottom">
 	<div class="container-fluid">
 		<ul class="nav navbar-nav">

@@ -30,7 +30,7 @@ public class PlatformAccessSpec extends AppIntegrationSpec {
 		a(sessionObject(Const.AUTHENTICATED_PARTNER)).shouldBeNull();
 		controller("/platform/statistics").get("index");
 		it(redirected()).shouldBeTrue();
-		a(redirectValue()).shouldBeEqual("/platform/home");
+		a(redirectValue()).shouldBeEqual("/platform/auth");
 		Cookie initialCookie = cookie(Const.PARTNER_AUTH_COOKIE_NAME);
 		a(initialCookie).shouldBeNull();
 		a(sessionObject(Const.AUTHENTICATED_PARTNER)).shouldBeNull();
@@ -51,8 +51,8 @@ public class PlatformAccessSpec extends AppIntegrationSpec {
 		a(sessionObject(Const.AUTHENTICATED_PARTNER)).shouldBeNull();
 		controller("/platform/home").cookie(cookie).get("home");
 		it(redirected()).shouldBeTrue();
-		a(redirectValue()).shouldBeEqual("/platform/home/autosignin");
-		controller("/platform/home").cookie(cookie).get("autosignin");
+		a(redirectValue()).shouldBeEqual("/platform/auth/autosignin");
+		controller("/platform/auth").cookie(cookie).get("autosignin");
 		Partner sessionPartner = (Partner) sessionObject(Const.AUTHENTICATED_PARTNER);
 		a(sessionPartner).shouldNotBeNull();
 		a(sessionPartner.get("email")).shouldBeEqual(dbPartner.get("email"));
