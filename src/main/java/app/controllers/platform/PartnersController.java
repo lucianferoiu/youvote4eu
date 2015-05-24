@@ -15,11 +15,18 @@ public class PartnersController extends PlatformController {
 	protected static final int PAGE_SIZE = 10;
 	public static final Logger log = LoggerFactory.getLogger(PartnersController.class);
 
+	/**
+	 * Render AngularJS SPA (the rest of the methods are JSON-based)
+	 * 
+	 * @see /views/platform/partners/index.ftl
+	 * @see /app/platform/partners/main.js etc.
+	 */
 	public void index() {
-		redirect("/platform/partners/list");
+
 	}
 
-	public void list() {
+	@Deprecated
+	public void paginatedList() {
 		Integer page = 1;
 		try {
 			String pageParam = param("page");
@@ -39,6 +46,10 @@ public class PartnersController extends PlatformController {
 		view("crtPage", page);
 		view("cntPages", (count <= 0 ? 1 : (int) Math.ceil((double) count / PAGE_SIZE)));
 
+	}
+
+	public void list() {
+		returnJsonResults(Partner.findAll(), Partner.count(), "password", "auth_token", "created_at", "updated_at");
 	}
 
 	private List<Partner> sanitizePartners(List<Partner> partners) {
