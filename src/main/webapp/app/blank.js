@@ -1,1 +1,3 @@
- 
+(function() {
+	//there's somehting happening here...
+}());
