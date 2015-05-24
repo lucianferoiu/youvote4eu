@@ -21,7 +21,7 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello ${session.authPartner.email} <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="${context_path}/platform/home/my_questions">My Questions</a></li>
+							[#--<li><a href="${context_path}/platform/home/my_questions">My Questions</a></li>--]
 							<li><a href="${context_path}/platform/home/preferences">Preferences</a></li>
 							<li><a href="${context_path}/platform/home/help">Help</a></li>
 							<li class="divider"></li>

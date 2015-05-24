@@ -31,7 +31,6 @@
 	[#include "../footer.ftl"]
 
 	<script src='${context_path}/js/jquery.min.js'></script>
-	<script src='${context_path}/js/aw.js'></script>
 	<script src='${context_path}/js/bootstrap.min.js'></script>
 	<script src='${context_path}/js/angular.min.js'></script>
 	[@yield to="footer_script"/]
