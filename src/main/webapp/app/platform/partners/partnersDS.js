@@ -11,7 +11,9 @@
 				countPages:countPages,
 				countPartners:countPartners,
 				getPartners: getPartners,
-				getPartnerById: getPartnerById
+				getPartnerById: getPartnerById,
+				savePartner: savePartner
+				
 			};
 		//----------------------------------------------//
 			
@@ -30,7 +32,7 @@
 					}) 
 					.error(function(data, status, headers, config) {
 						onError(data);
-					}) 
+					}); 
 			}
 
 			function countPages() {
@@ -38,11 +40,37 @@
 			}
 			
 			function countPartners() {
-				return ds.total;
+				return Math.max(ds.total,0);
 			}
+			
+			//----------------------------------------------//
 
-			function getPartnerById(partnerId) {
+			function getPartnerById(partnerId,onSuccess,onError) {
+				var cfg = {
+					params: {
+						id: partnerId
+					}
+				};
+				$http.get('/platform/partners/edit',cfg)
+					.success(function(data, status, headers, config) {
+						onSuccess(data);
+					}) 
+					.error(function(data, status, headers, config) {
+						onError(data);
+					});
 			}
+			
+			
+			function savePartner(partner,onSuccess,onError) {
+				var cfg = {};
+				$http.post('/platform/partners/save',partner,cfg)
+					.success(function(data, status, headers, config) {
+						onSuccess(data);
+					}) 
+					.error(function(data, status, headers, config) {
+						onError(data);
+					});
+				}
 			
 		}
 }());

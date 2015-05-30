@@ -16,5 +16,6 @@
 
 	[#include "partners.ftl"]
 
+	[#include "partner.ftl"]
 	
 </div>

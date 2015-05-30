@@ -21,14 +21,13 @@
 		vm.sortPartners = sortPartners;
 		vm.addPartner = addPartner;
 		vm.editPartner = editPartner;
+		vm.cancelEdit = cancelEdit;
+		vm.savePartner = savePartner;
 		//----------------------------------------------//
 		
 		loadPage(1);
 				
 		//----------------------------------------------//
-		function swapPanel(panel) {
-			vm.ctx.panel = panel;
-		}
 		
 		function loadPage(page) {
 			if (page>=1 && page<=vm.ctx.totalPages) {
@@ -47,11 +46,6 @@
 		
 		function onPageError(data) {
 			resetCtx();
-			
-		}
-		
-		function resetCtx() {
-			vm.ctx = angular.copy(vm.ctxCopy);
 		}
 		
 		function sortPartners(by) {
@@ -60,14 +54,59 @@
 			vm.loadPage(1);//always reset the current page when re-sorting
 		}
 		
-		function addPartner() {
-			swapPanel('add');
-		}
+		//----------------------------------------------//
 		
 		function editPartner(partnerId) {
+			partnersDS.getPartnerById(partnerId,onPartnerEdit,onPartnerEditError);
 			swapPanel('edit');
 		}
 		
+		function onPartnerEdit(partner) {
+			vm.ctx.crtPartner = partner;
+		}
+		
+		function onPartnerEditError(data) {
+			cancelEdit();
+		}
+
+		function cancelEdit() {
+			vm.ctx.crtPartner = null;
+			swapPanel('list');
+		}
+		
+		function savePartner() {
+			if (vm.ctx.crtPartner) {
+				partnersDS.savePartner(vm.ctx.crtPartner,onPartnerSaved,onPartnerCannotSave);
+			}
+		}
+		
+		function onPartnerSaved() {
+			vm.ctx.crtPartner = null;
+			vm.loadPage(vm.ctx.crtPage);
+			swapPanel('list');
+		}
+		
+		function onPartnerCannotSave(msg) {
+			cancelEdit();
+			console.log('cannot save partner: '+msg);
+		}
+
+		//----------------------------------------------//
+
+		function addPartner() {
+			swapPanel('add');
+		}
+
+		//----------------------------------------------//
+
+		function swapPanel(panel) {
+			vm.ctx.panel = panel;
+		}
+		
+		function resetCtx() {
+			vm.ctx = angular.copy(vm.ctxCopy);
+		}
+
 		function range(n) {
 			return new Array(n);
 		}

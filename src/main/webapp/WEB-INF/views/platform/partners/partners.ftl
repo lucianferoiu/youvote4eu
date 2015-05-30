@@ -1,6 +1,6 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 
-<div class="container-fluid" ng-show="vm.ctx.panel==='list'">
+<div class="container-fluid" [#-- ng-show="vm.ctx.panel==='list'" --]>
 	
 	<div class="page-header"><h4>List of Platform Partners</h4></div> 
 	
@@ -47,7 +47,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="p in vm.partners" ng-click="vm.editPartner(p.id)">
-				<td>{{p.email}}</td>
+				<td>{{p.email}} <small class="text-uppercase text-muted" ng-show="p.name!==null && p.name.length>1"> &nbsp;&nbsp;&nbsp;[ {{p.name}} ]</small></td>
 				<td><span ng-show="p.verified===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 				<td><span ng-show="p.enabled===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 				<td>{{p.last_login | date}}</td>

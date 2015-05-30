@@ -38,3 +38,9 @@ body {
 .modal.in {
    display:block;
 }
+
+.editing-dialog {
+	margin-top: 100px;
+	overflow:auto;
+	overflow-y:scroll;
+}

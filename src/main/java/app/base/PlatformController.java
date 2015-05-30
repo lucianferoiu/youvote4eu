@@ -71,7 +71,7 @@ public abstract class PlatformController extends AppController {
 	 * Handy method for returning a paginated resultset in JSON format. Ensures
 	 * the uniformity and conformity to convention: <br/>
 	 * - expected GET query parameters: from, to and orderBy <br/>
-	 * - sort uses a prepended '-' to denote descending order of sort<br/>
+	 * - sort uses a prepended \"-\" to denote descending order of sort<br/>
 	 * - returns a JSON struct that reports the total number of items too:
 	 * {total:.., results: [..], from:.., to:.. }
 	 */
@@ -107,7 +107,7 @@ public abstract class PlatformController extends AppController {
 			if (sortByParam.matches("\\w+")) {//we only accept one word - no cheeky sql injection, sir!
 				sortBy = sortByParam;
 			} else {
-				log.debug("Offensive sort param '{}'", sortByParam);
+				log.debug("Offensive sort param \"{}\"", sortByParam);
 			}
 		}
 
@@ -122,17 +122,33 @@ public abstract class PlatformController extends AppController {
 		respond(json).contentType("application/json").status(200);
 	}
 
-	protected void returnJson(Model model, String... excludeFields) {
-		List<String> l = model.getMetaModel().getAttributeNamesSkip(excludeFields);
+	protected void returnJson(MetaModel metaModel, Model model, String... excludeFields) {
+		List<String> l = metaModel.getAttributeNamesSkip(excludeFields);
 		respond(model.toJson(true, l.toArray(new String[0]))).contentType("application/json").status(200);
 	}
 
-	protected void json_404(String msg) {
-		respond("{message:\"" + msg + "\"}").contentType("application/json").status(404);
+	protected void json_200(String msg) {//generic success
+		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(200);
 	}
 
-	protected void json_501(String msg) {
-		respond("{message:\"" + msg + "\"}").contentType("application/json").status(501);
+	protected void json_201(String json) {//new content created - send the content back
+		respond(json).contentType("application/json").status(201);
+	}
+
+	protected void json_204() {//success but no new content
+		respond("").contentType("application/json").status(204);
+	}
+
+	protected void json_400(String msg) {//bad request
+		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(400);
+	}
+
+	protected void json_404(String msg) {//not found
+		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(404);
+	}
+
+	protected void json_500(String msg) {//server error
+		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(501);
 	}
 
 }
