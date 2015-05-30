@@ -1,12 +1,15 @@
 package app.base;
 
+import java.util.List;
+
 import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.MetaModel;
+import org.javalite.activejdbc.Model;
 import org.javalite.activeweb.AppController;
 import org.javalite.activeweb.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.models.Partner;
 import app.services.Mailer;
 import app.services.MessageDigester;
 import app.services.TokenGenerator;
@@ -68,53 +71,68 @@ public abstract class PlatformController extends AppController {
 	 * Handy method for returning a paginated resultset in JSON format. Ensures
 	 * the uniformity and conformity to convention: <br/>
 	 * - expected GET query parameters: from, to and orderBy <br/>
-	 * - orderBy uses a prepended '-' to denote descending order of sort<br/>
+	 * - sort uses a prepended '-' to denote descending order of sort<br/>
 	 * - returns a JSON struct that reports the total number of items too:
 	 * {total:.., results: [..], from:.., to:.. }
 	 */
-	protected void returnJsonResults(LazyList<Partner> rows, Long total, String... excludeFields) {
+	protected void returnJsonResults(MetaModel metamodel, LazyList rows, Long total, String... excludeFields) {
 
 		Long from = 0L;
 		Long to = total - 1;
-		String orderBy = "first_login";
-		String dir = " asc ";
+		String sortBy = "last_login";
+		String dir = " asc nulls first ";
 
 		try {
 			String fromParam = param("from");
 			if (!StringUtils.nullOrEmpty(fromParam)) {
 				from = Long.decode(fromParam);
 			}
+
 			String toParam = param("to");
 			if (!StringUtils.nullOrEmpty(toParam)) {
 				to = Long.decode(toParam);
 			}
-			String orderByParam = param("orderBy");
-			if (!StringUtils.nullOrEmpty(orderByParam)) {
-				if (orderByParam.startsWith("-")) {
-					dir = " desc ";
-					orderByParam = orderByParam.substring(1);
-					if (orderByParam.matches("\\w")) {//we only accept one word - no cheeky sql injection, sir!
-						orderBy = orderByParam;
-					} else {
-						log.debug("Offensive orderBy param '%s'", orderByParam);
-					}
-				}
-			}
 		}
 		catch (NumberFormatException nfe) {
 			from = 0L;
-			to = total - 1;
+			to = Math.max(total - 1, 10);
 		}
 
-		rows = rows.offset(from).limit(Math.max(to - from, 0) + 1).orderBy(orderBy + dir);
+		String sortByParam = param("sort");
+		if (!StringUtils.nullOrEmpty(sortByParam)) {
+			if (sortByParam.startsWith("-")) {
+				dir = " desc nulls last ";
+				sortByParam = sortByParam.substring(1);
+			}
+			if (sortByParam.matches("\\w+")) {//we only accept one word - no cheeky sql injection, sir!
+				sortBy = sortByParam;
+			} else {
+				log.debug("Offensive sort param '{}'", sortByParam);
+			}
+		}
+
+		rows = rows.orderBy(sortBy + dir).offset(from).limit(Math.max(to - from, 0) + 1);
 
 		String json = JsonHelper.toResultsJson(rows, total, from, to, true, //
-				Partner.getMetaModel().getAttributeNamesSkip(excludeFields));
+				metamodel.getAttributeNamesSkip(excludeFields));
 		if (json == null) {
-			respond("\"results not found\"").contentType("application/json").status(404);
+			json_404("results not found");
 			return;
 		}
 		respond(json).contentType("application/json").status(200);
+	}
+
+	protected void returnJson(Model model, String... excludeFields) {
+		List<String> l = model.getMetaModel().getAttributeNamesSkip(excludeFields);
+		respond(model.toJson(true, l.toArray(new String[0]))).contentType("application/json").status(200);
+	}
+
+	protected void json_404(String msg) {
+		respond("{message:\"" + msg + "\"}").contentType("application/json").status(404);
+	}
+
+	protected void json_501(String msg) {
+		respond("{message:\"" + msg + "\"}").contentType("application/json").status(501);
 	}
 
 }

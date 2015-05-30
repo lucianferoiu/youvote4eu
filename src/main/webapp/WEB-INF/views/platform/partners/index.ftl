@@ -9,17 +9,12 @@
 [@content for="crtMenu"]partners[/@content]
 
 [@content for="footer_script"]<script src='${context_path}/app/platform/partners/main.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/app/platform/partners/partnersCtrl.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/app/platform/partners/partnersDS.js'></script>[/@content]
 
-<div ng-app="app.partners" ng-controller="AppCtrl as appCtrl">
-	<div class="container-fluid">
-		<div class="page-header">{{appCtrl.ctx.title}}</div> 
-	</div>
-	
-	[#include "partners.ftl"]
-		
+<div ng-app="app.partners" ng-controller="PartnersCtrl as vm">
 
-	
-	
+	[#include "partners.ftl"]
+
 	
 </div>

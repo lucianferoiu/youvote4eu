@@ -1,97 +1,46 @@
 (function() {
 	angular.module('app.partners')
-		.factory('partnersDS',['$q','$http',PartnersDS]);
+	.service('partnersDS',['$q','$http',PartnersDS]);//we want a new instance per client (so we use service instead of factory) so we can maintain state inside it...
 		
 		function PartnersDS($q,$http) {
+			var ds = {
+				PAGE_SIZE: 10,
+				total:0
+			};
 			return {
+				countPages:countPages,
+				countPartners:countPartners,
 				getPartners: getPartners,
 				getPartnerById: getPartnerById
 			};
 		//----------------------------------------------//
 			
-			function getPartners() {
-				 
-				var p = [
-				  {  
-				    "can_add_question":true,
-				    "can_approve_question":false,
-				    "can_archive_any_question":false,
-				    "can_change_translation":false,
-				    "can_delete_any_question":false,
-				    "can_edit_any_question":false,
-				    "can_edit_own_question":true,
-				    "can_manage_partners":true,
-				    "can_view_statistics":true,
-				    "email":"gogu@example.com",
-				    "enabled":true,
-				    "first_login":"2015-04-22T12:50Z",
-				    "id":1,
-				    "is_organization":false,
-				    "last_login":"2015-05-24T12:43Z",
-				    "name":null,
-				    "verified":true
-				  },
-				  {  
-				    "can_add_question":true,
-				    "can_approve_question":false,
-				    "can_archive_any_question":false,
-				    "can_change_translation":false,
-				    "can_delete_any_question":false,
-				    "can_edit_any_question":false,
-				    "can_edit_own_question":true,
-				    "can_manage_partners":false,
-				    "can_view_statistics":true,
-				    "email":"gogu4@example.com",
-				    "enabled":true,
-				    "first_login":"2015-04-23T10:54Z",
-				    "id":3,
-				    "is_organization":false,
-				    "last_login":"2015-04-23T10:54Z",
-				    "name":null,
-				    "verified":true
-				  },
-				  {  
-				    "can_add_question":true,
-				    "can_approve_question":false,
-				    "can_archive_any_question":false,
-				    "can_change_translation":false,
-				    "can_delete_any_question":false,
-				    "can_edit_any_question":false,
-				    "can_edit_own_question":true,
-				    "can_manage_partners":false,
-				    "can_view_statistics":true,
-				    "email":"gogu3@example.com",
-				    "enabled":true,
-				    "first_login":null,
-				    "id":2,
-				    "is_organization":false,
-				    "last_login":null,
-				    "name":null,
-				    "verified":false
-				  },
-				  {  
-				    "can_add_question":true,
-				    "can_approve_question":false,
-				    "can_archive_any_question":false,
-				    "can_change_translation":false,
-				    "can_delete_any_question":false,
-				    "can_edit_any_question":false,
-				    "can_edit_own_question":true,
-				    "can_manage_partners":false,
-				    "can_view_statistics":true,
-				    "email":"gogu5@example.com",
-				    "enabled":true,
-				    "first_login":null,
-				    "id":4,
-				    "is_organization":false,
-				    "last_login":null,
-				    "name":null,
-				    "verified":false
-				  }
-				];
-				return p;
+			function getPartners(page,sort,onSuccess,onError) {
+				var cfg = {
+					params: {
+						from: (page-1)*ds.PAGE_SIZE,
+						to: (page*ds.PAGE_SIZE)-1,
+						sort: sort
+					}
+				};
+				$http.get('/platform/partners/list',cfg)
+					.success(function(data, status, headers, config) {
+						ds.total = data.total;
+						onSuccess(data.results);
+					}) 
+					.error(function(data, status, headers, config) {
+						onError(data);
+					}) 
+			}
+
+			function countPages() {
+				return Math.ceil(ds.total/ds.PAGE_SIZE);
 			}
 			
+			function countPartners() {
+				return ds.total;
+			}
+
 			function getPartnerById(partnerId) {
 			}
 			

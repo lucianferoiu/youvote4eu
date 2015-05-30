@@ -1,22 +1,52 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
-[@content for="footer_script"]<script src='${context_path}/app/platform/partners/partnersCtrl.js'></script>[/@content]
 
-
-<div class="container-fluid" ng-controller="PartnersCtrl as partners" ng-show="appCtrl.ctx.panel==='list'">
+<div class="container-fluid" ng-show="vm.ctx.panel==='list'">
 	
-	<table class="table table-hover table-responsive">
+	<div class="page-header"><h4>List of Platform Partners</h4></div> 
+	
+	<table class="table table-hover table-striped table-responsive">
 		<thead>
 			<tr>
-				<th>E-Mail</th>
-				<th>Verified</th>
-				<th>Enabled</th>
-				<th>Last Login</th>
-				<th>Questions Editor</th>
-				<th>Partners Manager (admin)</th>
+				<th>
+					<span ng-click="vm.sortPartners('email')">E-Mail</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='email'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='email'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
+				<th>
+					<span ng-click="vm.sortPartners('verified')">Verified</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='verified'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='verified'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
+				<th>
+					<span ng-click="vm.sortPartners('enabled')">Enabled</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='enabled'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='enabled'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
+				<th>
+					<span ng-click="vm.sortPartners('last_login')">Last Login</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='last_login'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='last_login'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
+				<th>
+					<span ng-click="vm.sortPartners('can_edit_any_question')">Questions Editor</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='can_edit_any_question'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='can_edit_any_question'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
+				<th>
+					<span ng-click="vm.sortPartners('can_manage_partners')">Partners Manager (admin)</span>
+					<span>&nbsp;&nbsp;&nbsp;</span>
+					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='can_manage_partners'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='can_manage_partners'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="p in partners.partnersList" ng-click="appCtrl.editPartner(p.id)">
+			<tr ng-repeat="p in vm.partners" ng-click="vm.editPartner(p.id)">
 				<td>{{p.email}}</td>
 				<td><span ng-show="p.verified===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 				<td><span ng-show="p.enabled===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
@@ -29,13 +59,15 @@
 	
 	<div class="text-center">
 		<ul class="pagination">
-			<li class="disabled"><a href="?page=0" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-			<li class="active"><a href="?page=1">1</a></li>
-			<li><a href="?page=2">2</a></li>
-			<li><a href="?page=3">3</a></li>
-			<li><a href="?page=4">4</a></li>
-			<li><a href="?page=5">5</a></li>
-			<li class="disabled"><a href="?page=2" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			<li ng-class="{'disabled': (vm.ctx.crtPage<=1)} ">
+				<a href="#" ng-click="vm.loadPage(vm.ctx.crtPage-1)" aria-label="Previous"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span></a>
+			</li>
+			<li ng-repeat="pg in vm.ctx.pagesRange track by $index" ng-class="{'active': (vm.ctx.crtPage==($index+1))} ">
+				<a href="#" aria-label="{{$index+1}}" ng-click="vm.loadPage($index+1)">{{$index+1}}</a>
+			</li>
+			<li ng-class="{'disabled': (vm.ctx.crtPage>=vm.ctx.totalPages)} ">
+				<a href="#" ng-click="vm.loadPage(vm.ctx.crtPage+1)" aria-label="Next"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
+			</li>
 		</ul>
 	</div>
 </div>
