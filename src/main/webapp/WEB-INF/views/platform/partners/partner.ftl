@@ -1,5 +1,5 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
-<div class="container-fluid">
+<div class="container">
 	<div id="editPartnerModel" class="modal editing-dialog" ng-class="{'show': vm.ctx.panel==='edit'}" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">

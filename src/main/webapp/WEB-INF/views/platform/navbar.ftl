@@ -9,7 +9,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${context_path}/platform/home">You Vote for Europe - Platform Partners</a>
+			<a class="navbar-brand" href="${context_path}/platform/home">[@yield to="title"/]</a>
 		</div>
 		<!-- authenticated partner -->
 		<div id="navbar" class="navbar-collapse collapse pull-right">

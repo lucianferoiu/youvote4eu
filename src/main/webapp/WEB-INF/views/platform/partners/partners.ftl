@@ -1,10 +1,10 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 
-<div class="container-fluid" [#-- ng-show="vm.ctx.panel==='list'" --]>
+<div class="container" [#-- ng-show="vm.ctx.panel==='list'" --]>
 	
-	<div class="page-header"><h4>List of Platform Partners</h4></div> 
+	<div class="page-header text-centered large">List of Platform Partners</div> 
 	
-	<table class="table table-hover table-striped table-responsive">
+	<table class="table table-hover table-responsive">
 		<thead>
 			<tr>
 				<th>
@@ -32,13 +32,13 @@
 					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='last_login'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				</th>
 				<th>
-					<span ng-click="vm.sortPartners('can_edit_any_question')">Questions Editor</span>
+					<span ng-click="vm.sortPartners('can_edit_any_question')">Editor</span>
 					<span>&nbsp;&nbsp;&nbsp;</span>
 					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='can_edit_any_question'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='can_edit_any_question'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				</th>
 				<th>
-					<span ng-click="vm.sortPartners('can_manage_partners')">Partners Manager (admin)</span>
+					<span ng-click="vm.sortPartners('can_manage_partners')">Admin</span>
 					<span>&nbsp;&nbsp;&nbsp;</span>
 					<span ng-show="vm.ctx.sortDir && vm.ctx.sortBy==='can_manage_partners'" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 					<span ng-show="!vm.ctx.sortDir && vm.ctx.sortBy==='can_manage_partners'" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
@@ -50,7 +50,7 @@
 				<td>{{p.email}} <small class="text-uppercase text-muted" ng-show="p.name!==null && p.name.length>1"> &nbsp;&nbsp;&nbsp;[ {{p.name}} ]</small></td>
 				<td><span ng-show="p.verified===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 				<td><span ng-show="p.enabled===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
-				<td>{{p.last_login | date}}</td>
+				<td>{{p.last_login | date:'short'}}</td>
 				<td><span ng-show="p.can_edit_any_question===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 				<td><span ng-show="p.can_manage_partners===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 			</tr>

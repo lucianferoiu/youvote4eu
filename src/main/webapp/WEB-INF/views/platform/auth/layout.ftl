@@ -63,7 +63,7 @@
 
 [#if ((flasher.should_sign_up)=="true") ??]
 [@content for="footer_script"]
-<script>
+<script type="text/javascript">
 $('#sign-in-modal').delay(1000).modal('show');
 </script>
 [/@content]

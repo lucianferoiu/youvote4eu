@@ -4,8 +4,6 @@ import app.base.PlatformController;
 
 public class StatisticsController extends PlatformController {
 
-	public void index() {
-
-	}
+	public void index() {}
 
 }
