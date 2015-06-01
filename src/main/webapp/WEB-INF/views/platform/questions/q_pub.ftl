@@ -1,8 +1,7 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 
 <div class="container-fluid">
-	<hr/>
-	
+
 	<div class="row q-row bottom-border">
 		<div class="col-sm-2 q-info-cell ">
 			<div class="vcenter text-right">

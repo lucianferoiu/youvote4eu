@@ -22,23 +22,27 @@
 			</ul>
 		</div>
 	</div>
+	<br/>
+	<hr/>
 	<div class="row" style="margin-top:8px;">
 		[#-- <div class="col-xs-3">
 			<button type="button" class="btn btn-success" data-toggle="dropdown" style="display: block; width: 100%;"
 				aria-expanded="false">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Propose new Question </button>
 		</div> --]
 		<div class="pull-right col-xs-5">
-			<form class="form-inline">
-				<div class="input-group" style="width:100%;">
-					<input type="text" class="form-control" id="questionSearch" placeholder="type a word to search for questions containing it..">
+			<form class="">
+				<div class="input-group">
 					<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+					<input type="text" class="form-control" id="questionSearch" placeholder="type a word to search for questions containing it..">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button">Search</button>
+					</span>
 				</div>
 			</form>
 		</div>
 	</div>
-
 <div>
-
+<br/>
 
 [#include "q_pub.ftl"]
 
