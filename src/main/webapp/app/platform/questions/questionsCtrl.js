@@ -3,9 +3,54 @@
 		.controller('QuestionsCtrl',['questionsDS',QuestionsCtrl]);
 		
 	function QuestionsCtrl(questionDS) {
-		var vm = this;
 		
+		//setup view model
+		var vm = this;
+		vm.editingQuestion=false;
+		
+		//vm API
+		vm.switchPanel = switchPanel;
+		vm.addQuestion = addQuestion;
+		vm.cancelEdit = cancelEdit;
+		vm.saveQuestion = saveQuestion;
+		vm.publishQuestion = publishQuestion;
+		vm.archiveQuestion = archiveQuestion;
+		vm.deleteQuestion = deleteQuestion;
+		
+		//init
+		switchPanel('pubQ');
+		//----------------------------------------------//
+		function addQuestion() {
+			vm.crtQuestion = {};
+			vm.editingQuestion=true;
+		}
+		
+		function cancelEdit() {
+			vm.crtQuestion = null;
+			vm.editingQuestion=false;
+		}
+		
+		function saveQuestion() {
+			vm.editingQuestion=false;
+		}
+		
+		function publishQuestion() {
+			vm.editingQuestion=false;
+		}
+		
+		function archiveQuestion() {
+			vm.editingQuestion=false;
+		}
+		
+		function deleteQuestion() {
+			vm.editingQuestion=false;
+		}
 
+		//----------------------------------------------//
+
+		function switchPanel(panel) {
+			vm.activePanel = panel;
+		}
 
 /*************************************************************************************
 		//----------------------------------------------//

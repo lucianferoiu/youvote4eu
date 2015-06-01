@@ -10,6 +10,6 @@
 
 	[#include "questions.ftl"]
 
-	[#include "question.ftl"]
+	[#include "edit_q.ftl"]
 	
 </div>

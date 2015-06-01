@@ -4,20 +4,21 @@
 	<div class="row">
 		<div class="">
 			<ul class="nav nav-pills nav-justified">
-				<li role="presentation" class="active" style="padding-left:10px;">
-					<a href="#" class="q-pill"><span class="glyphicon glyphicon-star-empty"></span> Published Questions</a>
+				<li role="presentation" ng-class="{'active': vm.activePanel==='pubQ'}" style="padding-left:10px;">
+					<a href="#" class="q-pill" ng-click="vm.switchPanel('pubQ')"><span class="glyphicon glyphicon-star-empty"></span>&nbsp; Published Questions</a>
 				</li>
-				<li role="presentation">
-					<a href="#" class="q-pill"><span class="glyphicon glyphicon-inbox"></span> Archived Questions</a>
+				<li role="presentation" ng-class="{'active': vm.activePanel==='archQ'}">
+					<a href="#" class="q-pill" ng-click="vm.switchPanel('archQ')"><span class="glyphicon glyphicon-inbox"></span>&nbsp; Archived Questions</a>
 				</li>
-				<li role="presentation">
-					<a href="#" class="q-pill"><span class="glyphicon glyphicon-comment"></span> Proposed Questions</a>
+				<li role="presentation" ng-class="{'active': vm.activePanel==='propQ'}">
+					<a href="#" class="q-pill" ng-click="vm.switchPanel('propQ')"><span class="glyphicon glyphicon-comment"></span>&nbsp; Proposed Questions</a>
 				</li>
-				<li role="presentation">
-					<a href="#" class="q-pill"><span class="glyphicon glyphicon-user"></span> My Questions</a>
+				<li role="presentation" ng-class="{'active': vm.activePanel==='myQ'}">
+					<a href="#" class="q-pill" ng-click="vm.switchPanel('myQ')"><span class="glyphicon glyphicon-user"></span>&nbsp; My Questions</a>
 				</li>
 				<li role="presentation" id="addQuestionBtn" style="padding-right:10px;">
-					<a href="#" class="q-pill q-pill-button btn-success"><span class="glyphicon glyphicon-plus"></span> Propose new Questions</a>
+					<a href="#" class="q-pill q-pill-button btn-success" ng-click="vm.addQuestion()">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp; Propose new Questions</a>
 				</li>
 			</ul>
 		</div>

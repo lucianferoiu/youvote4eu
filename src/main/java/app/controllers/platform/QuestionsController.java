@@ -12,7 +12,7 @@ public class QuestionsController extends PlatformController {
 	 * @see /app/platform/questions/*.js etc.
 	 */
 	public void index() {
-		view("languages", Lang.findAll().orderBy("code asc"));
+		view("languages", Lang.findAll().orderBy("label_en asc"));
 	}
 
 }

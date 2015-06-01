@@ -5,7 +5,7 @@
 [@content for="footer_script"]<script src='${context_path}/js/summernote.min.js'></script>[/@content]
 
 <div class="container">
-	<div id="editPartnerModel" class="modal editing-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+	<div id="editPartnerModel" class="modal editing-dialog" tabindex="-1" role="dialog" aria-hidden="true" ng-class="{'show': vm.editingQuestion}">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -21,7 +21,7 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Translations <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								[#list languages as lang]
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="#">${lang.label_en}</a></li>
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#">[#-- [${lang.code}] --] ${lang.label_en}</a></li>
 								[/#list]
 							</ul>
 						</li>

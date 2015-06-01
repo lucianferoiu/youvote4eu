@@ -1,6 +1,6 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 
-<div class="container-fluid">
+<div class="container-fluid" ng-show="vm.activePanel==='myQ'">
 	
 	<div class="row q-row bottom-border">
 		<div class="col-sm-2 q-info-cell ">
