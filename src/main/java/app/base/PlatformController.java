@@ -143,6 +143,10 @@ public abstract class PlatformController extends AppController {
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(400);
 	}
 
+	protected void json_403() {//unauthorized access
+		respond("unauthorized").contentType("application/json").status(204);
+	}
+
 	protected void json_404(String msg) {//not found
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(404);
 	}
