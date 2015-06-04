@@ -69,6 +69,14 @@ $('#sign-in-modal').delay(1000).modal('show');
 [/@content]
 [/#if]
 
+#if ((flasher.should_show_set_pwd)=="true") ??]
+[@content for="footer_script"]
+<script type="text/javascript">
+$('#set-password-modal').delay(1000).modal('show');
+</script>
+[/@content]
+[/#if]
+
 
 <div class="modal fade" role="dialog" id="sign-in-modal" aria-labelledby="sign-in-modal-label" aria-hidden="true">
 	<div class="modal-dialog">
@@ -212,6 +220,65 @@ $('#sign-in-modal').delay(1000).modal('show');
 						<hr/>
 						<div class="form-group">
 							<button type="submit" class="col-sm-3 btn btn-primary">Reset Password</button>
+							<button type="button" class="col-sm-2 btn btn-default pull-right" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+			</div><!-- modal body -->
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" role="dialog" id="set-password-modal" aria-labelledby="set-password-modal-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h4 class="panel-title">Set Your Password..</h4>
+				<hr/>
+				<div class="panel-body">
+					<form class="form-horizontal" action="${context_path}/platform/auth/set_password" method="post" data-toggle="validator" role="form">
+						<input id="pp-set-code" name="pp-set-code" type="hidden" value="${validation_code}">
+						<div class="form-group">
+							<label for="pp-set-email" class="col-sm-4">Your Email address</label> 
+							<div class="col-sm-8">
+								<input id="pp-set-email" name="pp-set-email" type="email" class="form-control" value="${email}" readonly>
+								<div class="help-block with-errors"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="pp-signin-password" class="col-sm-4">New Password</label> 
+							<div class="col-sm-8">
+								<input id="pp-signin-password" name="pp-reset-password" type="password" class="form-control" placeholder="password" data-minlength="7" data-error="Minimum of 7 characters.." required>
+								<div class="help-block with-errors"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="checkbox col-sm-offset-4">
+								<label><input type="checkbox" name="pp-set-agreement" required>Agree with the <a data-toggle="collapse" href="#terms-of-use2" aria-expanded="false" aria-controls="terms-of-use2">terms of use</a></label>
+							</div>
+						</div>
+						<div class="collapse" id="terms-of-use2">
+							<div class="col-sm-12">
+								<h4>Terms of Use</h4>
+								<p>
+									Registration and access to this website is available unhindered and free of charge for as long the website is available, under the following tenets:
+								</p>
+								<ol>
+									<li>The intention of the website is to promote a civilized platform for expressing civic oppinion. Henceforth, offensive, vulgar or hateful language, and aggressive or inciting behaviour will not be tolerated.</li>
+									<li>The quality of the content is of utmost priority. Before proposing a question, a partner should try to verify if the question was not already proposed, so duplicates can be avoided. The formulation of the question should be clear, rational and concise, and should provide links to further sources of information on the topic. A proposed question will not be published and subjected to public voting until sufficient translations of it into a number of EU languages and significant support from the other partners is achieved, therefore an active participation is highly encouraged.</li>
+									<li>Your email address and other personal details are confidential and we will protect them to the best of our abilities.</li>
+								</ol>
+								<p>
+									Registration signifies an implicit agreement to the above terms.
+								</p>
+								<hr/>
+							</div>
+						</div>
+						<hr/>
+						<div class="form-group">
+							<button type="submit" class="col-sm-3 btn btn-primary">Set Password</button>
 							<button type="button" class="col-sm-2 btn btn-default pull-right" data-dismiss="modal">Close</button>
 						</div>
 					</form>

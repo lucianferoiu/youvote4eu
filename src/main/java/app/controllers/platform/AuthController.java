@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.javalite.activeweb.Configuration;
 import org.javalite.activeweb.Cookie;
+import org.javalite.activeweb.annotations.GET;
 import org.javalite.activeweb.annotations.POST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,11 +153,54 @@ public class AuthController extends PlatformController {
 		//we're good to register the new partner
 		String shaPwd = messageDigester.digest(pwd);
 		Partner.createIt("email", email, "password", shaPwd, "verified", false, "enabled", true);
-		sendVerificationMail(email, "/other/mail/validation");
+		sendVerificationMail(email, "/other/mail/validation", "is_registration");
 		flash("success_message", "registration_successful");
 		redirect("/platform/auth");
 	}
 
+	@POST
+	public void setPassword() {
+		String email = param("pp-set-email");
+		String code = param("pp-set-code");
+		String pwd = param("pp-set-password");
+		String agree = param("pp-set-agreement");
+		if (StringUtils.nullOrEmpty(pwd) || StringUtils.nullOrEmpty(email) || StringUtils.nullOrEmpty(code)
+				|| (!"on".equalsIgnoreCase(agree)) || pwd.length() < 7
+				|| (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
+			flash("pwd_set_failure", "wrong_params");
+			redirect("/platform/auth");
+			return;
+		}
+		email = email.trim().toLowerCase();//sanitize the email address
+
+		Partner partner = Partner.findByEmail(email);
+		if (partner == null) {
+			log.debug("Partner with email {} doesn't exist", email);
+			flash("pwd_set_failure", "email_not_registered");
+			redirect("/platform/auth");
+			return;
+		}
+
+		EmailValidation validation = EmailValidation.findValidation(code);
+		if (validation == null || !(email.equalsIgnoreCase(validation.getString("email")))) {
+			log.debug("Validation code not paired with email {}", email);
+			flash("pwd_set_failure", "wrong_params");
+			redirect("/platform/auth");
+			return;
+		}
+
+		//we're good to register the new partner
+		String shaPwd = messageDigester.digest(pwd);
+		partner.set("password", shaPwd, "verified", true, "enabled", true);
+		partner.save();
+		validation.set("verified", true);
+		validation.save();
+
+		flash("success_message", "added_partner_verified");
+		redirect("/platform/auth");
+	}
+
+	@GET
 	public void validate() {
 		String code = param("code");
 		if (StringUtils.nullOrEmpty(code)) {
@@ -183,16 +227,25 @@ public class AuthController extends PlatformController {
 			redirect("/platform/auth");
 			return;
 		}
-		validation.set("validated", true);
+
+		if (partner.get("added_by") != null) {
+			//the process finishes in the setPassword for validations of this kind...
+		} else {
+			validation.set("validated", true);
+			partner.set("verified", true);
+		}
 		validation.save();
 		//validation.delete();
-		partner.set("verified", true);
 		partner.save();
 		log.debug("Partner registration finalized: validated new partner {}", partner);
-		if (partner.get("last_login") != null) {//this is not this partner's first dance
+		if (partner.getBoolean("is_pwd_renew")) {//this is not this partner's first dance
 			flash("success_message", "new_pwd_verified");
-		} else {
+		} else if (partner.getBoolean("is_registration")) {
 			flash("success_message", "verification_successful");
+		} else if (partner.get("added_by") != null) {
+			flash("should_show_set_pwd", "true");
+			flash("validation_code", code);
+			flash("email", email);
 		}
 		redirect("/platform/auth");
 
@@ -259,16 +312,16 @@ public class AuthController extends PlatformController {
 
 		String shaPwd = messageDigester.digest(pwd);
 		alreadyExisting.set("password", shaPwd).set("verified", false).saveIt();
-		sendVerificationMail(email, "/other/mail/reset_password");
+		sendVerificationMail(email, "/other/mail/reset_password", "is_pwd_renew");
 		flash("success_message", "pwd_reset_successful");
 		redirect("/platform/auth");
 
 	}
 
-	protected void sendVerificationMail(String email, String template) {
+	protected void sendVerificationMail(String email, String template, String field) {
 		String validationCode = tokenGenerator.generateToken().trim();
 		String url = hostname() + "/platform/auth/validate?code=" + validationCode;
-		String subj = "Validate your email to complete registration to YouVoteForEurope";
+		String subj = "Validate your email so you may access YouVoteForEurope";
 		Map<String, Object> vals = new HashMap<String, Object>();
 		vals.put("url", url);
 
@@ -277,9 +330,10 @@ public class AuthController extends PlatformController {
 
 		LocalDateTime now = LocalDateTime.now();
 		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
-		EmailValidation validation = EmailValidation.create("email", email, "token", validationCode, "is_registration",
-				true, "validated", false);
+		EmailValidation validation = EmailValidation
+				.create("email", email, "token", validationCode, "validated", false);
 		validation.setTimestamp("valid_until", tomorrow).saveIt();
+		validation.setBoolean(field, true);//the kind of email verification
 
 		mailer.sendMail(email, subj, writer.toString(), true);
 		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}",

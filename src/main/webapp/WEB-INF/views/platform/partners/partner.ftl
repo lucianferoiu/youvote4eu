@@ -5,7 +5,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancelEdit()"><span aria-hidden="true">&times;</span></button>
-					<h3>Change the details of the Partner <em>{{vm.ctx.crtPartner.name}}</em></h3>
+					<h3>Details of the Partner <em>{{vm.ctx.crtPartner.name}}</em></h3>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal">

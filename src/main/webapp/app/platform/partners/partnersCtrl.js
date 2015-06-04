@@ -61,6 +61,11 @@
 			swapPanel('edit');
 		}
 		
+		function addPartner() {
+			vm.ctx.crtPartner = {};
+			swapPanel('edit');
+		}
+		
 		function onPartnerEdit(partner) {
 			vm.ctx.crtPartner = partner;
 		}
@@ -89,12 +94,6 @@
 		function onPartnerCannotSave(msg) {
 			cancelEdit();
 			console.log('cannot save partner: '+msg);
-		}
-
-		//----------------------------------------------//
-
-		function addPartner() {
-			swapPanel('add');
 		}
 
 		//----------------------------------------------//

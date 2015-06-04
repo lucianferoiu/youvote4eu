@@ -117,6 +117,24 @@
 </div>
 [/#if]
 
+[#if flasher.pwd_set_failure??]
+<div class="container">
+	<div class="jumbotron">
+		<h2 class="text-danger">Failed to set a password for your new account</h2>
+		
+		[#if (flasher.pwd_set_failure=="wrong_params") ]
+		<p>The values you entered in the form were not correct... Please try again.</p>
+		[/#if]
+
+		[#if (flasher.pwd_set_failure=="email_not_registered") ]
+		<p>The email doesn't seem to belong to any Partner in our database... </p>
+		[/#if]
+
+	</div>
+</div>
+[/#if]
+
+
 
 [#-- ========================================================================================================= --]
 
@@ -148,6 +166,14 @@
 		<h2 class="text-success">Your new password was verified!</h2>
 		<p>The successful validation via email of the password means that now you can <a href="#sign-in-modal" data-dismiss="modal" data-toggle="modal" data-target="#sign-in-modal"><em>Sign in</em></a> as usual. Thank you.</p>
 		[/#if]
+		
+		[#if (flasher.success_message=="added_partner_verified") ]
+		<h2 class="text-success">Registration successful!</h2>
+		<p>Congratulations on your civic spirit and thank you for joining our efforts!</p>
+		<p>You are now a registered <em>Platform Partner</em> and as such you may propose questions, help in the translation of the questions and support the questions proposed by other Partners that you would like to become public.</p>
+		<p>Now you may <a href="#sign-in-modal" data-dismiss="modal" data-toggle="modal" data-target="#sign-in-modal"><em>Sign in</em></a> and start.</p>
+		[/#if]
+		
 		
 	</div>
 </div>

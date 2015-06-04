@@ -1,16 +1,24 @@
 package app.controllers.platform;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.javalite.activeweb.Configuration;
 import org.javalite.activeweb.annotations.GET;
 import org.javalite.activeweb.annotations.POST;
 import org.javalite.activeweb.annotations.PUT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.base.Const;
 import app.base.PlatformController;
+import app.models.EmailValidation;
 import app.models.Partner;
 import app.util.JsonHelper;
 import app.util.StringUtils;
@@ -64,6 +72,9 @@ public class PartnersController extends PlatformController {
 		catch (IOException e) {
 			json_400("Cannot read POST payload");
 		}
+		catch (NumberFormatException nfe) {
+			json_400("Malformed partner id");
+		}
 
 		if (atts == null) json_400("Cannot read POST payload");
 
@@ -74,13 +85,13 @@ public class PartnersController extends PlatformController {
 				json_404(String.format("No existing partner with id: %d", partner.getLongId()));
 			}
 		}
-
 		atts.remove("first_login");
 		atts.remove("last_login");
 		partner.fromMap(atts);
 		boolean succ = partner.save();
 		if (succ) {
 			if (id == null) {//was new content
+				sendVerificationMailToNewPartner(partner.getString("email"), "/other/mail/added_partner");
 				json_201(String.format("new partner with id: %d", partner.getLongId()));
 			} else {
 				json_200(String.format("updated partner with id: %d", partner.getLongId()));
@@ -94,6 +105,30 @@ public class PartnersController extends PlatformController {
 	@PUT
 	public void add() {
 		redirect("/platform/partners/list");
+	}
+
+	protected void sendVerificationMailToNewPartner(String email, String template) {
+		String validationCode = tokenGenerator.generateToken().trim();
+		String url = hostname() + "/platform/auth/validate?code=" + validationCode;
+		String subj = "You have been endorsed as YouVoteForEurope Partner";
+		Map<String, Object> vals = new HashMap<String, Object>();
+		vals.put("url", url);
+
+		StringWriter writer = new StringWriter();
+		Configuration.getTemplateManager().merge(vals, template, null, null, writer);
+
+		LocalDateTime now = LocalDateTime.now();
+		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
+		EmailValidation validation = EmailValidation
+				.create("email", email, "token", validationCode, "validated", false);
+		validation.setTimestamp("valid_until", tomorrow).saveIt();
+		Partner me = (Partner) session(Const.AUTHENTICATED_PARTNER);
+		if (me == null) return;
+		validation.setLong("added_by", me.getId());
+
+		mailer.sendMail(email, subj, writer.toString(), true);
+		log.debug("Partner added: created email validation {} and sent the validation email for URL {}", validation,
+				url);
 	}
 
 }

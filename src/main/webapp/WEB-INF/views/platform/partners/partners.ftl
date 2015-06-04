@@ -3,7 +3,16 @@
 <div class="container" [#-- ng-show="vm.ctx.panel==='list'" --]>
 	
 	<div class="page-header text-centered large">List of Platform Partners</div> 
-	
+	<div class="row">
+		<div class="">
+			<ul class="nav nav-pills">
+				<li role="presentation" id="addPartnerBtn">
+					<a href="#" class="q-pill q-pill-button btn-success" ng-click="vm.addPartner()">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp; Endorse New Partner</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 	<table class="table table-hover table-responsive">
 		<thead>
 			<tr>
