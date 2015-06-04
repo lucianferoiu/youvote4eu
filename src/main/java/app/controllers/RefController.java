@@ -5,7 +5,7 @@ import java.util.List;
 import org.javalite.activeweb.annotations.GET;
 
 import app.base.AnonAuthController;
-import app.models.Flag;
+import app.models.Comment;
 import app.models.Lang;
 import app.models.Tag;
 
@@ -30,8 +30,8 @@ public class RefController extends AnonAuthController {
 
 	@GET
 	public void flags() {
-		List<String> atts = (Flag.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
-		String json = Flag.findAll().orderBy("id asc").toJson(true, atts.toArray(new String[0]));
+		List<String> atts = (Comment.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
+		String json = Comment.findAll().orderBy("id asc").toJson(true, atts.toArray(new String[0]));
 		respond(json).contentType("application/json").status(200);
 	}
 

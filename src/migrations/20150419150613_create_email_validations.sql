@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS email_validations (
 	validated BOOLEAN DEFAULT false,					/* the token was validated via email (i.e. this validation is obsolete - batch delete tonight) */
 	is_citizen BOOLEAN DEFAULT false,					/* to distinguish between citizen validations and partner registrations */
 	is_registration BOOLEAN DEFAULT false,				/* mutually exclusive with the above */
+	is_pwd_renew BOOLEAN DEFAULT false,					/* partner validation for password renewal */
+	added_by BIGINT,									/* partner who is subscribing a new partner (null in all other cases) */
 	/* - */
 	created_at TIMESTAMP WITH TIME ZONE,
 	updated_at TIMESTAMP WITH TIME ZONE

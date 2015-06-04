@@ -19,6 +19,7 @@ public class QuestionsController extends PlatformController {
 	static final Logger log = LoggerFactory.getLogger(QuestionsController.class);
 	protected static final String[] LIST_EXCLUDED_FIELDS = { "html_content_en", "html_content_id", "picture_path",
 			"created_at", "updated_at" };
+	protected static final String[] EXCLUDED_FIELDS = { "created_at", "updated_at" };
 
 	/**
 	 * Render AngularJS SPA (the rest of the methods are JSON-based)
@@ -53,6 +54,38 @@ public class QuestionsController extends PlatformController {
 		} else {
 			json_403();
 		}
+	}
+
+	@GET
+	public void by() {
+		String partnerParam = param("partner");
+		if (!StringUtils.nullOrEmpty(partnerParam)) {
+			try {
+				Long partnerId = Long.decode(partnerParam);
+				questionsList(" proposed_by=" + partnerParam);
+			}
+			catch (NumberFormatException nfe) {
+				json_400("wrong partner ID " + partnerParam);
+			}
+		} else {
+			json_400("missing partner ID ");
+		}
+	}
+
+	@GET
+	public void edit() {
+		String idParam = param("id");
+		try {
+			if (!StringUtils.nullOrEmpty(idParam)) {
+				Long questionId = Long.decode(idParam);
+				Question question = Question.findById(questionId);
+				returnJson(Question.getMetaModel(), question, EXCLUDED_FIELDS);
+			}
+		}
+		catch (NumberFormatException nfe) {
+			json_400("invalid question id: " + idParam);
+		}
+
 	}
 
 	//------------//

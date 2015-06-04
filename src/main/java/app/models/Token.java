@@ -1,14 +1,22 @@
 package app.models;
 
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.annotations.BelongsTo;
 
 /**
  * Persistent authentication token used to track the anonymous citizen
  */
+@BelongsTo(parent = Citizen.class, foreignKeyName = "citizen_id")
 public class Token extends Model {
 
+	static {
+		Model.validatePresenceOf("token");
+	}
+
 	/**
-	 * Sets the validation flag and cascades the validation to the referred citizen
+	 * Sets the validation flag and cascades the validation to the referred
+	 * citizen
+	 * 
 	 * @return success of the validation
 	 */
 	public boolean validateToken() {
@@ -24,7 +32,7 @@ public class Token extends Model {
 			}
 		} else {}
 		success = success & save();
-		
+
 		return success;
 	}
 }

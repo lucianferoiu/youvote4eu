@@ -127,30 +127,51 @@ public abstract class PlatformController extends AppController {
 		respond(model.toJson(true, l.toArray(new String[0]))).contentType("application/json").status(200);
 	}
 
+	/**
+	 * JSON 200 - ok
+	 */
 	protected void json_200(String msg) {//generic success
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(200);
 	}
 
+	/**
+	 * JSON 201 - content created
+	 */
 	protected void json_201(String json) {//new content created - send the content back
 		respond(json).contentType("application/json").status(201);
 	}
 
+	/**
+	 * JSON 204 - success but no new content
+	 */
 	protected void json_204() {//success but no new content
 		respond("").contentType("application/json").status(204);
 	}
 
+	/**
+	 * JSON 400 - bad request
+	 */
 	protected void json_400(String msg) {//bad request
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(400);
 	}
 
+	/**
+	 * JSON 403 - unauthorized
+	 */
 	protected void json_403() {//unauthorized access
 		respond("unauthorized").contentType("application/json").status(204);
 	}
 
+	/**
+	 * JSON 404 - not found
+	 */
 	protected void json_404(String msg) {//not found
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(404);
 	}
 
+	/**
+	 * JSON 500 - server error
+	 */
 	protected void json_500(String msg) {//server error
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(501);
 	}
