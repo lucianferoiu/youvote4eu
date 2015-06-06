@@ -99,6 +99,11 @@ body {
 	color: white;
 }
 
+#addPartnerBtn > a:hover {
+	background-color: #449d44;
+	color: white;
+}
+
 .q-row {
 	background-color: white;
 	border-style: none none solid none;

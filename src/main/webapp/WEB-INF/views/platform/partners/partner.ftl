@@ -12,7 +12,7 @@
 						<div class="form-group">
 							<label for="partnerEmail" class="col-sm-4 control-label">Email address</label>
 							<div class="col-sm-8">
-								<input type="email" class="form-control" id="partnerEmail" placeholder="Enter email" ng-model="vm.ctx.crtPartner.email" required>
+								<input type="email" class="form-control" id="partnerEmail" placeholder="Enter email" ng-model="vm.ctx.crtPartner.email" ng-readonly="vm.ctx.crtPartner.id>0" required>
 							</div>
 						</div>
 						<div class="form-group">
