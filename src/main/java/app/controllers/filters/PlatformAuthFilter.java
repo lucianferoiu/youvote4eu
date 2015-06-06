@@ -45,18 +45,19 @@ public class PlatformAuthFilter extends HttpSupportFilter {
 
 	protected void ensureAuthorized(Partner authenticatedPartner, String path) {
 		if (path.startsWith("/platform/statistics") && !authenticatedPartner.getBoolean("can_view_statistics")) {
-			notAuthorized();
+			notAuthorized(authenticatedPartner);
 		}
 		if (path.startsWith("/platform/partners") && !authenticatedPartner.getBoolean("can_manage_partners")) {
-			notAuthorized();
+			notAuthorized(authenticatedPartner);
 		}
 		// TODO restrict access only to authorized sections
 
 	}
 
-	protected void notAuthorized() {
+	protected void notAuthorized(Partner p) {
 		flash("access_denied", "not_authorized");
-		redirect("/platform/auth");
+		log.debug("Partner {} accessing {} - Not Authorized, redirecting to home.. ", p.get("email"), path());
+		redirect("/platform/home");
 	}
 
 	protected void authenticationRequired() {

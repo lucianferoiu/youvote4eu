@@ -222,13 +222,13 @@ public class AuthController extends PlatformController {
 		String email = validation.getString("email");
 		Partner partner = Partner.findByEmail(email);
 		if (partner == null) {
-			log.debug("Partner is not registered by email {}", email);
+			log.debug("No partner is registered by email {}", email);
 			flash("pwd_reset_failure", "nonexisting");
 			redirect("/platform/auth");
 			return;
 		}
 
-		if (partner.get("added_by") != null) {
+		if (validation.get("added_by") != null) {
 			//the process finishes in the setPassword for validations of this kind...
 		} else {
 			validation.set("validated", true);
@@ -238,11 +238,11 @@ public class AuthController extends PlatformController {
 		//validation.delete();
 		partner.save();
 		log.debug("Partner registration finalized: validated new partner {}", partner);
-		if (partner.getBoolean("is_pwd_renew")) {//this is not this partner's first dance
+		if (validation.getBoolean("is_pwd_renew")) {//this is not this partner's first dance
 			flash("success_message", "new_pwd_verified");
-		} else if (partner.getBoolean("is_registration")) {
+		} else if (validation.getBoolean("is_registration")) {
 			flash("success_message", "verification_successful");
-		} else if (partner.get("added_by") != null) {
+		} else if (validation.get("added_by") != null) {
 			flash("should_show_set_pwd", "true");
 			flash("validation_code", code);
 			flash("email", email);
@@ -332,8 +332,9 @@ public class AuthController extends PlatformController {
 		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
 		EmailValidation validation = EmailValidation
 				.create("email", email, "token", validationCode, "validated", false);
-		validation.setTimestamp("valid_until", tomorrow).saveIt();
+		validation.setTimestamp("valid_until", tomorrow);
 		validation.setBoolean(field, true);//the kind of email verification
+		validation.saveIt();
 
 		mailer.sendMail(email, subj, writer.toString(), true);
 		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}",

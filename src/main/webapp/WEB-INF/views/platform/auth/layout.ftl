@@ -46,7 +46,7 @@
 		</div>
 	</nav>
 
-	[#include "flash_messages.ftl"]
+[#include "../flash_messages.ftl"]
 	
 [#-- ======================================================================================================================================= --]
 	<div class="container-narrow">
@@ -69,7 +69,7 @@ $('#sign-in-modal').delay(1000).modal('show');
 [/@content]
 [/#if]
 
-#if ((flasher.should_show_set_pwd)=="true") ??]
+[#if ((flasher.should_show_set_pwd)=="true") ??]
 [@content for="footer_script"]
 <script type="text/javascript">
 $('#set-password-modal').delay(1000).modal('show');
@@ -239,11 +239,11 @@ $('#set-password-modal').delay(1000).modal('show');
 				<hr/>
 				<div class="panel-body">
 					<form class="form-horizontal" action="${context_path}/platform/auth/set_password" method="post" data-toggle="validator" role="form">
-						<input id="pp-set-code" name="pp-set-code" type="hidden" value="${validation_code}">
+						<input id="pp-set-code" name="pp-set-code" type="hidden" value="${validation_code!''}">
 						<div class="form-group">
 							<label for="pp-set-email" class="col-sm-4">Your Email address</label> 
 							<div class="col-sm-8">
-								<input id="pp-set-email" name="pp-set-email" type="email" class="form-control" value="${email}" readonly>
+								<input id="pp-set-email" name="pp-set-email" type="email" class="form-control" value="${email!''}" readonly>
 								<div class="help-block with-errors"></div>
 							</div>
 						</div>
