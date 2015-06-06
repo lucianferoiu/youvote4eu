@@ -10,18 +10,31 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancelEdit()"><span aria-hidden="true">&times;</span></button>
-					<h3>Question: <em>{questionTitle}</em></h3>
+					<h3>Question: <em>{{vm.crtQuestion.title}}</em></h3>
 				</div>
 				<div class="modal-body">
 					<!-- tabs -->
 					<ul class="nav nav-tabs">
-						<li role="presentation" class="active"><a href="#">English</a></li>
-						<li role="presentation"><a href="#">French</a></li>
+						<li role="presentation" 
+							ng-class="{'active':vm.crtTranslation.lang==='en'}"
+							ng-click="vm.switchTranslation('en')" 
+								><a href="#">English</a></li>
+						<li role="presentation" 
+							ng-repeat="t in vm.translationsTab" 
+							ng-click="vm.switchTranslation(t.lang)" 
+							ng-class="{'active':vm.crtTranslation.lang===t.lang}">
+								<a href="#">{{t.label}}</a>
+						</li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Translations <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								[#list languages as lang]
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="#">[#-- [${lang.code}] --] ${lang.label_en}</a></li>
+								[#if (lang.code!='en')]
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#" 
+										ng-click="vm.switchTranslation('${lang.code}')"
+										
+										>${lang.label_en}</a></li>
+								[/#if]
 								[/#list]
 							</ul>
 						</li>
@@ -33,15 +46,18 @@
 						<form class="">
 							<div class="form-group">
 								<label for="questionTitle" class="control-label">Title</label>
-								<input type="text" class="form-control" id="questionTitle" placeholder="Short title" required>
+								<input type="text" class="form-control" id="questionTitle" ng-model="vm.crtTranslation.title" placeholder="Short title" required>
 							</div>
 							<div class="form-group">
 								<label for="questionDescription" class="control-label">Short Description</label>
-								<textarea class="form-control" rows="2" id="questionDescription" placeholder="Concise formulation of the question" maxlength="280"></textarea>
+								<textarea class="form-control" rows="2" id="questionDescription" ng-model="vm.crtTranslation.description" placeholder="Concise formulation of the question" maxlength="280"></textarea>
 							</div>
 							<div class="form-group">
 								<label for="questionContent" class="control-label">Question Content</label>
-								<div class="form-control" id="questionContent">Elaboration of the question arguments, supporting references and links.</div>
+								<div class="form-control" id="questionContent" placeholder="Elaboration of the question arguments, supporting references and links"></div>
+							</div>
+							<div class="">
+								{{vm.crtTranslation.html_content}}
 							</div>
 						</form>
 					</div>
@@ -51,23 +67,12 @@
 						<!-- tags cloud -->
 						<div class="col-xs-9">
 							<div class="tags-cloud" style="padding:6px;">
-								<span class="label label-info">environment &times;</span>
-								<span class="label label-info">social &times;</span>
-								<span class="label label-info">privacy &times;</span>
-								<span class="label label-info">2015 EP Session &times;</span>
-								<span class="label label-info">law &times;</span>
-								<span class="label label-info">euroskeptic &times;</span>
-								<span class="label label-info">energy &times;</span>
-								<span class="label label-info">WHO HHR2 Campain &times;</span>
+								<span class="label label-info" ng-repeat="t in vm.crtQuestion.tags">{{t.label}} <span ng-click="removeTag(t.id)">&times;</span></span>
 							</div>
 							<br/>
-							<div class="flags-cloud">
-								<span class="label label-success">promoted &times;</span>
-								<span class="label label-danger">duplicate &times;</span>
-								<span class="label label-danger">offensive &times;</span>
-								<span class="label label-danger">misleading references &times;</span>
-								<span class="label label-danger">mistranslated &times;</span>
-							</div>
+							<ul class="list-group">
+								<li class="list-group-item" ng-repeat="c in vm.crtQuestion.comments">{{c.text}}</li>
+							</ul>
 						</div>
 						<div class="col-xs-3">
 							<div class="dropup">

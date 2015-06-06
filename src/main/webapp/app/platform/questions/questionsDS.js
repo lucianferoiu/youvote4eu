@@ -4,9 +4,36 @@
 		
 	function QuestionsDS($q,$http) {
 		return {
+			getQuestionById: getQuestionById,
+			saveQuestion: saveQuestion
 		};
 
-
+		function getQuestionById(questionId,onSuccess,onError) {
+			var cfg = {
+				params: {
+					id: questionId
+				}
+			};
+			$http.get('/platform/questions/edit',cfg)
+				.success(function(data, status, headers, config) {
+					onSuccess(data);
+				}) 
+				.error(function(data, status, headers, config) {
+					onError(data);
+				});
+		}
+		
+		
+		function saveQuestion(question,onSuccess,onError) {
+			var cfg = {};
+			$http.post('/platform/questions/save',question,cfg)
+				.success(function(data, status, headers, config) {
+					onSuccess(data);
+				}) 
+				.error(function(data, status, headers, config) {
+					onError(data);
+				});
+		}
 
 /*************************************************************************************			
 			var ds = {

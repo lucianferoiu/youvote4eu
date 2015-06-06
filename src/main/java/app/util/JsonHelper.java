@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.CollectionType;
 import org.javalite.activejdbc.LazyList;
 
 public class JsonHelper {
 	public static Map toMap(String json) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
+			CollectionType mapCollectionType = mapper.getTypeFactory().constructCollectionType(List.class, Map.class);
 			return mapper.readValue(json, Map.class);
 		}
 		catch (IOException e) {
