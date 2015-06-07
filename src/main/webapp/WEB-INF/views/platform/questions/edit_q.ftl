@@ -43,14 +43,20 @@
 					<!-- form -->
 					<div class="">
 						<br/>
-						<form class="">
+						<form name="qTrans" class="">
 							<div class="form-group">
 								<label for="questionTitle" class="control-label">Title</label>
-								<input type="text" class="form-control" id="questionTitle" ng-model="vm.crtTranslation.title" placeholder="Short title" required>
+								<input type="text" class="form-control" id="questionTitle" 
+									ng-model="vm.crtTranslation.title" 
+									ng-required="vm.crtTranslation.lang==='en'" 
+									placeholder="Short title" >
 							</div>
 							<div class="form-group">
 								<label for="questionDescription" class="control-label">Short Description</label>
-								<textarea class="form-control" rows="2" id="questionDescription" ng-model="vm.crtTranslation.description" placeholder="Concise formulation of the question" maxlength="280"></textarea>
+								<textarea class="form-control" rows="2" id="questionDescription" 
+									ng-model="vm.crtTranslation.description" 
+									ng-required="vm.crtTranslation.lang==='en'"
+									placeholder="Concise formulation of the question" maxlength="280"></textarea>
 							</div>
 							<div class="form-group">
 								<label for="questionContent" class="control-label">Question Content</label>
@@ -108,10 +114,10 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
-					<button type="button" class="btn btn-primary" ng-click="vm.saveQuestion()">Save Question</button>
-					<button type="button" class="btn btn-default" ng-click="vm.publishQuestion()">Publish</button>
-					<button type="button" class="btn btn-default" ng-click="vm.archiveQuestion()">Archive</button>
-					<button type="button" class="btn btn-default" ng-click="vm.deleteQuestion()">Delete</button>
+					<button type="button" class="btn btn-default" ng-click="vm.saveQuestion()" ng-disabled="qTrans.$invalid">Save Question</button>
+					<button type="button" class="btn btn-default" ng-click="vm.publishQuestion()" ng-show="!(vm.crtQuestion.is_published)">Publish</button>
+					<button type="button" class="btn btn-default" ng-click="vm.archiveQuestion()" ng-show="vm.crtQuestion.is_published">Archive</button>
+					<button type="button" class="btn btn-default" ng-click="vm.deleteQuestion()" ng-disabled="!(vm.crtQuestion.is_published)">Delete</button>
 				</div>
 			</div>
 		</div>

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.javalite.activejdbc.Base;
 import org.javalite.activeweb.annotations.GET;
 import org.javalite.activeweb.annotations.POST;
 import org.slf4j.Logger;
@@ -86,7 +87,9 @@ public class QuestionsController extends PlatformController {
 		try {
 			if (!StringUtils.nullOrEmpty(idParam)) {
 				Long questionId = Long.decode(idParam);
-				Question question = Question.findById(questionId);
+				List<Question> questions = Question.where("id=?", questionId).include(Comment.class, Tag.class,
+						Translation.class);
+				Question question = questions.get(0);
 				if (question != null) {
 					//cache children
 					question.getAll(Comment.class);
@@ -130,25 +133,30 @@ public class QuestionsController extends PlatformController {
 
 		if (atts == null) json_400("Cannot read POST payload");
 
+		Base.openTransaction();
 		Question question = new Question();
 		if (id != null) {//update
 			question = Question.findById(id);
 			if (question == null) {
+				Base.rollbackTransaction();
 				json_404(String.format("No existing question with id: %d", question.getLongId()));
+				return;
 			}
+			//cleanup the children in preparation for addition from the values map
+			for (Comment o : question.getAll(Comment.class)) {
+				question.remove(o);
+			}
+			for (Tag o : question.getAll(Tag.class)) {
+				question.remove(o);
+			}
+			for (Translation o : question.getAll(Translation.class)) {
+				question.remove(o);
+			}
+			question.save();
 		}
 
-		//hydrate common attributes and process translations, tags and comments...
+		//hydrate common attributes 
 		question.fromMap(atts);
-		if (atts.containsKey("translations")) {
-			Map[] translations = JsonHelper.toMaps((String) atts.get("translations"));
-		}
-		if (atts.containsKey("comments")) {
-			Map[] comments = JsonHelper.toMaps((String) atts.get("comments"));
-		}
-		if (atts.containsKey("tags")) {
-			Map[] tags = JsonHelper.toMaps((String) atts.get("tags"));
-		}
 
 		if (id == null) {//new question
 			question.set("proposed_by", me.getLongId());
@@ -156,11 +164,45 @@ public class QuestionsController extends PlatformController {
 
 		}
 		boolean succ = question.save();
-		if (succ) {
-			json_200(String.format("updated question with id: %d", question.getLongId()));
-		} else {
-			json_400("cannot update partner details");
+		if (!succ) {
+			Base.rollbackTransaction();
+			json_400("cannot update question details: " + question.errors().toString());
+			return;
 		}
+
+		//process translations, tags and comments...
+		if (atts.containsKey("translations")) {
+			for (Map m : (List<Map>) atts.get("translations")) {
+				Translation o = new Translation();
+				o.fromMap(m);
+				if (o.get("created_by") == null) {
+					o.setLong("created_by", me.getLongId());
+				}
+				question.add(o);
+			}
+		}
+		if (atts.containsKey("comments")) {
+			for (Map m : (List<Map>) atts.get("comments")) {
+				Comment o = new Comment();
+				o.fromMap(m);
+				question.add(o);
+			}
+		}
+		if (atts.containsKey("tags")) {
+			for (Map m : (List<Map>) atts.get("tags")) {
+				Tag o = new Tag();
+				o.fromMap(m);
+				question.add(o);
+			}
+		}
+		succ = question.save();
+		if (!succ) {
+			Base.rollbackTransaction();
+			json_400("cannot update question associations: " + question.errors().toString());
+			return;
+		}
+		Base.commitTransaction();
+		json_200(String.format("updated question with id: %d", question.getLongId()));
 
 	}
 

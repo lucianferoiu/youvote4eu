@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS questions (
 	is_archived BOOLEAN DEFAULT false,				/* is this question archived */
 	is_deleted BOOLEAN DEFAULT false,				/* in case we decide against physically deleting the questions */
 	proposed_by BIGINT NOT NULL,					/* the platform partner that introduced this question */
-	upvotes BIGINT DEFAULT 1,						/* number of upvotes (support) that a question gained in order to be published */
+	support BIGINT DEFAULT 1,						/* number of upvotes (support) that a question gained in order to be published */
 	popular_votes BIGINT DEFAULT 0,					/* total votes cast by the public (on the website) */
 	popular_vote_tally NUMERIC(3),					/* summary of the YES votes percentage of the popular vote (on the website) */
 	official_vote_tally NUMERIC(3),					/* summary of the YES votes percentage of the official/institutional vote (if public agenda topic) */

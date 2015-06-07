@@ -1,8 +1,8 @@
 (function() {
 	angular.module('app.questions')
-		.controller('QuestionsCtrl',['questionsDS',QuestionsCtrl]);
+		.controller('QuestionsCtrl',['questionsDS','refDS',QuestionsCtrl]);
 		
-	function QuestionsCtrl(questionsDS) {
+	function QuestionsCtrl(questionsDS,refDS) {
 		
 		//setup view model
 		var vm = this;
@@ -17,11 +17,13 @@
 		vm.cancelEdit = cancelEdit;
 		vm.saveQuestion = saveQuestion;
 		vm.switchTranslation = switchTranslation;
+		vm.englishForLangCode = englishForLangCode;
 		vm.publishQuestion = publishQuestion;
 		vm.archiveQuestion = archiveQuestion;
 		vm.deleteQuestion = deleteQuestion;
 		
 		//init
+		refDS.preload();
 		switchPanel('pubQ');
 		//----------------------------------------------//
 		function addQuestion() {
@@ -116,8 +118,10 @@
 		
 		function switchTranslation(lng) {
 			if (vm.crtQuestion!=null&&vm.crtTranslation.lang!==lng) {
+				//save what we have now in the input fields
 				saveCrtTranslation(vm.crtQuestion);
-				//
+				
+				//load the values from the temp. storage
 				vm.crtTranslation = {
 					lang: lng,
 					title: getTranslation(vm.crtQuestion,lng,'title')||'',
@@ -126,6 +130,7 @@
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
 				
+				//update the tabs
 				if (vm.translationsTab!=null) {
 					var tabExists = false;
 					for (var i = vm.translationsTab.length - 1; i >= 0; i--) {
@@ -134,13 +139,13 @@
 							tabExists = true;
 						}
 					}
-					if (!tabExists) {
+					if ( (!tabExists) && (lng !== 'en') ) {
 						if (vm.translationsTab.length>5) {
 							vm.translationsTab.shift();
 						}
 						vm.translationsTab.push({
 							lang: lng,
-							label: lng
+							label: englishForLangCode(lng)
 						});
 					}
 				}
@@ -165,6 +170,17 @@
 
 		function switchPanel(panel) {
 			vm.activePanel = panel;
+		}
+		
+		function englishForLangCode(code) {
+			var langs = refDS.languages();
+			if (langs!=null) {
+				var lang = langs[code];
+				if (lang!=null) {
+					return lang.label_en;
+				}
+			}
+			return code;
 		}
 
 /*************************************************************************************
