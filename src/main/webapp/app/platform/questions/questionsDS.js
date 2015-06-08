@@ -3,7 +3,20 @@
 		.service('questionsDS',['$q','$http',QuestionsDS]);//we want a new instance per client (so we use service instead of factory) so we can maintain state inside it...
 		
 	function QuestionsDS($q,$http) {
+		
+		var ds = {
+			PAGE_SIZE: 10,
+			questionListURLs: {
+				'archQ': '/platform/questions/archived',
+				'pubQ': '/platform/questions/published',
+				'propQ': '/platform/questions/proposed',
+				'myQ': '/platform/questions/mine'
+			}
+		};
+		
 		return {
+			PAGE_SIZE: ds.PAGE_SIZE,
+			getQuestions: getQuestions,
 			getQuestionById: getQuestionById,
 			saveQuestion: saveQuestion
 		};
@@ -34,6 +47,26 @@
 					onError(data);
 				});
 		}
+		
+		function getQuestions(page,questionsType,onSuccess,onError) {
+			var cfg = {
+				params: {
+					from: (page-1)*ds.PAGE_SIZE,
+					to: (page*ds.PAGE_SIZE)-1
+				}
+			};
+			var url = ds.questionListURLs[questionsType];
+			if (url) {
+				$http.get(url,cfg)
+					.success(function(data, status, headers, config) {
+						onSuccess(data);
+					}) 
+					.error(function(data, status, headers, config) {
+						onError(data);
+					});
+			} 
+		}
+		
 
 /*************************************************************************************			
 			var ds = {

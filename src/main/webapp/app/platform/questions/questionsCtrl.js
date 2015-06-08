@@ -7,14 +7,28 @@
 		//setup view model
 		var vm = this;
 		vm.editingQuestion=false;
+		vm.pubQ = {
+			crtPage: 1,
+			totalPages: 1,
+			pagesRange: [],
+			totalResults: 0,
+			results: []
+		};
+		vm.archQ = angular.copy(vm.pubQ);
+		vm.propQ = angular.copy(vm.pubQ);
+		vm.myQ = angular.copy(vm.pubQ);
 		vm.crtQuestion = {};
 		vm.crtTranslation = {lang:'en'};
 		vm.translationsTab = [];
+		vm.translationsDropdown = [];
 		
 		//vm API
 		vm.switchPanel = switchPanel;
+		vm.loadPage = loadPage;
 		vm.addQuestion = addQuestion;
+		vm.editQuestion = editQuestion;
 		vm.cancelEdit = cancelEdit;
+		vm.crtQuestionInalid = crtQuestionInalid;
 		vm.saveQuestion = saveQuestion;
 		vm.switchTranslation = switchTranslation;
 		vm.englishForLangCode = englishForLangCode;
@@ -23,16 +37,97 @@
 		vm.deleteQuestion = deleteQuestion;
 		
 		//init
-		refDS.preload();
+		refDS.preload(true);
 		switchPanel('pubQ');
 		//----------------------------------------------//
+		
+		function loadPage(page) {
+			var panel = vm[vm.activePanel];
+			if (panel) {
+				if (page>=1 && page<=panel.totalPages) {
+					panel.crtPage=page;
+					questionsDS.getQuestions(page,vm.activePanel,function (data) {
+						panel.totalRecords = data.total;
+						panel.totalPages = Math.ceil(panel.totalRecords/questionsDS.PAGE_SIZE);
+						panel.pagesRange = refDS.range(panel.totalPages);
+						panel.results = data.results;
+					},function (message) {
+						console.log('Cannot load page '+page+' of '+vm.activePanel+'questions: '+message)
+					});
+				}
+			}
+		}
+		
+		//----------------------------------------------//
+		
 		function addQuestion() {
 			vm.crtQuestion = {
-				translations:[],
-				tags:[],
-				comments:[]
+				children: {
+					translations:[],
+					tags:[],
+					comments:[]
+				}
 			};
+			refDS.languages(false,function (langs) {
+				vm.translationsDropdown = [];
+				for (var code in langs) {
+					if (langs.hasOwnProperty(code)) {
+						vm.translationsDropdown.unshift({
+							code: code,
+							label: langs[code].label_en,
+							completed: false
+						});
+					}
+				}
+			});
+			
 			vm.editingQuestion = true;
+		}
+		
+		function editQuestion(questionId) {
+			questionsDS.getQuestionById(questionId,function (question) {
+				vm.crtQuestion = question;
+				
+				//load default translation
+				vm.crtTranslation = {
+					lang:'en',
+					title: question.title,
+					description: question.description,
+					html_content: question.html_content,
+				};
+				$('#questionContent').code(vm.crtTranslation.html_content);
+				
+				//update dropdown
+				if (question.children && question.children.translations) {
+					refDS.languages(false,function (langs) {
+						vm.translationsDropdown = [];
+						for (var code in langs) {
+							if (langs.hasOwnProperty(code)) {
+								var isCompleted = false;
+								for (var i = question.children.translations.length - 1; i >= 0; i--) {
+									var tr = question.children.translations[i];
+									if (tr.code===code) {
+										if (tr.title && tr.description && tr.html_content) {
+											isCompleted = true;
+										}
+									}
+								}
+							
+								vm.translationsDropdown.unshift({
+									code: code,
+									label: langs[code].label_en,
+									completed: isCompleted
+								});
+							}
+						}
+					});
+				}
+				//show the question
+				vm.editingQuestion = true;
+			}, function (err) {
+				console.log('Cannot load question with id='+questionId+' :'+err);
+			});
+			
 		}
 		
 		function cancelEdit() {
@@ -60,6 +155,18 @@
 			console.log('cannot save question: '+msg);
 		}
 		
+		function crtQuestionInalid() {
+			if (!vm.crtQuestion) return true;
+			if (vm.crtTranslation.lang==='en') {
+				if ( (!vm.crtTranslation.title) || (vm.crtTranslation.title.length<5) || 
+					(!vm.crtTranslation.description) || (vm.crtTranslation.description.length<20)) return true;
+			} else {
+				if ( (!vm.crtQuestion.title) || (vm.crtQuestion.title.length<5) || 
+					(!vm.crtQuestion.description) || (vm.crtQuestion.description.length<20)) return true;
+			}
+			return false;
+		}
+		
 		function saveCrtTranslation(q) {
 			vm.crtTranslation.html_content = $('#questionContent').code();
 			if (vm.crtTranslation.lang==='en') {
@@ -71,14 +178,29 @@
 				setTranslation(q,vm.crtTranslation,'description');
 				setTranslation(q,vm.crtTranslation,'html_content');
 			}
+			
+			//update the dropdown
+			for (var i = vm.translationsDropdown.length - 1; i >= 0; i--) {
+				var dd = vm.translationsDropdown[i];
+				if (dd.code===vm.crtTranslation.lang) {
+					if (vm.crtTranslation.title && vm.crtTranslation.title.length>5 && vm.crtTranslation.description && vm.crtTranslation.description.length>10 && vm.crtTranslation.html_content) {
+						dd.completed = true;
+					} else {
+						dd.completed = false;
+					}
+				}
+			}	
+				
+			
 		}
 		
 		function setTranslation(q,trans,fld) {
 			if (q!=null&&trans!=null) {
-				if (q.translations==null) q.translations=[];
+				if (q.children==null) q.children={translations:[],tags:[],comments:[]};
+				if (q.children.translations==null) q.children.translations=[];
 				var isNewTrans = true;
-				for (var i = q.translations.length - 1; i >= 0; i--) {
-					var t = q.translations[i];
+				for (var i = q.children.translations.length - 1; i >= 0; i--) {
+					var t = q.children.translations[i];
 					if (t.lang===trans.lang && t.field_type===fld) {
 						t.text = trans[fld];
 						isNewTrans = false;
@@ -93,7 +215,7 @@
 						lang: trans.lang,
 						text: trans[fld]
 					};
-					q.translations.push(newTrans);
+					q.children.translations.push(newTrans);
 				}
 				
 			}
@@ -105,8 +227,8 @@
 				if (lng==='en') {
 					return q[fld];
 				} else {
-					for (var i = q.translations.length - 1; i >= 0; i--) {
-						var t = q.translations[i];
+					for (var i = q.children.translations.length - 1; i >= 0; i--) {
+						var t = q.children.translations[i];
 						if (t.lang===lng && t.field_type===fld) {
 							return t.text;
 						}
@@ -155,21 +277,36 @@
 		
 		
 		function publishQuestion() {
-			vm.editingQuestion=false;
+			if (vm.crtQuestion) {
+				vm.crtQuestion.is_published=true;
+				vm.open_at = new Date();
+				saveQuestion();
+			}
 		}
 		
 		function archiveQuestion() {
-			vm.editingQuestion=false;
+			if (vm.crtQuestion) {
+				vm.crtQuestion.is_archived=true;
+				vm.archived_at = new Date();
+				saveQuestion();
+			}
 		}
 		
 		function deleteQuestion() {
-			vm.editingQuestion=false;
+			if (vm.crtQuestion) {
+				vm.crtQuestion.is_deleted=true;
+				saveQuestion();
+			}
 		}
 
 		//----------------------------------------------//
 
-		function switchPanel(panel) {
-			vm.activePanel = panel;
+		function switchPanel(panelName) {
+			var panel = vm[vm.activePanel];
+			vm.activePanel = panelName;
+			if (panel) {
+				loadPage(panel.crtPage);
+			}
 		}
 		
 		function englishForLangCode(code) {

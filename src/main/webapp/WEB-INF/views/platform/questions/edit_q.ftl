@@ -28,14 +28,10 @@
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Translations <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								[#list languages as lang]
-								[#if (lang.code!='en')]
 									<li role="presentation"><a role="menuitem" tabindex="-1" href="#" 
-										ng-click="vm.switchTranslation('${lang.code}')"
-										
-										>${lang.label_en}</a></li>
-								[/#if]
-								[/#list]
+										ng-repeat="l in vm.translationsDropdown"
+										ng-click="vm.switchTranslation(l.code)"
+										>{{l.label}}    <span class="glyphicon glyphicon-pencil" ng-show="l.completed"></span></a></li>
 							</ul>
 						</li>
 					</ul>
@@ -49,14 +45,14 @@
 								<input type="text" class="form-control" id="questionTitle" 
 									ng-model="vm.crtTranslation.title" 
 									ng-required="vm.crtTranslation.lang==='en'" 
-									placeholder="Short title" >
+									placeholder="Short title (mandatory)" >
 							</div>
 							<div class="form-group">
 								<label for="questionDescription" class="control-label">Short Description</label>
 								<textarea class="form-control" rows="2" id="questionDescription" 
 									ng-model="vm.crtTranslation.description" 
 									ng-required="vm.crtTranslation.lang==='en'"
-									placeholder="Concise formulation of the question" maxlength="280"></textarea>
+									placeholder="Concise formulation of the question (mandatory: at least a few words)" maxlength="280"></textarea>
 							</div>
 							<div class="form-group">
 								<label for="questionContent" class="control-label">Question Content</label>
@@ -114,8 +110,8 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
-					<button type="button" class="btn btn-default" ng-click="vm.saveQuestion()" ng-disabled="qTrans.$invalid">Save Question</button>
-					<button type="button" class="btn btn-default" ng-click="vm.publishQuestion()" ng-show="!(vm.crtQuestion.is_published)">Publish</button>
+					<button type="button" class="btn btn-default" ng-click="vm.saveQuestion()" ng-disabled="vm.crtQuestionInalid()">Save Question</button>
+					<button type="button" class="btn btn-default" ng-click="vm.publishQuestion()" ng-show="!(vm.crtQuestion.is_published)" ng-disabled="vm.crtQuestionInalid()">Publish</button>
 					<button type="button" class="btn btn-default" ng-click="vm.archiveQuestion()" ng-show="vm.crtQuestion.is_published">Archive</button>
 					<button type="button" class="btn btn-default" ng-click="vm.deleteQuestion()" ng-disabled="!(vm.crtQuestion.is_published)">Delete</button>
 				</div>

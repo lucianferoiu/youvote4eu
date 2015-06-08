@@ -79,7 +79,7 @@ public abstract class PlatformController extends AppController {
 
 		Long from = 0L;
 		Long to = total - 1;
-		String sortBy = "last_login";
+		String sortBy = "id";
 		String dir = " asc nulls first ";
 
 		try {

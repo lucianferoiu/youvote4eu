@@ -42,24 +42,25 @@ public class QuestionsController extends PlatformController {
 
 	@GET
 	public void archived() {
-		questionsList(" is_archived=true ");
+		questionsList(" is_archived=true ", " archived_at desc, popular_votes desc ");
 	}
 
 	@GET
 	public void published() {
-		questionsList(" is_published=true ");
+		questionsList(" is_published=true ", " popular_votes desc, open_at desc ");
 	}
 
 	@GET
 	public void proposed() {
-		questionsList(" is_archived=false AND is_published=false ");
+		questionsList(" (is_archived IS NULL OR is_archived=false) AND (is_published IS NULL OR is_published=false) ",
+				" created_at desc, support desc ");
 	}
 
 	@GET
 	public void mine() {
 		Question authenticatedPartner = (Question) session(Const.AUTHENTICATED_PARTNER);
 		if (authenticatedPartner != null) {
-			questionsList(" proposed_by=" + authenticatedPartner.getLongId());
+			questionsList(" proposed_by=" + authenticatedPartner.getLongId(), " created_at desc, support desc ");
 		} else {
 			json_403();
 		}
@@ -71,7 +72,7 @@ public class QuestionsController extends PlatformController {
 		if (!StringUtils.nullOrEmpty(partnerParam)) {
 			try {
 				Long partnerId = Long.decode(partnerParam);
-				questionsList(" proposed_by=" + partnerParam);
+				questionsList(" proposed_by=" + partnerParam, " created_at desc, support desc ");
 			}
 			catch (NumberFormatException nfe) {
 				json_400("wrong partner ID " + partnerParam);
@@ -171,28 +172,32 @@ public class QuestionsController extends PlatformController {
 		}
 
 		//process translations, tags and comments...
-		if (atts.containsKey("translations")) {
-			for (Map m : (List<Map>) atts.get("translations")) {
-				Translation o = new Translation();
-				o.fromMap(m);
-				if (o.get("created_by") == null) {
-					o.setLong("created_by", me.getLongId());
+		if (atts.containsKey("children")) {
+			Map kids = (Map) atts.get("children");
+
+			if (kids.containsKey("translations")) {
+				for (Map m : (List<Map>) kids.get("translations")) {
+					Translation o = new Translation();
+					o.fromMap(m);
+					if (o.get("created_by") == null) {
+						o.setLong("created_by", me.getLongId());
+					}
+					question.add(o);
 				}
-				question.add(o);
 			}
-		}
-		if (atts.containsKey("comments")) {
-			for (Map m : (List<Map>) atts.get("comments")) {
-				Comment o = new Comment();
-				o.fromMap(m);
-				question.add(o);
+			if (kids.containsKey("comments")) {
+				for (Map m : (List<Map>) kids.get("comments")) {
+					Comment o = new Comment();
+					o.fromMap(m);
+					question.add(o);
+				}
 			}
-		}
-		if (atts.containsKey("tags")) {
-			for (Map m : (List<Map>) atts.get("tags")) {
-				Tag o = new Tag();
-				o.fromMap(m);
-				question.add(o);
+			if (kids.containsKey("tags")) {
+				for (Map m : (List<Map>) kids.get("tags")) {
+					Tag o = new Tag();
+					o.fromMap(m);
+					question.add(o);
+				}
 			}
 		}
 		succ = question.save();
@@ -208,16 +213,20 @@ public class QuestionsController extends PlatformController {
 
 	//------------//
 
-	protected void questionsList(String filter) {
+	protected void questionsList(String filter, String orderBy) {
 		List<Object> filterParams = new ArrayList<Object>();
+		//exclude deleted...
+		filter += "AND (is_deleted IS NULL OR is_deleted=?) ";
+		filterParams.add(new Boolean(false));
+
 		String searchParam = param("search");
 		if (!StringUtils.nullOrEmpty(searchParam) && searchParam.matches("\\w+")) {
-			filter += " AND (lower(title_en) like '%?%' OR lower(description_en) '%?%') ";
+			filter += " AND (lower(title) like '%?%' OR lower(description) '%?%') ";
 			filterParams.add(searchParam.toLowerCase());
 			filterParams.add(searchParam.toLowerCase());
 		}
-		returnJsonResults(Question.getMetaModel(), Question.find(filter, filterParams),
-				Question.count(filter, filterParams), LIST_EXCLUDED_FIELDS);
+		returnJsonResults(Question.getMetaModel(), Question.find(filter, filterParams.toArray()).orderBy(orderBy),
+				Question.count(filter, filterParams.toArray()), LIST_EXCLUDED_FIELDS);
 	}
 
 }
