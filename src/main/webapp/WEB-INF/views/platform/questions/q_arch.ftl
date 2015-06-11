@@ -2,87 +2,42 @@
 
 <div class="container-fluid" ng-show="vm.activePanel==='archQ'">
 
-	<div class="row q-row bottom-border">
+	<div class="row q-row bottom-border"  ng-repeat="q in vm.archQ.results">
 		<div class="col-sm-2 q-info-cell ">
 			<div class="vcenter">
 				<p class="text-nowrap" style="padding-top: 8px;">
-					<span class="label label-success text-left">Yes: 42%</span>&nbsp;
-					<span class="label label-danger text-right">No: 68%</span>
+					<span class="label label-success text-left">Yes: {{q.popular_vote_tally*100}} %</span>&nbsp;
+					<span class="label label-danger text-right">No: {{(1-q.popular_vote_tally)*100}} %</span>
 				</p>
-				<span class="label label-default">Archived: May &nbsp;1, 2015</span>
+				<span class="label label-default">Archived: {{q.archived_at|date:'medium'}}</span>
 			</div>
 		</div>
-		<div class="col-sm-10 q-text-cell">
+		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="vcenter">
 				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
+					<span class="glyphicon glyphicon-inbox text-primary"></span> 
+					&nbsp;
+					<strong class="leading">{{q.title}}</strong>
 				</div>
 				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row q-row bottom-border">
-		<div class="col-sm-2 q-info-cell ">
-			<div class="vcenter">
-				<p class="text-nowrap" style="padding-top: 8px;">
-					<span class="label label-success text-left">Yes: 83%</span>&nbsp;
-					<span class="label label-danger text-right">No: 17%</span>
-				</p>
-				<span class="label label-default">Archived: Nov 31, 2015</span>
-			</div>
-		</div>
-		<div class="col-sm-10 q-text-cell">
-			<div class="vcenter">
-				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
-				</div>
-				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
+					{{q.description}}
 				</div>
 			</div>
 		</div>
 	</div>
 
 
-	<div class="row q-row bottom-border">
-		<div class="col-sm-2 q-info-cell ">
-			<div class="vcenter">
-				<p class="text-nowrap" style="padding-top: 8px;">
-					<span class="label label-success text-left">Yes: 15%</span>&nbsp;
-					<span class="label label-danger text-right">No: 85%</span>
-				</p>
-				<span class="label label-default">Archived: Aug 31, 2015</span>
-			</div>
-		</div>
-		<div class="col-sm-10 q-text-cell">
-			<div class="vcenter">
-				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
-				</div>
-				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
-				</div>
-			</div>
-		</div>
-	</div>
-
-
+	<!-- pagination -->
 	<div class="text-center">
 		<ul class="pagination">
-			<li ng-class="{'disabled': (vm.ctx.crtPage<=1)} ">
-				<a href="#" ng-click="vm.loadPage(vm.ctx.crtPage-1)" aria-label="Previous"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span></a>
+			<li ng-class="{'disabled': (vm.archQ.crtPage<=1)} ">
+				<a href="#" ng-click="vm.loadPage(vm.archQ.crtPage-1)" aria-label="Previous"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span></a>
 			</li>
-			<li ng-repeat="pg in vm.ctx.pagesRange track by $index" ng-class="{'active': (vm.ctx.crtPage==($index+1))} ">
+			<li ng-repeat="pg in vm.archQ.pagesRange track by $index" ng-class="{'active': (vm.archQ.crtPage==($index+1))} ">
 				<a href="#" aria-label="{{$index+1}}" ng-click="vm.loadPage($index+1)">{{$index+1}}</a>
 			</li>
-			<li ng-class="{'disabled': (vm.ctx.crtPage>=vm.ctx.totalPages)} ">
-				<a href="#" ng-click="vm.loadPage(vm.ctx.crtPage+1)" aria-label="Next"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
+			<li ng-class="{'disabled': (vm.archQ.crtPage>=vm.archQ.totalPages)} ">
+				<a href="#" ng-click="vm.loadPage(vm.archQ.crtPage+1)" aria-label="Next"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
 			</li>
 		</ul>
 	</div>

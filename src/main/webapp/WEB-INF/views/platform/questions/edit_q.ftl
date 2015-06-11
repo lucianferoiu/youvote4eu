@@ -10,62 +10,76 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancelEdit()"><span aria-hidden="true">&times;</span></button>
-					<h3>Question: <em>{{vm.crtQuestion.title}}</em></h3>
+					<h3>Question [{{vm.crtQuestion.id|pad:3:'0'}}]: <em>{{vm.crtQuestion.title}}</em></h3>
 				</div>
 				<div class="modal-body">
-					<!-- tabs -->
-					<ul class="nav nav-tabs">
-						<li role="presentation" 
-							ng-class="{'active':vm.crtTranslation.lang==='en'}"
-							ng-click="vm.switchTranslation('en')" 
-								><a href="#">English</a></li>
-						<li role="presentation" 
-							ng-repeat="t in vm.translationsTab" 
-							ng-click="vm.switchTranslation(t.lang)" 
-							ng-class="{'active':vm.crtTranslation.lang===t.lang}">
-								<a href="#">{{t.label}}</a>
+					<!-- question detail sections -->
+					<ul class="nav nav-pills nav-justified">
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='main'}" style="padding-left:10px;">
+							<a href="#" class="q-pill" ng-click="vm.switCrtQPanel('main')">Main Details</a>
 						</li>
-						<li role="presentation" class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Translations <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-									<li role="presentation"><a role="menuitem" tabindex="-1" href="#" 
-										ng-repeat="l in vm.translationsDropdown"
-										ng-click="vm.switchTranslation(l.code)"
-										>{{l.label}}    <span class="glyphicon glyphicon-pencil" ng-show="l.completed"></span></a></li>
-							</ul>
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='meta'}" style="padding-left:10px;">
+							<a href="#" class="q-pill" ng-click="vm.switCrtQPanel('meta')">Metadata</a>
+						</li>
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='stats'}" style="padding-left:10px;">
+							<a href="#" class="q-pill" ng-click="vm.switCrtQPanel('stats')">Statistics</a>
 						</li>
 					</ul>
-					
-					<!-- form -->
-					<div class="">
-						<br/>
-						<form name="qTrans" class="">
-							<div class="form-group">
-								<label for="questionTitle" class="control-label">Title</label>
-								<input type="text" class="form-control" id="questionTitle" 
-									ng-model="vm.crtTranslation.title" 
-									ng-required="vm.crtTranslation.lang==='en'" 
-									placeholder="Short title (mandatory)" >
-							</div>
-							<div class="form-group">
-								<label for="questionDescription" class="control-label">Short Description</label>
-								<textarea class="form-control" rows="2" id="questionDescription" 
-									ng-model="vm.crtTranslation.description" 
-									ng-required="vm.crtTranslation.lang==='en'"
-									placeholder="Concise formulation of the question (mandatory: at least a few words)" maxlength="280"></textarea>
-							</div>
-							<div class="form-group">
-								<label for="questionContent" class="control-label">Question Content</label>
-								<div class="form-control" id="questionContent" placeholder="Elaboration of the question arguments, supporting references and links"></div>
-							</div>
-							<div class="">
-								{{vm.crtTranslation.html_content}}
-							</div>
-						</form>
-					</div>
-					<!-- tags panel -->
+
 					<hr/>
-					<div class="row">
+					<!-- main question panel -->
+					<div class="q-panel">
+						<!-- question body translation tabs -->
+						<ul class="nav nav-tabs">
+							<li role="presentation" 
+								ng-class="{'active':vm.crtTranslation.lang==='en'}"
+								ng-click="vm.switchTranslation('en')" 
+									><a href="#">English</a></li>
+							<li role="presentation" 
+								ng-repeat="t in vm.translationsTab" 
+								ng-click="vm.switchTranslation(t.lang)" 
+								ng-class="{'active':vm.crtTranslation.lang===t.lang}">
+									<a href="#">{{t.label}}</a>
+							</li>
+							<li role="presentation" class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Translations <span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+										<li role="presentation"><a role="menuitem" tabindex="-1" href="#" 
+											ng-repeat="l in vm.translationsDropdown"
+											ng-click="vm.switchTranslation(l.code)"
+											>{{l.label}} <span class="glyphicon glyphicon-pencil" ng-show="l.completed"></span></a></li>
+								</ul>
+							</li>
+						</ul>
+					
+						<!-- form -->
+						<div class="">
+							<br/>
+							<form name="qTrans" class="">
+								<div class="form-group">
+									<label for="questionTitle" class="control-label">Title</label>
+									<input type="text" class="form-control" id="questionTitle" 
+										ng-model="vm.crtTranslation.title" 
+										ng-required="vm.crtTranslation.lang==='en'" 
+										placeholder="Short title (mandatory)" >
+								</div>
+								<div class="form-group">
+									<label for="questionDescription" class="control-label">Short Description</label>
+									<textarea class="form-control" rows="2" id="questionDescription" 
+										ng-model="vm.crtTranslation.description" 
+										ng-required="vm.crtTranslation.lang==='en'"
+										placeholder="Concise formulation of the question (mandatory: at least a few words)" maxlength="280"></textarea>
+								</div>
+								<div class="form-group">
+									<label for="questionContent" class="control-label">Question Content</label>
+									<div class="form-control" id="questionContent" placeholder="Elaboration of the question arguments, supporting references and links"></div>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+					<!-- metadata question panel -->
+					<div class="q-panel">
 						<!-- tags cloud -->
 						<div class="col-xs-9">
 							<div class="tags-cloud" style="padding:6px;">
@@ -107,6 +121,12 @@
 							</div>
 						</div>
 					</div>
+					
+					
+					<!-- statistics question panel -->
+					<div class="q-panel">
+						
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
@@ -123,7 +143,7 @@
 
 [@content for="footer_script"]<script  type="text/javascript">
 	$('#questionContent').summernote({
-		height: 100,//TODO: make it 360
+		height: 200,
 		maxHeight: 800,
 		keyMap: {pc:{},mac:{}},//the only way to turn off both shortcuts and squigly chars in tooltips
 		toolbar: [

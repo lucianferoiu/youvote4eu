@@ -112,7 +112,7 @@ body {
 	border-color: #eee;
 }
 
-.q-row:hover {
+.q-text-cell:hover {
 	background-color: #f5f5f5;
 	border-style: none none solid none;
 	border-width: 1px;

@@ -1,6 +1,8 @@
 package app.base;
 
+import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.MetaModel;
@@ -174,6 +176,20 @@ public abstract class PlatformController extends AppController {
 	 */
 	protected void json_500(String msg) {//server error
 		respond("{\"message\":\"" + msg + "\"}").contentType("application/json").status(501);
+	}
+
+	protected void parseTimestamps(Model model, Map<String, Object> atts) {
+		for (String key : atts.keySet()) {
+			Object val = atts.get(key);
+			if (val != null) {
+				if (key.endsWith("_at") || key.endsWith("_on")) {
+					//ZonedDateTime date = ZonedDateTime.parse(val.toString(), DateTimeFormatter.ISO_INSTANT);
+					model.setTimestamp(key, new Time((Long) val));
+				} else if (val instanceof Map) {//deep parse
+					parseTimestamps(model, (Map<String, Object>) val);
+				}
+			}
+		}
 	}
 
 }

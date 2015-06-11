@@ -18,7 +18,7 @@
 				</li>
 				<li role="presentation" id="addQuestionBtn" style="padding-right:10px;">
 					<a href="#" class="q-pill q-pill-button btn-success" ng-click="vm.addQuestion()">
-						<span class="glyphicon glyphicon-plus"></span>&nbsp; Propose new Questions</a>
+						<span class="glyphicon glyphicon-plus"></span>&nbsp; Propose new Question</a>
 				</li>
 			</ul>
 		</div>
@@ -30,13 +30,12 @@
 			<button type="button" class="btn btn-success" data-toggle="dropdown" style="display: block; width: 100%;"
 				aria-expanded="false">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;Propose new Question </button>
 		</div> --]
-		<div class="pull-right col-xs-5">
+		<div class="pull-right col-xs-3">
 			<form class="">
 				<div class="input-group">
-					<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-					<input type="text" class="form-control" id="questionSearch" placeholder="type a word to search for questions containing it..">
+					<input type="text" class="form-control" id="questionSearch" placeholder="search by key word">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button">Search</button>
+						<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></button>
 					</span>
 				</div>
 			</form>

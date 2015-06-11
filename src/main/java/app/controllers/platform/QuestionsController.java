@@ -47,7 +47,8 @@ public class QuestionsController extends PlatformController {
 
 	@GET
 	public void published() {
-		questionsList(" is_published=true ", " popular_votes desc, open_at desc ");
+		questionsList(" is_published=true AND (is_archived IS NULL OR is_archived=false) ",
+				" popular_votes desc, open_at desc ");
 	}
 
 	@GET
@@ -58,7 +59,7 @@ public class QuestionsController extends PlatformController {
 
 	@GET
 	public void mine() {
-		Question authenticatedPartner = (Question) session(Const.AUTHENTICATED_PARTNER);
+		Partner authenticatedPartner = (Partner) session(Const.AUTHENTICATED_PARTNER);
 		if (authenticatedPartner != null) {
 			questionsList(" proposed_by=" + authenticatedPartner.getLongId(), " created_at desc, support desc ");
 		} else {
@@ -88,15 +89,15 @@ public class QuestionsController extends PlatformController {
 		try {
 			if (!StringUtils.nullOrEmpty(idParam)) {
 				Long questionId = Long.decode(idParam);
-				List<Question> questions = Question.where("id=?", questionId).include(Comment.class, Tag.class,
-						Translation.class);
+				List<Question> questions = Question.where("id=?", questionId)//
+						.include(Comment.class, Tag.class, Translation.class);//gather translations and metadata associated entities
 				Question question = questions.get(0);
 				if (question != null) {
-					//cache children
+					//force cache children
 					question.getAll(Comment.class);
 					//question.getAll(Upvote.class); <-- we don't need this one...
 					question.getAll(Tag.class);
-					question.getAll(Translation.class);
+					//					question.getAll(Translation.class);
 					returnJson(Question.getMetaModel(), question, EXCLUDED_FIELDS);
 				} else {
 					json_404("cannot find question with id=" + idParam);
@@ -143,27 +144,21 @@ public class QuestionsController extends PlatformController {
 				json_404(String.format("No existing question with id: %d", question.getLongId()));
 				return;
 			}
-			//cleanup the children in preparation for addition from the values map
-			for (Comment o : question.getAll(Comment.class)) {
-				question.remove(o);
-			}
-			for (Tag o : question.getAll(Tag.class)) {
-				question.remove(o);
-			}
-			for (Translation o : question.getAll(Translation.class)) {
-				question.remove(o);
-			}
-			question.save();
 		}
 
 		//hydrate common attributes 
 		question.fromMap(atts);
-
+		parseTimestamps(question, atts);
+		//		question.setTimestamp("archived_at", atts.get("archived_at"));
 		if (id == null) {//new question
 			question.set("proposed_by", me.getLongId());
-		} else {
+			question.setLong("support", 1L);
+			question.setBoolean("is_published", false);
+			question.setBoolean("is_archived", false);
+			question.setBoolean("is_deleted", false);
+			question.setLong("popular_votes", 0L);
+		} else {}
 
-		}
 		boolean succ = question.save();
 		if (!succ) {
 			Base.rollbackTransaction();
@@ -182,21 +177,29 @@ public class QuestionsController extends PlatformController {
 					if (o.get("created_by") == null) {
 						o.setLong("created_by", me.getLongId());
 					}
-					question.add(o);
+					question.add(o);//always insert/update a translation - no deletions...
 				}
 			}
 			if (kids.containsKey("comments")) {
 				for (Map m : (List<Map>) kids.get("comments")) {
 					Comment o = new Comment();
 					o.fromMap(m);
-					question.add(o);
+					if ("true".equalsIgnoreCase((String) m.get("remove"))) {//convention - add a flag for deletion, otherwise we'd have to delete+insert everything.. 
+						question.remove(o);
+					} else {
+						question.add(o);
+					}
 				}
 			}
 			if (kids.containsKey("tags")) {
 				for (Map m : (List<Map>) kids.get("tags")) {
 					Tag o = new Tag();
 					o.fromMap(m);
-					question.add(o);
+					if ("true".equalsIgnoreCase((String) m.get("remove"))) {//convention - add a flag for deletion, otherwise we'd have to delete+insert everything.. 
+						question.remove(o);
+					} else {
+						question.add(o);
+					}
 				}
 			}
 		}

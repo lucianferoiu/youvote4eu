@@ -3,14 +3,19 @@
 <div class="container-fluid" ng-show="vm.activePanel==='propQ'">
 
 	<div class="row q-row bottom-border" ng-repeat="q in vm.propQ.results">
-		<div class="col-sm-2 q-info-cell">
-			<button class="btn btn-default vcenter" type="button">
-				<span class="glyphicon glyphicon-thumbs-up huge"></span> &nbsp;&nbsp;&nbsp;<span class="badge q-badge vcenter" style="top:4px;">&nbsp;&nbsp;{{q.support}}</span>
-			</button>
+		<div class="col-sm-1 col-sm-offset-1 q-info-cell">
+			<div class="text-center">
+				<span class="glyphicon glyphicon-circle-arrow-up huge" style="padding-top:10px;"></span>
+			</div>
+			<div class="text-center">
+				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
+			</div>
 		</div>
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="vcenter">
 				<div class="">
+					<span class="glyphicon glyphicon-comment text-primary"></span> 
+					&nbsp;
 					<strong class="leading">{{q.title}}</strong>
 				</div>
 				<div class="">
@@ -21,64 +26,7 @@
 	</div>
 
 
-	<div class="row q-row bottom-border">
-		<div class="col-sm-2 q-info-cell">
-			<button class="btn btn-default vcenter disabled" type="button">
-				<span class="glyphicon glyphicon-thumbs-up huge"></span> &nbsp;&nbsp;&nbsp;<span class="badge q-badge vcenter" style="top:4px;">&nbsp;&nbsp;&nbsp;31</span>
-			</button>
-		</div>
-		<div class="col-sm-10 q-text-cell">
-			<div class="vcenter">
-				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
-				</div>
-				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row q-row bottom-border">
-		<div class="col-sm-2 q-info-cell">
-			<button class="btn btn-default vcenter" type="button">
-				<span class="glyphicon glyphicon-thumbs-up huge"></span> &nbsp;&nbsp;&nbsp;<span class="badge q-badge vcenter" style="top:4px;">&nbsp;&nbsp;&nbsp;21</span>
-			</button>
-		</div>
-		<div class="col-sm-10 q-text-cell">
-			<div class="vcenter">
-				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
-				</div>
-				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row q-row bottom-border">
-		<div class="col-sm-2 q-info-cell">
-			<button class="btn btn-default vcenter" type="button">
-				<span class="glyphicon glyphicon-thumbs-up huge"></span> &nbsp;&nbsp;&nbsp;<span class="badge q-badge vcenter" style="top:4px;">&nbsp;&nbsp;&nbsp;&nbsp;1</span>
-			</button>
-		</div>
-		<div class="col-sm-10 q-text-cell">
-			<div class="vcenter">
-				<div class="">
-					<strong class="leading">Question Title: Concise and rallying question ?</strong>
-				</div>
-				<div class="">
-					Longer body and description of the question. This could go on for several lines -- one, maybe even two lines but it must be broken down 
-					to about 250 characters... Some other words here until we reach 250 words in total for this question description.
-				</div>
-			</div>
-		</div>
-	</div>
-
-
+	<!-- pagination -->
 	<div class="text-center">
 		<ul class="pagination">
 			<li ng-class="{'disabled': (vm.propQ.crtPage<=1)} ">

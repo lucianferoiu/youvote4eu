@@ -39,11 +39,15 @@
 		//init
 		refDS.preload(true);
 		switchPanel('pubQ');
+		loadPage(1);
 		//----------------------------------------------//
 		
 		function loadPage(page) {
 			var panel = vm[vm.activePanel];
 			if (panel) {
+				if (!page) {
+					page = panel.crtPage;//simply reload
+				}
 				if (page>=1 && page<=panel.totalPages) {
 					panel.crtPage=page;
 					questionsDS.getQuestions(page,vm.activePanel,function (data) {
@@ -87,6 +91,10 @@
 		function editQuestion(questionId) {
 			questionsDS.getQuestionById(questionId,function (question) {
 				vm.crtQuestion = question;
+				if (vm.crtQuestion.children==null) vm.crtQuestion.children={translations:[],tags:[],comments:[]};
+				if (vm.crtQuestion.children.translations==null) vm.crtQuestion.children.translations=[];
+				if (vm.crtQuestion.children.tags==null) vm.crtQuestion.children.tags=[];
+				if (vm.crtQuestion.children.comments==null) vm.crtQuestion.children.comments=[];
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -102,14 +110,18 @@
 					refDS.languages(false,function (langs) {
 						vm.translationsDropdown = [];
 						for (var code in langs) {
-							if (langs.hasOwnProperty(code)) {
+							if (code==='en') {
+								vm.translationsDropdown.unshift({
+									code: 'en',
+									label: 'English',
+									completed: question.title && question.description && question.html_content
+								});
+							} else if (langs.hasOwnProperty(code)) {
 								var isCompleted = false;
 								for (var i = question.children.translations.length - 1; i >= 0; i--) {
 									var tr = question.children.translations[i];
-									if (tr.code===code) {
-										if (tr.title && tr.description && tr.html_content) {
-											isCompleted = true;
-										}
+									if (tr.lang===code) {
+										isCompleted = true;
 									}
 								}
 							
@@ -146,12 +158,20 @@
 		}
 		
 		function onQuestionSaved() {
-			vm.crtQuestion = null;
+			vm.loadPage();
+			resetCrtQuestion();
 			vm.editingQuestion=false;
 		}
 		
+		function resetCrtQuestion() {
+			vm.crtQuestion = null;
+			vm.crtTranslation = {lang:'en'};
+			vm.translationsTab = [];
+			vm.translationsDropdown = [];
+		}
+		
 		function onQuestionCannotSave(msg) {
-			cancelEdit();
+			// cancelEdit();
 			console.log('cannot save question: '+msg);
 		}
 		
@@ -196,8 +216,7 @@
 		
 		function setTranslation(q,trans,fld) {
 			if (q!=null&&trans!=null) {
-				if (q.children==null) q.children={translations:[],tags:[],comments:[]};
-				if (q.children.translations==null) q.children.translations=[];
+				
 				var isNewTrans = true;
 				for (var i = q.children.translations.length - 1; i >= 0; i--) {
 					var t = q.children.translations[i];
@@ -279,7 +298,9 @@
 		function publishQuestion() {
 			if (vm.crtQuestion) {
 				vm.crtQuestion.is_published=true;
-				vm.open_at = new Date();
+				if (!vm.crtQuestion.open_at) {
+					vm.crtQuestion.open_at = Date.now();
+				}
 				saveQuestion();
 			}
 		}
@@ -287,7 +308,7 @@
 		function archiveQuestion() {
 			if (vm.crtQuestion) {
 				vm.crtQuestion.is_archived=true;
-				vm.archived_at = new Date();
+				vm.crtQuestion.archived_at = Date.now();
 				saveQuestion();
 			}
 		}
