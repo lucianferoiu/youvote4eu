@@ -18,6 +18,8 @@
 		vm.archQ = angular.copy(vm.pubQ);
 		vm.propQ = angular.copy(vm.pubQ);
 		vm.myQ = angular.copy(vm.pubQ);
+		vm.propQ.canVoteOnQuestions = [];
+		//
 		vm.crtQuestion = {};
 		vm.crtTranslation = {lang:'en'};
 		vm.translationsTab = [];
@@ -38,6 +40,8 @@
 		vm.publishQuestion = publishQuestion;
 		vm.archiveQuestion = archiveQuestion;
 		vm.deleteQuestion = deleteQuestion;
+		vm.canUpvote = canUpvote;
+		vm.upvote = upvote;
 		
 		//init
 		refDS.preload(true);
@@ -64,8 +68,23 @@
 						panel.pagesRange = refDS.range(panel.totalPages);
 						panel.results = data.results;
 						panel.crtPage=page;
+						
+						if (panel.canVoteOnQuestions) {//proposed questions... ask what the partner can upvote
+							var qIDs = [];
+							for (var i = panel.results.length - 1; i >= 0; i--) {
+								var q = panel.results[i];
+								qIDs.push(q.id);
+							}
+							questionsDS.getUpvotableQuestions(qIDs, function (data) {
+								 panel.canVoteOnQuestions = panel.canVoteOnQuestions.concat(data);
+								
+							},function (message) {
+								console.log('Cannot retrieve upvotabe questions : '+message);
+							})
+						}
+						
 					},function (message) {
-						console.log('Cannot load page '+page+' of '+vm.activePanel+'questions: '+message)
+						console.log('Cannot load page '+page+' of '+vm.activePanel+'questions: '+message);
 					});
 				}
 			}
@@ -80,6 +99,30 @@
 			if (panel) {
 				panel.searchWord = '';
 				loadPage();
+			}
+		}
+		
+		function canUpvote(qID) {
+			if (qID && vm.propQ.canVoteOnQuestions) {
+				return vm.propQ.canVoteOnQuestions.indexOf(qID)>=0;
+			}
+			return false;
+		}
+		
+		function upvote(questionID) {
+			if (questionID && vm.propQ.canVoteOnQuestions) {
+				var qIdx = vm.propQ.canVoteOnQuestions.indexOf(questionID);
+				if (qIdx>=0) {
+					vm.propQ.canVoteOnQuestions.splice(qIdx,1);
+				} else {
+					return;//ignore clicks on un-upvotable questions
+				}
+				questionsDS.upvote(questionID, function (data) {
+					vm.propQ.canVoteOnQuestions = [];
+					vm.loadPage();
+				},function (message) {
+					console.log('Cannot upvote question '+questionID+' :'+message);
+				});
 			}
 		}
 		

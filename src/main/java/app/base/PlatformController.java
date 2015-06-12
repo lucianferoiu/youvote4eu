@@ -129,6 +129,11 @@ public abstract class PlatformController extends AppController {
 		respond(model.toJson(true, l.toArray(new String[0]))).contentType("application/json").status(200);
 	}
 
+	protected void returnJsonList(List results) {
+		String json = JsonHelper.toListJson(results);
+		respond(json).contentType("application/json").status(200);
+	}
+
 	/**
 	 * JSON 200 - ok
 	 */

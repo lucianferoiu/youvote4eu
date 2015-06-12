@@ -4,8 +4,12 @@
 
 	<div class="row q-row bottom-border" ng-repeat="q in vm.propQ.results">
 		<div class="col-sm-1 col-sm-offset-1 q-info-cell">
-			<div class="text-center">
-				<span class="glyphicon glyphicon-arrow-up huge text-primary" style="padding-top:10px;"></span>
+			<div class="text-center" data-toggle="tooltip" title="{{vm.canUpvote(q.id)?'Support the question by upvoting it!':''}}">
+				<span class="glyphicon glyphicon-arrow-up huge" style="padding-top:10px;" 
+					ng-class="{'upvotable':vm.canUpvote(q.id),'unvotable':(!vm.canUpvote(q.id))}"
+					ng-click="vm.upvote(q.id)">
+				</span>
+					
 			</div>
 			<div class="text-center">
 				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
@@ -45,3 +49,11 @@
 
 	
 </div>
+
+[@content for="footer_script"]
+<script type="text/javascript">
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+[/@content]

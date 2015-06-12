@@ -9,6 +9,8 @@ import java.util.Map;
 import org.javalite.activejdbc.Base;
 import org.javalite.activeweb.annotations.GET;
 import org.javalite.activeweb.annotations.POST;
+import org.javalite.activeweb.annotations.PUT;
+import org.javalite.common.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,7 @@ import app.models.Partner;
 import app.models.Question;
 import app.models.Tag;
 import app.models.Translation;
+import app.models.Upvote;
 import app.util.JsonHelper;
 import app.util.StringUtils;
 
@@ -54,7 +57,7 @@ public class QuestionsController extends PlatformController {
 	@GET
 	public void proposed() {
 		questionsList(" (is_archived IS NULL OR is_archived=false) AND (is_published IS NULL OR is_published=false) ",
-				" created_at desc, support desc ");
+				" support desc, created_at desc ");
 	}
 
 	@GET
@@ -211,6 +214,90 @@ public class QuestionsController extends PlatformController {
 		}
 		Base.commitTransaction();
 		json_200(String.format("updated question with id: %d", question.getLongId()));
+
+	}
+
+	@GET
+	public void canUpvote() {
+		Partner me = (Partner) session(Const.AUTHENTICATED_PARTNER);
+		if (me == null) {
+			json_403();
+			return;
+		}
+		Long myId = me.getLongId();
+
+		List<String> qParams = params("questionIDs");
+		List<Long> qIDs = new ArrayList<Long>();
+		for (String qParam : qParams) {
+			try {
+				qIDs.add(Long.parseLong(qParam));
+			}
+			catch (NumberFormatException nfe) {}
+		}
+
+		String questionsIDs = Util.join(qIDs, ",");
+		List<Long> canVoteIDs = Base.firstColumn(
+				" SELECT DISTINCT q.id FROM questions q "
+						+ // get the IDs of ..
+						" WHERE q.is_published=false AND q.proposed_by!=? AND q.id in (" + questionsIDs + ") "
+						+ // unpublished questions not proposed by the upvoter
+						" EXCEPT "
+						+ // but remove...
+						"SELECT u.question_id FROM upvotes u WHERE u.upvoted_by=? AND u.question_id in ("
+						+ questionsIDs + ") ", // already upvoted questions by the upvoter
+				myId, myId);
+		Collections.sort(canVoteIDs);
+		returnJsonList(canVoteIDs);
+
+	}
+
+	@PUT
+	public void upvote() {
+		Partner me = (Partner) session(Const.AUTHENTICATED_PARTNER);
+		if (me == null) {
+			json_403();
+			return;
+		}
+
+		String idParam = "";
+		try {
+			idParam = getRequestString();
+			if (!StringUtils.nullOrEmpty(idParam)) {
+				Long questionId = Long.decode(idParam);
+				Question question = Question.findById(questionId);
+				if (question != null) {
+					Long myId = me.getLongId();
+					if (question.getLong("proposed_by") == myId) {
+						json_400("the autohor of a question cannot upvote it");
+						return;
+					}
+					Long alreadyUpvotedCount = Upvote.count("question_id=? AND upvoted_by=?", questionId, myId);
+					if (alreadyUpvotedCount > 0) {
+						json_400("partner already upvoted the question");
+						return;
+					}
+
+					//we can upvote
+					Base.openTransaction();
+					Upvote upvote = Upvote.create("question_id", questionId, "upvoted_by", myId, "value", 1);//if we implement a reputation multiplier, here's the place for that reputation to act
+					question.add(upvote);
+					question.setLong("support", question.getLong("support") + 1);
+					question.save();
+					Base.commitTransaction();
+					json_204();
+				} else {
+					json_404("cannot find question with id=" + idParam);
+				}
+			}
+		}
+		catch (NumberFormatException nfe) {
+			log.warn("invalid question id ", nfe);
+			json_400("invalid question id: " + idParam);
+		}
+		catch (IOException e) {
+			log.warn("cannot read PUT payload of question id ", e);
+			json_400("cannot read question id");
+		}
 
 	}
 

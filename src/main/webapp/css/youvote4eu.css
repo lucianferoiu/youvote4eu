@@ -95,6 +95,20 @@ body {
 	margin:6px;
 }
 
+.upvotable {
+	cursor: pointer;
+}
+
+.upvotable:hover {
+	cursor: pointer;
+	color: #337ab7;
+}
+
+.unvotable {
+	cursor: not-allowed;
+	 color: #286090;
+}
+
 #addQuestionBtn > a:hover {
 	background-color: #449d44;
 	color: white;

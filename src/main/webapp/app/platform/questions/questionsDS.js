@@ -18,7 +18,9 @@
 			PAGE_SIZE: ds.PAGE_SIZE,
 			getQuestions: getQuestions,
 			getQuestionById: getQuestionById,
-			saveQuestion: saveQuestion
+			saveQuestion: saveQuestion,
+			getUpvotableQuestions: getUpvotableQuestions,
+			upvote: upvote
 		};
 
 		function getQuestionById(questionId,onSuccess,onError) {
@@ -69,6 +71,32 @@
 						onError(data);
 					});
 			} 
+		}
+		
+		function getUpvotableQuestions(qIDs,onSuccess,onError) {
+			var cfg = {
+				params: {
+					questionIDs: qIDs
+				}
+			};
+			$http.get('/platform/questions/can_upvote',cfg)
+				.success(function(data, status, headers, config) {
+					onSuccess(data);
+				}) 
+				.error(function(data, status, headers, config) {
+					onError(data);
+				});
+		}
+		
+		function upvote(questionID,onSuccess,onError) {
+			var cfg = {};
+			$http.put('/platform/questions/upvote',questionID,cfg)
+				.success(function(data, status, headers, config) {
+					onSuccess(data);
+				}) 
+				.error(function(data, status, headers, config) {
+					onError(data);
+				});
 		}
 		
 

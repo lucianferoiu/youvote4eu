@@ -35,6 +35,7 @@ public class JsonHelper {
 		}
 	}
 
+	@Deprecated
 	protected static void deserializeDates(Map<String, Object> result) {
 
 		for (String key : result.keySet()) {
@@ -42,10 +43,7 @@ public class JsonHelper {
 			if (val != null) {
 				if (key.endsWith("_at") || key.endsWith("_on")) {
 					ZonedDateTime date = ZonedDateTime.parse(val.toString(), DateTimeFormatter.RFC_1123_DATE_TIME);
-					//					result.put(key, Date.from(date.toInstant()));
-					//					result.put(key, date);
 					result.put(key, Convert.toTimestamp(new Timestamp(date.toEpochSecond())));
-					//result.put(key, Convert.toTimestamp(Date.from(date.toInstant())));
 					log.debug("Parsed date " + val);
 				} else if (val instanceof Map) {//deep parse
 					deserializeDates((Map) val);
@@ -62,6 +60,19 @@ public class JsonHelper {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static String toListJson(List results) {
+		if (results == null) return "";
+		StringWriter sw = new StringWriter();
+		ObjectMapper om = new ObjectMapper();
+		try {
+			om.writeValue(sw, results);
+		}
+		catch (IOException e) {
+			log.warn("Cannot generate JSON of list: " + results.toString(), e);
+		}
+		return sw.toString();
 	}
 
 	public static String toResultsJson(LazyList results, Long total, Long from, Long to, boolean pretty,

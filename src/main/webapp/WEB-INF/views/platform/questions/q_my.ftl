@@ -21,8 +21,8 @@
 		</div>
 		
 		<div class="col-sm-1 col-sm-offset-1 q-info-cell" ng-show="(!q.is_published) && (!q.is_archived)">
-			<div class="text-center text-primary">
-				<span class="glyphicon glyphicon-arrow-up huge" style="padding-top:10px;"></span>
+			<div class="text-center">
+				<span class="glyphicon glyphicon-arrow-up huge unvotable" style="padding-top:10px;"></span>
 			</div>
 			<div class="text-center">
 				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
