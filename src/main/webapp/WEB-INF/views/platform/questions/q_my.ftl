@@ -10,7 +10,7 @@
 					<span class="label label-success text-left">Yes: {{q.popular_vote_tally*100}} %</span>&nbsp;
 					<span class="label label-danger text-right">No: {{(1-q.popular_vote_tally)*100}} %</span>
 				</p>
-				<span class="label label-default">Archived: {{q.archived_at|date:'medium'}}</span>
+				<span class="label label-default">Archived: {{q.archived_at|date:'MMM d, y h:mm'}}</span>
 			</div>
 		</div>
 		
@@ -22,10 +22,10 @@
 		
 		<div class="col-sm-1 col-sm-offset-1 q-info-cell" ng-show="(!q.is_published) && (!q.is_archived)">
 			<div class="text-center text-primary">
-				<span class="glyphicon glyphicon-circle-arrow-up huge" style="padding-top:10px;"></span>
+				<span class="glyphicon glyphicon-arrow-up huge" style="padding-top:10px;"></span>
 			</div>
 			<div class="text-center">
-				<span class="label label-primary">{{q.support|pad:5:'&nbsp;'}}</span>
+				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
 			</div>
 		</div>
 		
@@ -33,10 +33,12 @@
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="vcenter">
 				<div class="">
+					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
+					&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-inbox text-primary" ng-show="q.is_archived"></span> 
 					<span class="glyphicon glyphicon-star-empty text-primary" ng-show="q.is_published && (!q.is_archived)"></span> 
-					<span class="glyphicon glyphicon-comment text-primary" ng-show="(!q.is_published) && (!q.is_archived)"></span> 
-					&nbsp;
+					<span class="glyphicon glyphicon-circle-arrow-up text-primary" ng-show="(!q.is_published) && (!q.is_archived)"></span> 
+					&nbsp;&nbsp;
 					<strong class="leading">{{q.title}}</strong>
 				</div>
 				<div class="">

@@ -224,9 +224,19 @@ public class QuestionsController extends PlatformController {
 
 		String searchParam = param("search");
 		if (!StringUtils.nullOrEmpty(searchParam) && searchParam.matches("\\w+")) {
-			filter += " AND (lower(title) like '%?%' OR lower(description) '%?%') ";
-			filterParams.add(searchParam.toLowerCase());
-			filterParams.add(searchParam.toLowerCase());
+			searchParam = searchParam.toLowerCase();
+			try {
+				//shortcut for the question id
+				Long qId = Long.parseLong(searchParam);
+				filter += " AND id=? ";
+				filterParams.add(qId);
+			}
+			catch (NumberFormatException nfe) {
+				filter += " AND (lower(title) like '%" + searchParam + "%' OR lower(description) like '%" + searchParam
+						+ "%') ";
+				// filterParams.add(searchParam);
+				// filterParams.add(searchParam);
+			}
 		}
 		returnJsonResults(Question.getMetaModel(), Question.find(filter, filterParams.toArray()).orderBy(orderBy),
 				Question.count(filter, filterParams.toArray()), LIST_EXCLUDED_FIELDS);

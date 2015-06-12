@@ -5,7 +5,7 @@
 	<div class="row q-row bottom-border" ng-repeat="q in vm.propQ.results">
 		<div class="col-sm-1 col-sm-offset-1 q-info-cell">
 			<div class="text-center">
-				<span class="glyphicon glyphicon-circle-arrow-up huge" style="padding-top:10px;"></span>
+				<span class="glyphicon glyphicon-arrow-up huge text-primary" style="padding-top:10px;"></span>
 			</div>
 			<div class="text-center">
 				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
@@ -14,8 +14,10 @@
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="vcenter">
 				<div class="">
-					<span class="glyphicon glyphicon-comment text-primary"></span> 
-					&nbsp;
+					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
+					&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-circle-arrow-up text-primary"></span> 
+					&nbsp;&nbsp;
 					<strong class="leading">{{q.title}}</strong>
 				</div>
 				<div class="">

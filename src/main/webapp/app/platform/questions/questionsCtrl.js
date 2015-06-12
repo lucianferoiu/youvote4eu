@@ -9,6 +9,7 @@
 		vm.editingQuestion=false;
 		vm.pubQ = {
 			crtPage: 1,
+			searchWord: '',
 			totalPages: 1,
 			pagesRange: [],
 			totalResults: 0,
@@ -25,6 +26,8 @@
 		//vm API
 		vm.switchPanel = switchPanel;
 		vm.loadPage = loadPage;
+		vm.searchByWord = searchByWord;
+		vm.clearSearch = clearSearch;
 		vm.addQuestion = addQuestion;
 		vm.editQuestion = editQuestion;
 		vm.cancelEdit = cancelEdit;
@@ -48,17 +51,35 @@
 				if (!page) {
 					page = panel.crtPage;//simply reload
 				}
-				if (page>=1 && page<=panel.totalPages) {
-					panel.crtPage=page;
-					questionsDS.getQuestions(page,vm.activePanel,function (data) {
+				if ( (panel.searchWord && panel.searchWord.length>1) || (page>=1 && page<=panel.totalPages)) {
+
+					var params = {};
+					if (panel.searchWord && panel.searchWord.length>1) {
+						params.search = panel.searchWord;
+					}
+					
+					questionsDS.getQuestions(page,vm.activePanel,params,function (data) {
 						panel.totalRecords = data.total;
 						panel.totalPages = Math.ceil(panel.totalRecords/questionsDS.PAGE_SIZE);
 						panel.pagesRange = refDS.range(panel.totalPages);
 						panel.results = data.results;
+						panel.crtPage=page;
 					},function (message) {
 						console.log('Cannot load page '+page+' of '+vm.activePanel+'questions: '+message)
 					});
 				}
+			}
+		}
+		
+		function searchByWord() {
+			loadPage();
+		}
+		
+		function clearSearch() {
+			var panel = vm[vm.activePanel];
+			if (panel) {
+				panel.searchWord = '';
+				loadPage();
 			}
 		}
 		

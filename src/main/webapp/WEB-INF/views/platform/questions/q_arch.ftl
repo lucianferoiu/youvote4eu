@@ -9,14 +9,16 @@
 					<span class="label label-success text-left">Yes: {{q.popular_vote_tally*100}} %</span>&nbsp;
 					<span class="label label-danger text-right">No: {{(1-q.popular_vote_tally)*100}} %</span>
 				</p>
-				<span class="label label-default">Archived: {{q.archived_at|date:'medium'}}</span>
+				<span class="label label-default">Archived: {{q.archived_at|date:'MMM d, y h:mm'}}</span>
 			</div>
 		</div>
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="vcenter">
 				<div class="">
+					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
+					&nbsp;&nbsp;
 					<span class="glyphicon glyphicon-inbox text-primary"></span> 
-					&nbsp;
+					&nbsp;&nbsp;
 					<strong class="leading">{{q.title}}</strong>
 				</div>
 				<div class="">

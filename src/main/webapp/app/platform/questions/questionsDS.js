@@ -48,13 +48,17 @@
 				});
 		}
 		
-		function getQuestions(page,questionsType,onSuccess,onError) {
+		function getQuestions(page,questionsType,additionalParams,onSuccess,onError) {
 			var cfg = {
 				params: {
 					from: (page-1)*ds.PAGE_SIZE,
 					to: (page*ds.PAGE_SIZE)-1
 				}
 			};
+			if (additionalParams) {
+				cfg.params = angular.extend(cfg.params,additionalParams);
+			}
+			
 			var url = ds.questionListURLs[questionsType];
 			if (url) {
 				$http.get(url,cfg)
