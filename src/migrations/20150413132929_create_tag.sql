@@ -1,6 +1,6 @@
 /*** The enum of the searcheable topics/tags pertaining to the questions list ***/
 CREATE TABLE IF NOT EXISTS tags (
-	id BIGINT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	/* - */
 	label VARCHAR(120) NOT NULL,							/* label of the tag (english version) */
 	/* - */

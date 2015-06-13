@@ -9,6 +9,7 @@
 		return {
 			preload: preload,
 			languages: getLanguages,
+			tags: getTags,
 			user: getCurrentUser,
 			range: newRange
 		};
@@ -40,6 +41,28 @@
 			}
 		}
 		
+		function getTags(force,fn) {
+			if (ds.cache.tags && !force) {
+				if (fn) {
+					fn(ds.cache.tags);
+				}
+				return ds.cache.tags;
+			} else {
+				var cfg = {};
+				$http.get('/platform/ref/tags',cfg)
+					.success(function(data, status, headers, config) {
+						ds.cache.tags = data;
+						if (fn) {
+							fn(data);
+						}
+					}) 
+					.error(function(data, status, headers, config) {
+						delete ds.cache.tags;
+						console.log('cannot retrieve the list of tags..' + data);
+					});
+			}
+		}
+		
 		function getCurrentUser(force,fn) {
 			if (ds.cache.crtUser && !force) {
 				if (fn) {
@@ -65,6 +88,7 @@
 		
 		function preload(force) {
 			getLanguages(force);
+			getTags(force);
 			getCurrentUser(force);
 		}
 		

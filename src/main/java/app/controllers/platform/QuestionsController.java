@@ -190,6 +190,9 @@ public class QuestionsController extends PlatformController {
 					if ("true".equalsIgnoreCase((String) m.get("remove"))) {//convention - add a flag for deletion, otherwise we'd have to delete+insert everything.. 
 						question.remove(o);
 					} else {
+						if (o.getLong("created_by") == null) {
+							o.setLong("created_by", me.getLongId());
+						}
 						question.add(o);
 					}
 				}
@@ -201,6 +204,11 @@ public class QuestionsController extends PlatformController {
 					if ("true".equalsIgnoreCase((String) m.get("remove"))) {//convention - add a flag for deletion, otherwise we'd have to delete+insert everything.. 
 						question.remove(o);
 					} else {
+						/* TODO: maybe add myId to QuestionsTags
+						if (o.getLong("created_by") == null) {
+							o.setLong("created_by", me.getLongId());
+						}
+						*/
 						question.add(o);
 					}
 				}

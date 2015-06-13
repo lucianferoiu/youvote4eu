@@ -38,7 +38,6 @@ public class RefController extends PlatformController {
 			return;
 		}
 		returnJson(Partner.getMetaModel(), me, EXCLUDED_FIELDS);
-
 	}
 
 }

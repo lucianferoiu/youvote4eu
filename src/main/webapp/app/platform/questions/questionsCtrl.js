@@ -6,7 +6,7 @@
 		
 		//setup view model
 		var vm = this;
-		vm.editingQuestion=false;
+		vm.crtQActivePanel = null;
 		vm.pubQ = {
 			crtPage: 1,
 			searchWord: '',
@@ -19,6 +19,7 @@
 		vm.propQ = angular.copy(vm.pubQ);
 		vm.myQ = angular.copy(vm.pubQ);
 		vm.propQ.canVoteOnQuestions = [];
+		vm.crtQSelectedTag = null;
 		//
 		vm.crtQuestion = {};
 		vm.crtTranslation = {lang:'en'};
@@ -42,11 +43,14 @@
 		vm.deleteQuestion = deleteQuestion;
 		vm.canUpvote = canUpvote;
 		vm.upvote = upvote;
+		vm.addTag = addTag;
+		vm.removeTag = removeTag;
 		
 		//init
 		refDS.preload(true);
 		switchPanel('pubQ');
 		loadPage(1);
+		initTags();
 		//----------------------------------------------//
 		
 		function loadPage(page) {
@@ -149,16 +153,23 @@
 				}
 			});
 			
-			vm.editingQuestion = true;
+			vm.crtQActivePanel = 'main';
 		}
 		
 		function editQuestion(questionId) {
 			questionsDS.getQuestionById(questionId,function (question) {
+				
+				if (question.archived_at) {$('#archivedAtDP').data("DateTimePicker").date(new Date(question.archived_at))} else {$('#archivedAtDP').data("DateTimePicker").clear()};
+				if (question.open_at) {$('#openAtDP').data("DateTimePicker").date(new Date(question.open_at))} else {$('#openAtDP').data("DateTimePicker").clear()};
+				if (question.closed_at) {$('#closedAtDP').data("DateTimePicker").date(new Date(question.closed_at))} else {$('#closedAtDP').data("DateTimePicker").clear()};
+				
 				vm.crtQuestion = question;
 				if (vm.crtQuestion.children==null) vm.crtQuestion.children={translations:[],tags:[],comments:[]};
 				if (vm.crtQuestion.children.translations==null) vm.crtQuestion.children.translations=[];
 				if (vm.crtQuestion.children.tags==null) vm.crtQuestion.children.tags=[];
 				if (vm.crtQuestion.children.comments==null) vm.crtQuestion.children.comments=[];
+				
+				vm.crtQSelectedTag = null;
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -199,7 +210,7 @@
 					});
 				}
 				//show the question
-				vm.editingQuestion = true;
+				vm.crtQActivePanel='main';
 			}, function (err) {
 				console.log('Cannot load question with id='+questionId+' :'+err);
 			});
@@ -208,7 +219,7 @@
 		
 		function cancelEdit() {
 			vm.crtQuestion = null;
-			vm.editingQuestion=false;
+			vm.crtQActivePanel = null;
 		}
 		
 		function saveQuestion() {
@@ -217,6 +228,15 @@
 				if (vm.crtTranslation!=null && vm.crtTranslation.lang!==null) {
 					saveCrtTranslation(q);
 				}
+				//sanitize dates
+				var m = null;
+				m=$('#archivedAtDP').data("DateTimePicker").date();
+				q.archived_at=m?m.valueOf():null;
+				m=$('#closedAtDP').data("DateTimePicker").date();
+				q.closed_at=m?m.valueOf():null;
+				m=$('#openAtDP').data("DateTimePicker").date();
+				q.open_at=m?m.valueOf():null;
+				
 				questionsDS.saveQuestion(q,onQuestionSaved,onQuestionCannotSave);
 			}
 		}
@@ -224,7 +244,7 @@
 		function onQuestionSaved() {
 			vm.loadPage();
 			resetCrtQuestion();
-			vm.editingQuestion=false;
+			vm.crtQActivePanel = null;
 		}
 		
 		function resetCrtQuestion() {
@@ -404,117 +424,61 @@
 			}
 			return code;
 		}
-
-/*************************************************************************************
-		//----------------------------------------------//
-		vm.ctx = {
-			panel: 'list',
-			crtPage: 1,
-			totalPages: 1,
-			pagesRange: [],
-			sortBy: 'last_login',
-			sortDir: false,
-			crtQuestion: null
-		};
-		vm.ctxCopy = angular.copy(vm.ctx);//preserve a reset point
 		
-		//api:
-		vm.loadPage = loadPage;
-		vm.sortQuestions = sortQuestions;
-		vm.addQuestion = addQuestion;
-		vm.editQuestion = editQuestion;
-		vm.cancelEdit = cancelEdit;
-		vm.saveQuestion = saveQuestion;
-		//----------------------------------------------//
+		function tagSelected(tag) {
+			console.log('Selected tag '+tag.label +' (#'+tag.id+')');
+			vm.crtQSelectedTag = tag;
+		}
 		
-		loadPage(1);
-				
-		//----------------------------------------------//
-		
-		function loadPage(page) {
-			if (page>=1 && page<=vm.ctx.totalPages) {
-				vm.ctx.crtPage=page;
-				var sort = (vm.ctx.sortDir?'':'-') + vm.ctx.sortBy;
-				questionsDS.getQuestions(page,sort,onPageLoad,onPageError);
-				swapPanel('list');
+		function addTag() {
+			if (vm.crtQSelectedTag) {
+				var alreadyPresent = false;
+				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
+					var t = vm.crtQuestion.children.tags[i];
+					if (t.id===vm.crtQSelectedTag.id) {
+						alreadyPresent = true;
+						break;
+					}
+				}
+				if (!alreadyPresent) {
+					vm.crtQuestion.children.tags.push(vm.crtQSelectedTag);
+				}
 			}
 		}
 		
-		function onPageLoad(results) {
-			vm.questions = results;
-			vm.ctx.totalPages = questionsDS.countPages();
-			vm.ctx.pagesRange = range(vm.ctx.totalPages);
-		}
-		
-		function onPageError(data) {
-			resetCtx();
-		}
-		
-		function sortQuestions(by) {
-			vm.ctx.sortBy = by;
-			vm.ctx.sortDir = !vm.ctx.sortDir;
-			vm.loadPage(1);//always reset the current page when re-sorting
-		}
-		
-		//----------------------------------------------//
-		
-		function editQuestion(questionId) {
-			questionsDS.getQuestionById(questionId,onQuestionEdit,onQuestionEditError);
-			swapPanel('edit');
-		}
-		
-		function onQuestionEdit(question) {
-			vm.ctx.crtQuestion = question;
-		}
-		
-		function onQuestionEditError(data) {
-			cancelEdit();
-		}
-
-		function cancelEdit() {
-			vm.ctx.crtQuestion = null;
-			swapPanel('list');
-		}
-		
-		function saveQuestion() {
-			if (vm.ctx.crtQuestion) {
-				questionsDS.saveQuestion(vm.ctx.crtQuestion,onQuestionSaved,onQuestionCannotSave);
+		function removeTag(tagId) {
+			if (tagId) {
+				var toBeRemoved = -1;
+				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
+					var t = vm.crtQuestion.children.tags[i];
+					if (t.id===tagId) {
+						toBeRemoved = i;
+						break;
+					}
+				}
+				if (toBeRemoved>=0) {
+					vm.crtQuestion.children.tags.splice(toBeRemoved,1);
+				}
 			}
 		}
 		
-		function onQuestionSaved() {
-			vm.ctx.crtQuestion = null;
-			vm.loadPage(vm.ctx.crtPage);
-			swapPanel('list');
-		}
-		
-		function onQuestionCannotSave(msg) {
-			cancelEdit();
-			console.log('cannot save question: '+msg);
+		function initTags() {
+			refDS.tags(false,function (data) {
+				if (data) {
+					$('#tagsTypeahead').typeahead({
+						source: data,
+						autoSelect: true,
+						displayText: function (item) {
+							return item.label;
+						},
+						afterSelect: tagSelected
+					});
+				}
+			});
+
 		}
 
 		//----------------------------------------------//
-
-		function addQuestion() {
-			swapPanel('add');
-		}
-
-		//----------------------------------------------//
-
-		function swapPanel(panel) {
-			vm.ctx.panel = panel;
-		}
-		
-		function resetCtx() {
-			vm.ctx = angular.copy(vm.ctxCopy);
-		}
-
-		function range(n) {
-			return new Array(n);
-		}
-		
-
-**************************************************************************************/
 
 	}
 

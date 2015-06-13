@@ -1,6 +1,6 @@
 /*** The enum of the countries (primarily EU member states) ***/
 CREATE TABLE IF NOT EXISTS countries (
-	id BIGINT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	/* - */
 	code CHAR(2) NOT NULL,							/* ISO 3166-1 alpha-2 two-letter code of the country */
 	is_eu BOOLEAN DEFAULT false,					/* is this country an EU member state? */
