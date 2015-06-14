@@ -4,6 +4,6 @@ import org.javalite.activejdbc.Model;
 
 public class Tag extends Model {
 	static {
-		Model.validatePresenceOf("label");
+		Model.validatePresenceOf("text");
 	}
 }

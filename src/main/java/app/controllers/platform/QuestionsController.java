@@ -231,12 +231,12 @@ public class QuestionsController extends PlatformController {
 							toKeep.add(oId);
 						} else {//new tag - create the association
 							QuestionsTags qt = QuestionsTags.createIt("created_by", myId, "question_id", id, "tag_id", oId);
-							log.debug("Tag '{}' added by partner {} to the question {}", o.get("label"), myId, id);
+							log.debug("Tag '{}' added by partner {} to the question {}", o.get("text"), myId, id);
 						}
 					} else {//new tag
 						o.saveIt();
 						QuestionsTags qt = QuestionsTags.createIt("created_by", myId, "question_id", id, "tag_id", o.getLongId());
-						log.debug("New tag '{}' was created by partner {} and added to the question {}", o.get("label"), myId, id);
+						log.debug("New tag '{}' was created by partner {} and added to the question {}", o.get("text"), myId, id);
 
 					}
 				}
@@ -244,7 +244,7 @@ public class QuestionsController extends PlatformController {
 					Long tId = existingTag.getLongId();
 					if (!toKeep.contains(tId)) {
 						question.remove(existingTag);
-						log.debug("Partner {} removed tag '{}' from the question {}", myId, existingTag.get("label"), id);
+						log.debug("Partner {} removed tag '{}' from the question {}", myId, existingTag.get("text"), id);
 					}
 				}
 			}
