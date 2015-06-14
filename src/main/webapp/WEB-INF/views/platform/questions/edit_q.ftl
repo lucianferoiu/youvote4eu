@@ -8,7 +8,9 @@
 [@content for="footer_script"]<script src='${context_path}/js/moment.min.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/bootstrap-datetimepicker.min.js'></script>[/@content]
 
-[@content for="footer_script"]<script src='${context_path}/js/bootstrap-typeahead.min.js'></script>[/@content]
+[#-- [@content for="footer_script"]<script src='${context_path}/js/bootstrap-typeahead.min.js'></script>[/@content] --]
+[@content for="header_css"]<link href='${context_path}/css/select2.min.css' rel="stylesheet">[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/select2.min.js'></script>[/@content]
 
 
 <div class="container">
@@ -87,8 +89,8 @@
 					
 					<!-- metadata question panel -->
 					<div class="q-panel" ng-show="vm.crtQActivePanel=='meta'">
-						
 						<div class="panel">
+							<h4><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp; Status</h4>
 							<div class="form-inline">
 								<div class="form-group disabled">
 									<label class="control-label" for="questionIsPublished">Published &nbsp;&nbsp;</label>
@@ -141,35 +143,26 @@
 							<br/>
 						</div>	
 							
-						<!-- tags cloud -->
-						<div class="form-inline">
-							<label class="control-label"> Question Tags <span class="glyphicon glyphicon-tags"></span></label>
-							<div class="input-group pull-right">
-								<input type="text" class="form-control typeahead" id="tagsTypeahead" placeholder="add a tag" data-provide="typeahead">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" 
-										ng-click="vm.addTag()"
-										[#-- ng-class="{'disabled':!vm.crtQSelectedTag}" --]
-										[#-- ng-disabled="!vm.crtQSelectedTag" --]
-										><span class="glyphicon glyphicon-plus"></span> <span class="glyphicon glyphicon-tags"></span></button>
-								</span>
-								[#-- <span class="input-group-addon" ng-click="vm.addTag()">
-									<span class="glyphicon glyphicon-plus"></span> <span class="glyphicon glyphicon-tags"></span>
-								</span> --]
-							</div>
+						<div class="panel">
+							<!-- tags cloud -->
+							<h4><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp; Tags</h4>
+							<select id="tagsSelector" class="form-control input-lg" multiple="multiple" style="width:100%;"></select>
+							<br/>
 						</div>
 						
+						<div class="panel">
+							<h4><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp; Flags and Comments</h4>
+							
+							<ul class="list-group">
+								<li class="list-group-item" 
+									ng-repeat="c in vm.crtQuestion.children.comments">
+									<span class="badge" ng-class="{'badge-warn':}">{{c.comment_type}}</span>
+									{{c.text}}
+								</li>
+							</ul>
+							
+						</div>
 
-							<div class="">
-								<div class="tags-cloud" style="padding:6px;">
-									<span class="label label-info" style="font-size: 100%;"
-										ng-repeat="t in vm.crtQuestion.children.tags">{{t.label}} &nbsp;&nbsp;&nbsp; 
-										<button type="button" class="badge badge-primary close" ng-click="vm.removeTag(t.id)"><span aria-hidden="true">&times;</span></button>
-									</span>
-								</div>
-							</div>
-						
-						
 						<div class="row">
 							<br/>
 							<ul class="list-group">

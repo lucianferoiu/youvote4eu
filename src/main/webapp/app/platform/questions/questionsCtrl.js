@@ -19,7 +19,6 @@
 		vm.propQ = angular.copy(vm.pubQ);
 		vm.myQ = angular.copy(vm.pubQ);
 		vm.propQ.canVoteOnQuestions = [];
-		vm.crtQSelectedTag = null;
 		//
 		vm.crtQuestion = {};
 		vm.crtTranslation = {lang:'en'};
@@ -169,7 +168,12 @@
 				if (vm.crtQuestion.children.tags==null) vm.crtQuestion.children.tags=[];
 				if (vm.crtQuestion.children.comments==null) vm.crtQuestion.children.comments=[];
 				
-				vm.crtQSelectedTag = null;
+				var selectedTags = [];
+				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
+					selectedTags.push(vm.crtQuestion.children.tags[i].id);
+				}
+				$('#tagsSelector').val(selectedTags).trigger("change");
+				
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -236,6 +240,20 @@
 				q.closed_at=m?m.valueOf():null;
 				m=$('#openAtDP').data("DateTimePicker").date();
 				q.open_at=m?m.valueOf():null;
+				
+				//update tags
+				var selectedTags = $('#tagsSelector').select2('data');
+				q.children.tags=[];
+				for (var i = selectedTags.length - 1; i >= 0; i--) {
+					var tag = selectedTags[i];
+					var tagId = parseInt(tag.id);
+					if (tagId && tagId>=0) {
+						q.children.tags.push({
+							id:  tagId,
+							text: tag.text
+						});
+					}
+				}
 				
 				questionsDS.saveQuestion(q,onQuestionSaved,onQuestionCannotSave);
 			}
@@ -425,54 +443,21 @@
 			return code;
 		}
 		
-		function tagSelected(tag) {
-			console.log('Selected tag '+tag.label +' (#'+tag.id+')');
-			vm.crtQSelectedTag = tag;
-		}
-		
-		function addTag() {
-			if (vm.crtQSelectedTag) {
-				var alreadyPresent = false;
-				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
-					var t = vm.crtQuestion.children.tags[i];
-					if (t.id===vm.crtQSelectedTag.id) {
-						alreadyPresent = true;
-						break;
-					}
-				}
-				if (!alreadyPresent) {
-					vm.crtQuestion.children.tags.push(vm.crtQSelectedTag);
-				}
-			}
-		}
-		
-		function removeTag(tagId) {
-			if (tagId) {
-				var toBeRemoved = -1;
-				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
-					var t = vm.crtQuestion.children.tags[i];
-					if (t.id===tagId) {
-						toBeRemoved = i;
-						break;
-					}
-				}
-				if (toBeRemoved>=0) {
-					vm.crtQuestion.children.tags.splice(toBeRemoved,1);
-				}
-			}
-		}
-		
 		function initTags() {
 			refDS.tags(false,function (data) {
 				if (data) {
-					$('#tagsTypeahead').typeahead({
-						source: data,
-						autoSelect: true,
-						displayText: function (item) {
-							return item.label;
-						},
-						afterSelect: tagSelected
+					var tagSelector = $('#tagsSelector');
+					tagSelector.select2({
+						placeholder: "Tag this question",
+						data: data,
+						closeOnSelect: false,
+						tags: true
 					});
+					tagSelector.hover(function (e) {
+						tagSelector.select2('open');
+					},function (e) {
+						tagSelector.select2('close');
+					})
 				}
 			});
 
