@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS tags (
 	id BIGSERIAL PRIMARY KEY,
 	/* - */
-	label VARCHAR(120) NOT NULL,							/* label of the tag (english version) */
+	text VARCHAR(120) NOT NULL,							/* label of the tag (english version) */
 	/* - */
 	created_at TIMESTAMP WITH TIME ZONE,
 	updated_at TIMESTAMP WITH TIME ZONE
