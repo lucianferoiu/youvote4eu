@@ -209,9 +209,11 @@ public class QuestionsController extends PlatformController {
 				for (Comment existingComment : existingComments) {
 					Long tId = existingComment.getLongId();
 					if (!toKeep.contains(tId)) {
-						question.remove(existingComment);
-						log.debug("Comment '{}' initially created by partner {} was removed from question {} by partner {}",
-								existingComment.get("text"), existingComment.get("created_by"), id, myId);
+						if (!existingComment.frozen()) {
+							log.debug("Comment '{}' initially created by partner {} will be removed from question {} by partner {}",
+									existingComment.get("text"), existingComment.get("created_by"), id, myId);
+							question.remove(existingComment);
+						}
 					}
 				}
 			}

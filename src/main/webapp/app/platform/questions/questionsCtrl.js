@@ -24,6 +24,7 @@
 		vm.crtTranslation = {lang:'en'};
 		vm.translationsTab = [];
 		vm.translationsDropdown = [];
+		vm.crtComment = null;
 		
 		//vm API
 		vm.switchPanel = switchPanel;
@@ -42,8 +43,8 @@
 		vm.deleteQuestion = deleteQuestion;
 		vm.canUpvote = canUpvote;
 		vm.upvote = upvote;
-		vm.addTag = addTag;
-		vm.removeTag = removeTag;
+		vm.addComment = addComment;
+		vm.deleteComment = deleteComment;
 		
 		//init
 		refDS.preload(true);
@@ -139,6 +140,7 @@
 					comments:[]
 				}
 			};
+			vm.crtComment = null;
 			refDS.languages(false,function (langs) {
 				vm.translationsDropdown = [];
 				for (var code in langs) {
@@ -161,7 +163,7 @@
 				if (question.archived_at) {$('#archivedAtDP').data("DateTimePicker").date(new Date(question.archived_at))} else {$('#archivedAtDP').data("DateTimePicker").clear()};
 				if (question.open_at) {$('#openAtDP').data("DateTimePicker").date(new Date(question.open_at))} else {$('#openAtDP').data("DateTimePicker").clear()};
 				if (question.closed_at) {$('#closedAtDP').data("DateTimePicker").date(new Date(question.closed_at))} else {$('#closedAtDP').data("DateTimePicker").clear()};
-				
+
 				vm.crtQuestion = question;
 				if (vm.crtQuestion.children==null) vm.crtQuestion.children={translations:[],tags:[],comments:[]};
 				if (vm.crtQuestion.children.translations==null) vm.crtQuestion.children.translations=[];
@@ -174,6 +176,10 @@
 				}
 				$('#tagsSelector').val(selectedTags).trigger("change");
 				
+				vm.crtQuestion.children.comments.sort(function (a,b) {
+					return b.id-a.id;
+				});
+				
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -183,6 +189,7 @@
 					html_content: question.html_content,
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
+				vm.crtComment = null;
 				
 				//update dropdown
 				if (question.children && question.children.translations) {
@@ -222,6 +229,7 @@
 		}
 		
 		function cancelEdit() {
+			vm.crtComment = null;
 			vm.crtQuestion = null;
 			vm.crtQActivePanel = null;
 		}
@@ -263,6 +271,7 @@
 			vm.loadPage();
 			resetCrtQuestion();
 			vm.crtQActivePanel = null;
+			vm.crtComment = null;
 		}
 		
 		function resetCrtQuestion() {
@@ -270,6 +279,7 @@
 			vm.crtTranslation = {lang:'en'};
 			vm.translationsTab = [];
 			vm.translationsDropdown = [];
+			vm.crtComment = null;
 		}
 		
 		function onQuestionCannotSave(msg) {
@@ -460,7 +470,20 @@
 					})
 				}
 			});
-
+		}
+		
+		function addComment(commType) {
+			vm.crtComment = {
+				id:null,//new comment
+				comment_type: commType,
+				text: ''
+			};
+			vm.crtQuestion.children.comments.unshift(vm.crtComment);
+			$('#commentText').delay(500).focus();
+		}
+		
+		function deleteComment(idx) {
+			vm.crtQuestion.children.comments.splice(idx,1);
 		}
 
 		//----------------------------------------------//

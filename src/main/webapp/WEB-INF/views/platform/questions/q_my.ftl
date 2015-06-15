@@ -5,7 +5,7 @@
 	<div class="row q-row bottom-border" ng-repeat="q in vm.myQ.results">
 		
 		<div class="col-sm-2 q-info-cell" ng-show="q.is_archived">
-			<div class="vcenter">
+			<div class="">
 				<p class="text-nowrap" style="padding-top: 8px;">
 					<span class="label label-success text-left">Yes: {{q.popular_vote_tally*100}} %</span>&nbsp;
 					<span class="label label-danger text-right">No: {{(1-q.popular_vote_tally)*100}} %</span>
@@ -15,23 +15,23 @@
 		</div>
 		
 		<div class="col-sm-1 col-sm-offset-1 q-info-cell " ng-show="q.is_published && (!q.is_archived)">
-			<div class="vcenter">
+			<div class="">
 				<span class="label label-default text-right"><strong>{{q.popular_votes|pad:11:'&nbsp;'}}</strong> votes</span>
 			</div>
 		</div>
 		
-		<div class="col-sm-1 col-sm-offset-1 q-info-cell" ng-show="(!q.is_published) && (!q.is_archived)">
-			<div class="text-center">
-				<span class="glyphicon glyphicon-arrow-up huge unvotable" style="padding-top:10px;"></span>
+		<div class="col-sm-2 q-info-cell" ng-show="(!q.is_published) && (!q.is_archived)">
+			<div class="text-center pull-right" data-toggle="tooltip" title="{{vm.canUpvote(q.id)?'Support the question by upvoting it!':''}}">
+				&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-up huge unvotable" style="padding-top:14px;">
+				</span>
 			</div>
-			<div class="text-center">
-				<span class="label label-default">{{q.support|pad:5:'&nbsp;'}}</span>
-			</div>
+			<div class=" q-support text-right pull-right">&nbsp;{{q.support}}</div>
 		</div>
 		
 		
+		
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
-			<div class="vcenter">
+			<div class="">
 				<div class="">
 					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
 					&nbsp;&nbsp;

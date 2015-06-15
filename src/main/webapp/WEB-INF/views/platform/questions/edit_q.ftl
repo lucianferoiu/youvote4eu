@@ -31,7 +31,7 @@
 							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='meta'">Metadata</a>
 						</li>
 						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='stats'}" style="padding-left:10px;">
-							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='stats'">Statistics</a>
+							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='stats'">Voting & Statistics</a>
 						</li>
 					</ul>
 
@@ -143,62 +143,61 @@
 							<br/>
 						</div>	
 							
+						<!-- tags cloud -->
 						<div class="panel">
-							<!-- tags cloud -->
 							<h4><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp; Tags</h4>
 							<select id="tagsSelector" class="form-control input-lg" multiple="multiple" style="width:100%;"></select>
 							<br/>
 						</div>
 						
+						<!-- comments -->
 						<div class="panel">
 							<h4><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp; Flags and Comments</h4>
-							
-							<ul class="list-group">
-								<li class="list-group-item" 
-									ng-repeat="c in vm.crtQuestion.children.comments">
-									<span class="badge" ng-class="{'badge-warn':}">{{c.comment_type}}</span>
-									{{c.text}}
-								</li>
-							</ul>
+							<div class="scroll-block">
+								<ul class="list-group">
+									<li class="list-group-item" style="min-height:22px;"
+										ng-repeat="c in vm.crtQuestion.children.comments "
+										ng-class="{'text-primary':c.id==null}">
+										{{c.text}}
+										<button type="button" class="close pull-right" 
+											ng-click="vm.deleteComment($index)">&nbsp;&nbsp;<span aria-hidden="true" class="text-danger">&times;</span></button>
+										<span class="label pull-right" style="padding: 6px;"
+											ng-class="{'label-warning':c.comment_type==='duplicate'||c.comment_type==='mistranslated'||c.comment_type==='misleading',
+												 'label-danger':c.comment_type==='offensive','label-success':c.comment_type==='promoted'}">
+												{{c.comment_type}}</span>
+									</li>
+								</ul>
+								<div class="bottom-comments">
+									<div class="muted" ng-show="!(vm.crtQuestion.children.comments.length>0)">
+										<em>Comments from other Partners ... </em>
+									</div>
+								</div>
+							</div>
+							<br/>
+							<div class="dropup">
+								<button type="button" class="btn dropdown-toggle" data-toggle="dropdown"> Add a new Comment or Flag &nbsp;&nbsp;<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#bottom-comments" ng-click="vm.addComment('promoted')">Flag the question as <strong>promoted</strong></a></li>
+									<li class="divider"></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('duplicate')">Flag <strong>duplicate</strong> question <em>(indicate which question)</em></a></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('offensive')">Flag <strong>offensive</strong> language</a></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('mistranslated')">Flag <strong>mistranslation</strong> <em>(indicate the language)</em></a></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('misleading')">Flag a <strong>misleading reference</strong></a></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('misleading')">Flag <strong>misleading content</strong></a></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('broken link')">Flag <strong>broken links</strong> inside the question</a></li>
+									<li class="divider"></li>
+									<li><a href="#bottom-comments" ng-click="vm.addComment('comment')">Add a short <strong>comment</strong></a></li>
+								</ul>
+								
+								<input type="text" class="form-control" id="commentText" maxlength="100"
+									ng-model="vm.crtComment.text"
+									ng-show="vm.crtComment && vm.crtComment.id==null" 
+									placeholder="Write a short comment or provide details for the flag" >
+								
+							</div>
 							
 						</div>
 
-						<div class="row">
-							<br/>
-							<ul class="list-group">
-								<li class="list-group-item" ng-repeat="c in vm.crtQuestion.children.comments">{{c.text}}</li>
-							</ul>
-						</div>
-						<div class="">
-							<div class="dropup">
-								<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="display: block; width: 100%;"
-									aria-expanded="false"> Tags &nbsp;<span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="#">environment</a></li>
-									<li><a href="#">trade</a></li>
-									<li><a href="#">social</a></li>
-									<li><a href="#">privacy</a></li>
-									<li class="divider"></li>
-									<li><a href="#">2015 EP Session</a></li>
-									<li><a href="#">TTIP-Awareness Campain</a></li>
-								</ul>
-							</div>
-							<br/>
-							<div class="dropup">
-								<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="display: block; width: 100%;"
-									aria-expanded="false"> Flags &nbsp;<span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="#">promoted</a></li>
-									<li class="divider"></li>
-									<li><a href="#">duplicate question</a></li>
-									<li><a href="#">offensive language</a></li>
-									<li><a href="#">mistranslated</a></li>
-									<li><a href="#">misleading references</a></li>
-									<li><a href="#">misleading content</a></li>
-									<li><a href="#">broken links</a></li>
-								</ul>
-							</div>
-						</div>
 					</div>
 					
 					

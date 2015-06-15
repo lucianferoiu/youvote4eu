@@ -18,7 +18,7 @@
 				</li>
 				<li role="presentation" id="addQuestionBtn" style="padding-right:10px;">
 					<a href="#" class="q-pill q-pill-button btn-success" ng-click="vm.addQuestion()">
-						<span class="glyphicon glyphicon-plus"></span>&nbsp; Propose new Question</a>
+						<span class="glyphicon glyphicon-plus"></span>&nbsp; Propose New Question</a>
 				</li>
 			</ul>
 		</div>

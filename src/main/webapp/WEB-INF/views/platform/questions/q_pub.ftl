@@ -3,16 +3,13 @@
 <div class="container-fluid" ng-show="vm.activePanel==='pubQ'">
 
 	<div class="row q-row bottom-border" ng-repeat="q in vm.pubQ.results">
-		<div class="col-sm-1">
-			
-		</div>
-		<div class="col-sm-1 q-info-cell ">
-			<div class="vcenter text-right">
-				<span class="label label-primary">{{q.popular_votes|pad:9:'&nbsp;'}} votes</span>
+		<div class="col-sm-2 q-info-cell ">
+			<div class="text-right" style="margin-top:18px;">
+				<span class="q-votes" >&nbsp;{{q.popular_votes|pad:7:'0'}} votes</span>
 			</div>
 		</div>
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
-			<div class="vcenter">
+			<div class="">
 				<div class="">
 					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
 					&nbsp;&nbsp;

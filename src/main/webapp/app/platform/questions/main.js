@@ -13,7 +13,11 @@
 				}
 				var inputAsStr = ''+input;
 				var len = inputAsStr.length;
-				var zeros = padder.repeat(n - len);
+				
+				var zeros = '';
+				for (var i = n-len; i >= 0; i--) {
+					zeros = zeros+padder;
+				}
 				return (zeros + input);
 			};
 		})
