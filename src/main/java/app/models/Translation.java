@@ -9,6 +9,6 @@ typeLabels = { "question", "tag", "country" } //
 )
 public class Translation extends Model {
 	static {
-		Model.validatePresenceOf("lang");
+		//		Model.validatePresenceOf("lang"); 
 	}
 }

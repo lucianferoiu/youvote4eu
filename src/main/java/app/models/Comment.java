@@ -6,6 +6,6 @@ import org.javalite.activejdbc.annotations.BelongsTo;
 @BelongsTo(parent = Question.class, foreignKeyName = "question_id")
 public class Comment extends Model {
 	static {
-		Model.validatePresenceOf("created_by");
+		//		Model.validatePresenceOf("created_by");
 	}
 }

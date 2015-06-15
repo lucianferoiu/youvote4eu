@@ -7,12 +7,11 @@ import org.javalite.activejdbc.Model;
  */
 public class EmailValidation extends Model {
 	static {
-		validatePresenceOf("email", "token");
-		validateEmailOf("email");
+		//		validatePresenceOf("email", "token");
+		//		validateEmailOf("email");
 	}
 
 	public static EmailValidation findValidation(String code) {
-		return EmailValidation.findFirst(
-				"token=? and validated=false and is_registration=true and valid_until>=current_timestamp ", code);
+		return EmailValidation.findFirst("token=? and validated=false and is_registration=true and valid_until>=current_timestamp ", code);
 	}
 }

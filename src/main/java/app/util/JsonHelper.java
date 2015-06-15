@@ -5,9 +5,9 @@ import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
@@ -75,8 +75,7 @@ public class JsonHelper {
 		return sw.toString();
 	}
 
-	public static String toResultsJson(LazyList results, Long total, Long from, Long to, boolean pretty,
-			List<String> attrs) {
+	public static String toResultsJson(LazyList results, Long total, Long from, Long to, boolean pretty, Set<String> attrs) {
 		StringWriter sw = new StringWriter();
 		sw.write("{" + (pretty ? "\n" : ""));
 		if (results != null) {
@@ -85,11 +84,7 @@ public class JsonHelper {
 			if (from != null) sw.write(" \"from\":" + from + (pretty ? ",\n" : ","));
 			if (to != null) sw.write(" \"to\":" + to + (pretty ? ",\n" : ","));
 			if (attrs != null) {
-				if (pretty) {
-					Collections.sort(attrs);
-				}
-				sw.write(" \"results\":" + results.toJson(pretty, attrs.toArray(new String[] {}))
-						+ (pretty ? "\n" : ""));
+				sw.write(" \"results\":" + results.toJson(pretty, attrs.toArray(new String[] {})) + (pretty ? "\n" : ""));
 			} else {
 				sw.write(" \"results\":" + results.toJson(pretty) + (pretty ? "\n" : ""));
 			}

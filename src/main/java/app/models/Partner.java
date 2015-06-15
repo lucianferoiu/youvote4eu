@@ -8,8 +8,8 @@ import org.javalite.activejdbc.Model;
  */
 public class Partner extends Model {
 	static {
-		validatePresenceOf("email");
-		validateEmailOf("email");
+		//		validatePresenceOf("email");
+		//		validateEmailOf("email");
 	}
 
 	public boolean canAuthenticate() {

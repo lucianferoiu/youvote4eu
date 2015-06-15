@@ -3,6 +3,7 @@ package app.base;
 import java.sql.Time;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.MetaModel;
@@ -125,7 +126,7 @@ public abstract class PlatformController extends AppController {
 	}
 
 	protected void returnJson(MetaModel metaModel, Model model, String... excludeFields) {
-		List<String> l = metaModel.getAttributeNamesSkip(excludeFields);
+		Set<String> l = metaModel.getAttributeNamesSkip(excludeFields);
 		respond(model.toJson(true, l.toArray(new String[0]))).contentType("application/json").status(200);
 	}
 

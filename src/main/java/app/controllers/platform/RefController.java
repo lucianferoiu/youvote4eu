@@ -1,6 +1,6 @@
 package app.controllers.platform;
 
-import java.util.List;
+import java.util.Set;
 
 import org.javalite.activeweb.annotations.GET;
 
@@ -17,14 +17,14 @@ public class RefController extends PlatformController {
 
 	@GET
 	public void langs() {
-		List<String> atts = (Lang.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
+		Set<String> atts = (Lang.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
 		String json = Lang.findAll().orderBy("label_en asc").toJson(true, atts.toArray(new String[0]));
 		respond(json).contentType("application/json").status(200);
 	}
 
 	@GET
 	public void tags() {
-		List<String> atts = (Tag.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
+		Set<String> atts = (Tag.getMetaModel().getAttributeNamesSkip("created_at", "updated_at"));
 		String json = Tag.findAll().orderBy("id asc").toJson(true, atts.toArray(new String[0]));
 		respond(json).contentType("application/json").status(200);
 	}

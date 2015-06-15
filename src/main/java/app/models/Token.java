@@ -10,7 +10,7 @@ import org.javalite.activejdbc.annotations.BelongsTo;
 public class Token extends Model {
 
 	static {
-		Model.validatePresenceOf("token");
+		//		Model.validatePresenceOf("token");
 	}
 
 	/**

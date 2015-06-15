@@ -98,11 +98,6 @@ public class QuestionsController extends PlatformController {
 						.include(Comment.class, Tag.class, Translation.class);//gather translations and metadata associated entities
 				Question question = questions.get(0);
 				if (question != null) {
-					//force cache children
-					//					question.getAll(Comment.class);
-					//question.getAll(Upvote.class); <-- we don't need this one...
-					//					question.getAll(Tag.class);
-					//					question.getAll(Translation.class);
 					returnJson(Question.getMetaModel(), question, EXCLUDED_FIELDS);
 				} else {
 					json_404("cannot find question with id=" + idParam);
@@ -192,13 +187,19 @@ public class QuestionsController extends PlatformController {
 			}
 			if (kids.containsKey("comments")) {
 				List<Comment> existingComments = question.getAll(Comment.class);
+				Set<Long> existingCommentIDs = new HashSet<>();
+				for (Comment existingComment : existingComments) {
+					Long cId = existingComment.getLongId();
+					existingCommentIDs.add(cId);
+				}
 				Set<Long> toKeep = new HashSet<>();
 				for (Map m : (List<Map>) kids.get("comments")) {
 					Comment o = new Comment();
 					o.fromMap(m);
-					if (o.getId() != null) {//we keep this one
-						Long oId = o.getLongId();
-						toKeep.add(oId);
+					Object oId = o.getId();
+					Long lId = oId != null ? o.getLongId() : null;
+					if (lId != null && existingCommentIDs.contains(lId)) {//we keep this one
+						toKeep.add(lId);
 					} else {//add it
 						o.set("created_by", myId);
 						question.add(o);

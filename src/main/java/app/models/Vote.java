@@ -9,7 +9,7 @@ import org.javalite.activejdbc.Model;
  */
 public class Vote extends Model {
 	static {
-		Model.validatePresenceOf("value");
+		//		Model.validatePresenceOf("value");
 	}
 
 }

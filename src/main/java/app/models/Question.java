@@ -11,7 +11,7 @@ import org.javalite.activejdbc.annotations.Many2Many;
 public class Question extends Model {
 
 	static {
-		Model.validatePresenceOf("title", "description", "proposed_by");
+		//		Model.validatePresenceOf("title", "description", "proposed_by");
 	}
 
 }
