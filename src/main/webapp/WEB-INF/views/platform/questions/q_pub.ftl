@@ -5,7 +5,7 @@
 	<div class="row q-row bottom-border" ng-repeat="q in vm.pubQ.results">
 		<div class="col-sm-2 q-info-cell ">
 			<div class="text-right" style="margin-top:18px;">
-				<span class="q-votes" >&nbsp;{{q.popular_votes|pad:7:'0'}} votes</span>
+				<span class="q-votes" >&nbsp;{{q.popular_votes|pad:5:'0'}} votes</span>
 			</div>
 		</div>
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">

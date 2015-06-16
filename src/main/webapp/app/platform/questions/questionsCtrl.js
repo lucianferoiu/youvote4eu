@@ -69,7 +69,7 @@
 					
 					questionsDS.getQuestions(page,vm.activePanel,params,function (data) {
 						panel.totalRecords = data.total;
-						panel.totalPages = Math.ceil(panel.totalRecords/questionsDS.PAGE_SIZE);
+						panel.totalPages = Math.max(1,Math.ceil(panel.totalRecords/questionsDS.PAGE_SIZE));
 						panel.pagesRange = refDS.range(panel.totalPages);
 						panel.results = data.results;
 						panel.crtPage=page;

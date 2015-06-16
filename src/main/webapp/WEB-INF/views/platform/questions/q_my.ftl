@@ -7,8 +7,8 @@
 		<div class="col-sm-2 q-info-cell" ng-show="q.is_archived">
 			<div class="">
 				<p class="text-nowrap" style="padding-top: 8px;">
-					<span class="label label-success text-left">Yes: {{q.popular_vote_tally*100}} %</span>&nbsp;
-					<span class="label label-danger text-right">No: {{(1-q.popular_vote_tally)*100}} %</span>
+					<span class="label label-success text-left">Yes: {{(q.popular_vote_tally*100).toFixed(0)}} %</span>&nbsp;
+					<span class="label label-danger text-right">No: {{((1-q.popular_vote_tally)*100).toFixed(0)}} %</span>
 				</p>
 				<span class="label label-default">Archived: {{q.archived_at|date:'MMM d, y h:mm'}}</span>
 			</div>

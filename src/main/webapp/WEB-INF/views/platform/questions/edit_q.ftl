@@ -245,7 +245,7 @@
 										>Yeas: {{vm.crtQuestion.popular_vote_tally.toFixed(2)*100}}% / Nays: {{(1-vm.crtQuestion.popular_vote_tally.toFixed(2))*100}}%</div>
 								</div>  --]
 								<div class="form-control-static col-sm-8" ng-show="vm.crtQuestion.popular_vote_tally>0">
-									Yeas: {{vm.crtQuestion.popular_vote_tally.toFixed(2)*100}}% / Nays: {{ (1-vm.crtQuestion.popular_vote_tally.toFixed(2))*100}}%
+									<span class="label label-success">Yeas: {{(vm.crtQuestion.popular_vote_tally*100).toFixed(2)}}% </span>&nbsp;&nbsp;/&nbsp;&nbsp;<span class="label label-danger"> Nays: {{ ( (1-vm.crtQuestion.popular_vote_tally)*100).toFixed(2)}}%</span>
 								</div>
 								<span id="questionPopTally2" class="form-control-static col-sm-8" ng-show="!(vm.crtQuestion.popular_vote_tally>0)">No votes yet..</span>
 							</div>

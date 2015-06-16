@@ -282,13 +282,17 @@ public class QuestionsController extends PlatformController {
 			catch (NumberFormatException nfe) {}
 		}
 
-		String questionsIDs = Util.join(qIDs, ",");
-		List<Long> canVoteIDs = Base.firstColumn(" SELECT DISTINCT q.id FROM questions q " + // get the IDs of ..
-				" WHERE q.is_published=false AND q.proposed_by!=? AND q.id in (" + questionsIDs + ") " + // unpublished questions not proposed by the upvoter
-				" EXCEPT " + // but remove...
-				"SELECT u.question_id FROM upvotes u WHERE u.upvoted_by=? AND u.question_id in (" + questionsIDs + ") ", // already upvoted questions by the upvoter
-				myId, myId);
-		Collections.sort(canVoteIDs);
+		List<Long> canVoteIDs = Collections.emptyList();
+		if (!qIDs.isEmpty()) {
+			String questionsIDs = Util.join(qIDs, ",");
+			canVoteIDs = Base.firstColumn(" SELECT DISTINCT q.id FROM questions q " + // get the IDs of ..
+					" WHERE q.is_published=false AND q.proposed_by!=? AND q.id in (" + questionsIDs + ") " + // unpublished questions not proposed by the upvoter
+					" EXCEPT " + // but remove...
+					"SELECT u.question_id FROM upvotes u WHERE u.upvoted_by=? AND u.question_id in (" + questionsIDs + ") ", // already upvoted questions by the upvoter
+					myId, myId);
+			Collections.sort(canVoteIDs);
+
+		}
 		returnJsonList(canVoteIDs);
 
 	}
