@@ -12,6 +12,9 @@
 [@content for="header_css"]<link href='${context_path}/css/select2.min.css' rel="stylesheet">[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/select2.min.js'></script>[/@content]
 
+[@content for="header_css"]<link href='${context_path}/css/bootstrap-slider.min.css' rel="stylesheet">[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/bootstrap-slider.min.js'></script>[/@content]
+
 
 <div class="container">
 	<div id="editPartnerModel" class="modal editing-dialog" tabindex="-1" role="dialog" aria-hidden="true" ng-class="{'show': vm.crtQActivePanel}">
@@ -93,7 +96,7 @@
 							<h4><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp; Status</h4>
 							<div class="form-inline">
 								<div class="form-group disabled">
-									<label class="control-label" for="questionIsPublished">Published &nbsp;&nbsp;</label>
+									<label class="control-label" for="questionIsPublished">Published &nbsp;&nbsp;&nbsp;</label>
 									<input type="checkbox" class="form-control disabled" id="questionIsPublished" ng-model="vm.crtQuestion.is_published" disabled>
 								</div>
 								<div class="form-control-static">
@@ -123,8 +126,27 @@
 							</div>
 							<br/>
 							<div class="form-inline">
+								<div class="form-group">
+									<label class="control-label" for="questionIsPublicAgenda">Public Agenda&nbsp;</label>
+									<input type="checkbox" class="form-control" id="questionIsPublicAgenda" 
+										ng-model="vm.crtQuestion.is_public_agenda" ng-change="vm.togglePubAgenda()">
+								</div>
+								<div class="form-control-static">
+									&nbsp;&nbsp;&nbsp;
+								</div>
+								<div class="form-group" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+									<label for="officialVoteResults" class="control-label">Official Vote Result&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<input id="officialVoteResults" type="text" class="" 
+										data-slider-min="0" data-slider-id='officialVoteSlider'
+										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+									&nbsp;&nbsp;&nbsp;
+									<p id="officialVoteLabel" class="form-control-static" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+								</div>
+							</div>
+							<br/>
+							<div class="form-inline">
 								<div class="form-group disabled">
-									<label class="control-label" for="questionIsArchived">Archived &nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<label class="control-label" for="questionIsArchived">Archived &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 									<input type="checkbox" class="form-control disabled" id="questionIsArchived" ng-model="vm.crtQuestion.is_archived" disabled>
 								</div>
 								<div class="form-control-static">
@@ -204,6 +226,8 @@
 					<!-- statistics question panel -->
 					<div class="q-panel" ng-show="vm.crtQActivePanel=='stats'">
 						
+						
+						
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -249,5 +273,22 @@
 		});
 	
 		//tags typeahead -> see questionsCtrl::initTags
+		
+		//vote results slider
+		$('#officialVoteResults').slider({
+			formatter: function(value) {
+				return 'Yes: ' + value+'% - No: '+ (100-value)+'%';
+			}
+			// ,tooltip: 'always'
+		});
+		$('#officialVoteResults').on("slide", function(slideEvt) {
+			var txt = 'No voting registered';
+			if (slideEvt.value>0) {
+				txt = ' Yes/No: ' + slideEvt.value+'/'+ (100-slideEvt.value)+' %';
+			} else {
+			}
+			$("#officialVoteLabel").text(txt);
+		});
+		
 	});
 </script>[/@content]

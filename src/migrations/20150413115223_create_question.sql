@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS questions (
 	proposed_by BIGINT NOT NULL,					/* the platform partner that introduced this question */
 	support BIGINT DEFAULT 1,						/* number of upvotes (support) that a question gained in order to be published */
 	popular_votes BIGINT DEFAULT 0,					/* total votes cast by the public (on the website) */
-	popular_vote_tally NUMERIC(3),					/* summary of the YES votes percentage of the popular vote (on the website) */
-	official_vote_tally NUMERIC(3),					/* summary of the YES votes percentage of the official/institutional vote (if public agenda topic) */
+	popular_vote_tally NUMERIC(6,3),				/* summary of the YES votes percentage of the popular vote (on the website) */
+	official_vote_tally NUMERIC(6,3),				/* summary of the YES votes percentage of the official/institutional vote (if public agenda topic) */
 	open_at TIMESTAMP WITH TIME ZONE,				/* the question become open for voting at the specified date/time */
 	closed_at TIMESTAMP WITH TIME ZONE,				/* the question become closed for voting at the specified date/time */
 	archived_at TIMESTAMP WITH TIME ZONE,			/* the question was archived at the specified date/time */

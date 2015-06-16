@@ -45,6 +45,7 @@
 		vm.upvote = upvote;
 		vm.addComment = addComment;
 		vm.deleteComment = deleteComment;
+		vm.togglePubAgenda = togglePubAgenda;
 		
 		//init
 		refDS.preload(true);
@@ -141,6 +142,8 @@
 				}
 			};
 			vm.crtComment = null;
+			$('#officialVoteResults').slider('setValue',0);
+			
 			refDS.languages(false,function (langs) {
 				vm.translationsDropdown = [];
 				for (var code in langs) {
@@ -179,7 +182,15 @@
 				vm.crtQuestion.children.comments.sort(function (a,b) {
 					return b.id-a.id;
 				});
-				
+
+				togglePubAgenda();
+				var tally = vm.crtQuestion.official_vote_tally>0?Math.ceil(vm.crtQuestion.official_vote_tally * 100):0;
+				$('#officialVoteResults').slider('setValue',tally);
+				if (tally>0) {
+					$("#officialVoteLabel").text(' Yes/No: ' + tally+'/'+ (100-tally)+' %');
+				} else {
+					$("#officialVoteLabel").text('No voting registered');
+				}
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -232,6 +243,7 @@
 			vm.crtComment = null;
 			vm.crtQuestion = null;
 			vm.crtQActivePanel = null;
+			$('#officialVoteResults').slider('setValue',0);
 		}
 		
 		function saveQuestion() {
@@ -263,6 +275,13 @@
 					}
 				}
 				
+				if (q.is_public_agenda) {
+					var tally = $('#officialVoteResults').slider('getValue');
+					if (tally>0) {
+						q.official_vote_tally = new Number((tally / 100).toPrecision(3));
+					}
+				}
+				
 				questionsDS.saveQuestion(q,onQuestionSaved,onQuestionCannotSave);
 			}
 		}
@@ -280,6 +299,7 @@
 			vm.translationsTab = [];
 			vm.translationsDropdown = [];
 			vm.crtComment = null;
+			$('#officialVoteResults').slider('setValue',0);
 		}
 		
 		function onQuestionCannotSave(msg) {
@@ -484,6 +504,14 @@
 		
 		function deleteComment(idx) {
 			vm.crtQuestion.children.comments.splice(idx,1);
+		}
+		
+		function togglePubAgenda() {
+			if (vm.crtQuestion.is_public_agenda) {
+				$('#officialVoteResults').slider('enable');
+			} else {
+				$('#officialVoteResults').slider('disable');
+			}
 		}
 
 		//----------------------------------------------//

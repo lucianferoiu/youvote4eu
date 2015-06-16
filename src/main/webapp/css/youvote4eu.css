@@ -172,3 +172,11 @@ body {
 	max-height:200px;
 	overflow-y:scroll;
 }
+
+#officialVoteSlider .slider-selection {
+	background: #5cb85c;
+}
+
+#officialVoteSlider .slider-track-high {
+	background: #d9534f;
+}
