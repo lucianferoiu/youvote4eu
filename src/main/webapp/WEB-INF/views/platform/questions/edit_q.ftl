@@ -225,8 +225,35 @@
 					
 					<!-- statistics question panel -->
 					<div class="q-panel" ng-show="vm.crtQActivePanel=='stats'">
+						<h4><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp; Votes</h4>
 						
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="questionSupport">Support from the Partners</label>
+								<p id="questionSupport" class="form-control-static col-sm-8">{{vm.crtQuestion.support}} upvotes</p>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="questionPopVote">Popular votes</label>
+								<p id="questionPopVote" class="form-control-static col-sm-8">{{vm.crtQuestion.popular_votes}}</p>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="questionPopTally">Popular vote tally</label>
+								[#-- <div class="progress col-sm-8" id="questionPopTally" ng-show="vm.crtQuestion.popular_vote_tally>0">
+									<div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+										ng-style="{'width': vm.crtQuestion.popular_vote_tally*100 + '%;'} "
+										aria-valuenow="{{Math.ceil(vm.crtQuestion.popular_vote_tally*100)}}"
+										>Yeas: {{vm.crtQuestion.popular_vote_tally.toFixed(2)*100}}% / Nays: {{(1-vm.crtQuestion.popular_vote_tally.toFixed(2))*100}}%</div>
+								</div>  --]
+								<div class="form-control-static col-sm-8" ng-show="vm.crtQuestion.popular_vote_tally>0">
+									Yeas: {{vm.crtQuestion.popular_vote_tally.toFixed(2)*100}}% / Nays: {{ (1-vm.crtQuestion.popular_vote_tally.toFixed(2))*100}}%
+								</div>
+								<span id="questionPopTally2" class="form-control-static col-sm-8" ng-show="!(vm.crtQuestion.popular_vote_tally>0)">No votes yet..</span>
+							</div>
+						</div>
 						
+						<br/>
+						
+						<h4><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp; Statistics</h4>
 						
 					</div>
 				</div>
