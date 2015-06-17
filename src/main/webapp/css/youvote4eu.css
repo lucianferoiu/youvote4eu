@@ -146,6 +146,10 @@ body {
 	color: white;
 }
 
+.q-panel {
+	min-height:600px;
+}
+
 .q-row {
 	background-color: white;
 	border-style: none none solid none;

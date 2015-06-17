@@ -12,9 +12,9 @@ public class HomeController extends PlatformController {
 
 	public static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
-	public void index() {
+	public void index() {}
 
-	}
+	public void help() {}
 
 	public void catchall() {
 		redirect("/platform/home");

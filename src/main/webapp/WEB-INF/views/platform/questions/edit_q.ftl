@@ -22,7 +22,9 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancelEdit()"><span aria-hidden="true">&times;</span></button>
-					<h3>Question [{{vm.crtQuestion.id|pad:3:'0'}}]: <em>{{vm.crtQuestion.title}}</em></h3>
+					<h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width:95%;">
+						<span class="text-primary">Question  {{vm.crtQuestion.id|pad:3:'0'}}</span>&nbsp; {{vm.crtQuestion.title}}
+					</h3>
 				</div>
 				<div class="modal-body">
 					<!-- question detail sections -->
@@ -274,8 +276,8 @@
 	$(function () {
 		//HTML editor
 		$('#questionContent').summernote({
-			height: 280,
-			maxHeight: 800,
+			height: 240,
+			maxHeight: 660,
 			keyMap: {pc:{},mac:{}},//the only way to turn off both shortcuts and squigly chars in tooltips
 			toolbar: [
 				['style', ['bold', 'italic', 'underline', 'fontsize','strikethrough', 'superscript', 'subscript','clear']],
