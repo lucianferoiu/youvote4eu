@@ -92,7 +92,7 @@ public class LoremController extends PlatformController {
 			//get some Lorem Ipsum texts
 			HttpResponse<JsonNode> response = null;
 			response = Unirest
-					.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 28) + "&length=13")
+					.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 28) + "&length=7")
 					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
 					.asJson();
 			JSONArray titles = response.getBody().getArray();
@@ -113,7 +113,7 @@ public class LoremController extends PlatformController {
 			log.debug("Retrieved {} Lorem contents", htmlContents.length());
 
 			//comments
-			response = Unirest.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 7) + "&length=7")
+			response = Unirest.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 7) + "&length=5")
 					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
 					.asJson();
 			JSONArray comments = response.getBody().getArray();

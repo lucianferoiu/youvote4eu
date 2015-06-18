@@ -30,10 +30,13 @@
 					<!-- question detail sections -->
 					<ul class="nav nav-pills nav-justified">
 						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='main'}" style="padding-left:10px;">
-							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='main'">Main Details</a>
+							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='main'">Main Text</a>
 						</li>
-						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='meta'}" style="padding-left:10px;">
-							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='meta'">Metadata</a>
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='pub'}" style="padding-left:10px;">
+							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='pub'">Publication Data</a>
+						</li>
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='arch'}" style="padding-left:10px;">
+							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='arch'">Archival Data</a>
 						</li>
 						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='stats'}" style="padding-left:10px;">
 							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='stats'">Voting & Statistics</a>
@@ -93,7 +96,7 @@
 					</div>
 					
 					<!-- metadata question panel -->
-					<div class="q-panel" ng-show="vm.crtQActivePanel=='meta'">
+					<div class="q-panel" ng-show="vm.crtQActivePanel=='pub'">
 						<div class="panel">
 							<h4><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp; Status</h4>
 							<div class="form-inline">
@@ -126,44 +129,9 @@
 									</div>
 								</div>
 							</div>
+							
 							<br/>
-							<div class="form-inline">
-								<div class="form-group">
-									<label class="control-label" for="questionIsPublicAgenda">Public Agenda&nbsp;</label>
-									<input type="checkbox" class="form-control" id="questionIsPublicAgenda" 
-										ng-model="vm.crtQuestion.is_public_agenda" ng-change="vm.togglePubAgenda()">
-								</div>
-								<div class="form-control-static">
-									&nbsp;&nbsp;&nbsp;
-								</div>
-								<div class="form-group" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
-									<label for="officialVoteResults" class="control-label">Official Vote Result&nbsp;&nbsp;&nbsp;&nbsp;</label>
-									<input id="officialVoteResults" type="text" class="" 
-										data-slider-min="0" data-slider-id='officialVoteSlider'
-										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-									&nbsp;&nbsp;&nbsp;
-									<p id="officialVoteLabel" class="form-control-static" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
-								</div>
-							</div>
-							<br/>
-							<div class="form-inline">
-								<div class="form-group disabled">
-									<label class="control-label" for="questionIsArchived">Archived &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-									<input type="checkbox" class="form-control disabled" id="questionIsArchived" ng-model="vm.crtQuestion.is_archived" disabled>
-								</div>
-								<div class="form-control-static">
-									&nbsp;&nbsp;&nbsp;
-								</div>
-								<div class="form-group" ng-class="{'disabled':true}">
-									<label for="archivedAtDP" class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Archived On&nbsp;</label>
-									<div class="input-group date" id="archivedAtDP">
-										<input type='text' class="form-control" ng-disabled="true"/>
-										<span class="input-group-addon">
-											<span class="glyphicon glyphicon-calendar"></span>
-										</span>
-									</div>
-								</div>
-							</div>
+							
 							<br/>
 						</div>	
 							
@@ -223,7 +191,151 @@
 						</div>
 
 					</div>
-					
+					<!-- archival data panel -->
+					<div class="q-panel" ng-show="vm.crtQActivePanel=='arch'">
+						
+						<div class="form-inline">
+							<div class="form-group disabled">
+								<label class="control-label" for="questionIsArchived">Archived &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+								<input type="checkbox" class="form-control disabled" id="questionIsArchived" ng-model="vm.crtQuestion.is_archived" disabled>
+							</div>
+							<div class="form-control-static">
+								&nbsp;&nbsp;&nbsp;
+							</div>
+							<div class="form-group" ng-class="{'disabled':true}">
+								<label for="archivedAtDP" class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Archived On&nbsp;</label>
+								<div class="input-group date" id="archivedAtDP">
+									<input type='text' class="form-control" ng-disabled="true"/>
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<br/>
+						<div class="form-inline">
+							<div class="form-group">
+								<label class="control-label" for="questionIsPublicAgenda">Public Agenda&nbsp;</label>
+								<input type="checkbox" class="form-control" id="questionIsPublicAgenda" 
+									ng-model="vm.crtQuestion.is_public_agenda" ng-change="vm.togglePubAgenda()">
+							</div>
+							<div class="form-control-static">
+								&nbsp;&nbsp;&nbsp;
+							</div>
+							<div class="form-group" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+							<div class="container">
+									
+								<div class="row">
+									<label for="officialVoteResults" class="control-label col-sm-2">Official Vote Result</label>
+									<input id="officialVoteResults" type="text" class="col-sm-6" 
+										data-slider-min="0" data-slider-id='officialVoteSlider'
+										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+									&nbsp;&nbsp;&nbsp;
+									<p id="officialVoteLabel" class="form-control-static col-sm-3" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+								</div>
+								<div class="row">
+									<label for="parliamentVoteResults" class="control-label col-sm-2">Parliament Vote</label>
+									<input id="parliamentVoteResults" type="text" class="col-sm-6" 
+										data-slider-min="0" data-slider-id='parliamentVoteSlider' data-slider-tooltip="hide"
+										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+									&nbsp;&nbsp;&nbsp;
+									<p id="parliamentVoteLabel" class="form-control-static pull-right" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+								</div>
+								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+									<label for="parliamentVoteDP" class="control-label col-sm-2">Parliament Voted On</label>
+									<div class="input-group date" id="parliamentVoteDP">
+										<input type='text' class="form-control"/>
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="row">
+									<label for="parliamentVoteLink" class="control-label col-sm-2">Link to EP Vote</label>
+									<div class="input-group col-sm-8">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="parliamentVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.parliament_vote_link"/>
+									</div>
+									&nbsp;&nbsp;&nbsp;
+									<a ng-show="vm.crtQuestion.parliament_vote_link.length>6" href="{{vm.crtQuestion.parliament_vote_link}}" class="pull-right"
+										target="_new">(try it)</a>
+								</div>
+								
+								<div class="row">
+									<label for="councilVoteResults" class="control-label col-sm-2">Council Vote</label>
+									<input id="councilVoteResults" type="text" class="col-sm-6" 
+										data-slider-min="0" data-slider-id='councilVoteSlider' data-slider-tooltip="hide"
+										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+									&nbsp;&nbsp;&nbsp;
+									<p id="councilVoteLabel" class="form-control-static pull-right" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+								</div>
+								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+									<label for="councilVoteDP" class="control-label col-sm-2">Council Voted On</label>
+									<div class="input-group date" id="councilVoteDP">
+										<input type='text' class="form-control"/>
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="row">
+									<label for="councilVoteLink" class="control-label col-sm-2">Link to Council Vote</label>
+									<div class="input-group col-sm-8">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="councilVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.council_vote_link"/>
+									</div>
+									&nbsp;&nbsp;&nbsp;
+									<a ng-show="vm.crtQuestion.council_vote_link.length>6" href="{{vm.crtQuestion.council_vote_link}}" class="pull-right"
+										target="_new">(try it)</a>
+								</div>
+								
+								<div class="row">
+									<label for="commissionVoteResults" class="control-label col-sm-2">Commission Decision</label>
+									<label class="radio-inline col-sm-2">
+										<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Approve
+									</label>
+									<label class="radio-inline col-sm-2">
+										<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Reject
+									</label>
+									<label class="radio-inline col-sm-2">
+										<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Postpone
+									</label>
+								</div>
+								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+									<label for="commissionDecisionDP" class="control-label col-sm-2">Commission Decided On</label>
+									<div class="input-group date" id="commissionDecisionDP">
+										<input type='text' class="form-control"/>
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="row">
+									<label for="commissionVoteLink" class="control-label col-sm-2">Link to Decision Details</label>
+									<div class="input-group col-sm-8">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="commissionVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.commission_decision_link"/>
+									</div>
+									&nbsp;&nbsp;&nbsp;
+									<a ng-show="vm.crtQuestion.commission_decision_link.length>6" href="{{vm.crtQuestion.commission_decision_link}}" class="pull-right"
+										target="_new">(try it)</a>
+								</div>
+								
+							</div>
+							</div>
+						</div>
+						
+						<br/>
+						
+						<div class="form">
+							<div class="form-group">
+								<label for="questionDescription" class="control-label">Archival Conclusion</label>
+								<textarea class="form-control" rows="2" id="archivalConclusion" 
+									ng-model="vm.crtQuestion.archival_conclusion" 
+									placeholder="Concise remarks as conclusion at the archival of this question (eulogy)" maxlength="500"></textarea>
+							</div>
+						</div>
+					</div>
 					
 					<!-- statistics question panel -->
 					<div class="q-panel" ng-show="vm.crtQActivePanel=='stats'">
@@ -300,24 +412,38 @@
 		$('#archivedAtDP').datetimepicker({
 			format: 'DD/MM/YYYY HH:mm'
 		});
+		$('#parliamentVoteDP').datetimepicker({
+			format: 'DD/MM/YYYY HH:mm'
+		});
+		$('#councilVoteDP').datetimepicker({
+			format: 'DD/MM/YYYY HH:mm'
+		});
+		$('#commissionDecisionDP').datetimepicker({
+			format: 'DD/MM/YYYY HH:mm'
+		});
 	
 		//tags typeahead -> see questionsCtrl::initTags
 		
 		//vote results slider
-		$('#officialVoteResults').slider({
-			formatter: function(value) {
-				return 'Yes: ' + value+'% - No: '+ (100-value)+'%';
-			}
-			// ,tooltip: 'always'
-		});
-		$('#officialVoteResults').on("slide", function(slideEvt) {
-			var txt = 'No voting registered';
-			if (slideEvt.value>0) {
-				txt = ' Yes/No: ' + slideEvt.value+'/'+ (100-slideEvt.value)+' %';
-			} else {
-			}
-			$("#officialVoteLabel").text(txt);
-		});
+		var zliders = ['official','parliament','council'];
+		for (var i = zliders.length - 1; i >= 0; i--) {
+			var zlider = $(('#'+zliders[i]+'VoteResults'));
+			// var zliderLabel = $(('#'+zliders[i]+'VoteLabel'));
+			zlider.slider({
+				formatter: function(value) {
+					return 'Yes: ' + value+'% - No: '+ (100-value)+'%';
+				}
+			});
+			zlider.on("slide", function(slideEvt) {
+				var txt = 'No voting registered';
+				if (slideEvt.value>0) {
+					txt = ' Yes/No: ' + slideEvt.value+'/'+ (100-slideEvt.value)+' %';
+				} else {
+				}
+				$(('#'+zliders[i]+'VoteLabel')).text(txt);
+			});
+			
+		}
 		
 	});
 </script>[/@content]
