@@ -177,10 +177,10 @@ body {
 	overflow-y:scroll;
 }
 
-#officialVoteSlider .slider-selection {
+#officialVoteSlider .slider-selection, #parliamentVoteSlider .slider-selection, #councilVoteSlider .slider-selection {
 	background: #5cb85c;
 }
 
-#officialVoteSlider .slider-track-high {
+#officialVoteSlider .slider-track-high, #parliamentVoteSlider .slider-track-high, #councilVoteSlider .slider-track-high {
 	background: #d9534f;
 }

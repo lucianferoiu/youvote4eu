@@ -142,7 +142,21 @@
 				}
 			};
 			vm.crtComment = null;
+			vm.crtTranslation = {lang:'en'};
 			$('#officialVoteResults').slider('setValue',0);
+			$('#parliamentVoteResults').slider('setValue',0);
+			$('#councilVoteResults').slider('setValue',0);
+			
+			$('#archivedAtDP').data("DateTimePicker").clear();
+			$('#openAtDP').data("DateTimePicker").clear();
+			$('#closedAtDP').data("DateTimePicker").clear();
+			$('#parliamentVoteDP').data("DateTimePicker").clear();
+			$('#councilVoteDP').data("DateTimePicker").clear();
+			$('#commissionDecisionDP').data("DateTimePicker").clear();
+			
+			$('#tagsSelector').val([]).trigger("change");
+			
+			togglePubAgenda();
 			
 			refDS.languages(false,function (langs) {
 				vm.translationsDropdown = [];
@@ -156,16 +170,20 @@
 					}
 				}
 			});
-			
+			$('#questionContent').code('');
 			vm.crtQActivePanel = 'main';
 		}
 		
 		function editQuestion(questionId) {
 			questionsDS.getQuestionById(questionId,function (question) {
 				
+				//set the date pickers
 				if (question.archived_at) {$('#archivedAtDP').data("DateTimePicker").date(new Date(question.archived_at))} else {$('#archivedAtDP').data("DateTimePicker").clear()};
 				if (question.open_at) {$('#openAtDP').data("DateTimePicker").date(new Date(question.open_at))} else {$('#openAtDP').data("DateTimePicker").clear()};
 				if (question.closed_at) {$('#closedAtDP').data("DateTimePicker").date(new Date(question.closed_at))} else {$('#closedAtDP').data("DateTimePicker").clear()};
+				if (question.parliament_voted_on) {$('#parliamentVoteDP').data("DateTimePicker").date(new Date(question.parliament_voted_on))} else {$('#parliamentVoteDP').data("DateTimePicker").clear()};
+				if (question.council_voted_on) {$('#councilVoteDP').data("DateTimePicker").date(new Date(question.council_voted_on))} else {$('#councilVoteDP').data("DateTimePicker").clear()};
+				if (question.commission_decided_on) {$('#commissionDecisionDP').data("DateTimePicker").date(new Date(question.commission_decided_on))} else {$('#commissionDecisionDP').data("DateTimePicker").clear()};
 
 				vm.crtQuestion = question;
 				if (vm.crtQuestion.children==null) vm.crtQuestion.children={translations:[],tags:[],comments:[]};
@@ -184,13 +202,10 @@
 				});
 
 				togglePubAgenda();
-				var tally = vm.crtQuestion.official_vote_tally>0?Math.ceil(vm.crtQuestion.official_vote_tally * 100):0;
-				$('#officialVoteResults').slider('setValue',tally);
-				if (tally>0) {
-					$("#officialVoteLabel").text(' Yes/No: ' + tally+'/'+ (100-tally)+' %');
-				} else {
-					$("#officialVoteLabel").text('No voting registered');
-				}
+				//set the voting sliders
+				updateSlider('officialVote','official_vote_tally');
+				updateSlider('parliamentVote','parliament_vote_tally');
+				updateSlider('councilVote','council_vote_tally');
 				
 				//load default translation
 				vm.crtTranslation = {
@@ -241,9 +256,21 @@
 		
 		function cancelEdit() {
 			vm.crtComment = null;
-			vm.crtQuestion = null;
 			vm.crtQActivePanel = null;
 			$('#officialVoteResults').slider('setValue',0);
+			vm.crtTranslation = {lang:'en'};
+			$('#officialVoteResults').slider('setValue',0);
+			$('#parliamentVoteResults').slider('setValue',0);
+			$('#councilVoteResults').slider('setValue',0);
+			$('#archivedAtDP').data("DateTimePicker").clear();
+			$('#openAtDP').data("DateTimePicker").clear();
+			$('#closedAtDP').data("DateTimePicker").clear();
+			$('#parliamentVoteDP').data("DateTimePicker").clear();
+			$('#councilVoteDP').data("DateTimePicker").clear();
+			$('#commissionDecisionDP').data("DateTimePicker").clear();
+			$('#tagsSelector').val([]).trigger("change");
+			togglePubAgenda();
+			vm.crtQuestion = null;
 		}
 		
 		function saveQuestion() {
@@ -260,6 +287,12 @@
 				q.closed_at=m?m.valueOf():null;
 				m=$('#openAtDP').data("DateTimePicker").date();
 				q.open_at=m?m.valueOf():null;
+				m=$('#parliamentVoteDP').data("DateTimePicker").date();
+				q.parliament_voted_on=m?m.valueOf():null;
+				m=$('#councilVoteDP').data("DateTimePicker").date();
+				q.council_voted_on=m?m.valueOf():null;
+				m=$('#commissionDecisionDP').data("DateTimePicker").date();
+				q.commission_decided_on=m?m.valueOf():null;
 				
 				//update tags
 				var selectedTags = $('#tagsSelector').select2('data');
@@ -276,10 +309,9 @@
 				}
 				
 				if (q.is_public_agenda) {
-					var tally = $('#officialVoteResults').slider('getValue');
-					if (tally>0) {
-						q.official_vote_tally = new Number((tally / 100).toPrecision(3));
-					}
+					q.official_vote_tally = saveSlider('officialVote');
+					q.parliament_vote_tally = saveSlider('parliamentVote');
+					q.council_vote_tally = saveSlider('councilVote');
 				}
 				
 				questionsDS.saveQuestion(q,onQuestionSaved,onQuestionCannotSave);
@@ -478,9 +510,10 @@
 				if (data) {
 					var tagSelector = $('#tagsSelector');
 					tagSelector.select2({
-						placeholder: "Tag this question",
+						placeholder: "Tag question",
 						data: data,
 						closeOnSelect: false,
+						clearOnSelect: true,
 						tags: true
 					});
 					tagSelector.hover(function (e) {
@@ -509,12 +542,34 @@
 		function togglePubAgenda() {
 			if (vm.crtQuestion.is_public_agenda) {
 				$('#officialVoteResults').slider('enable');
+				$('#parliamentVoteResults').slider('enable');
+				$('#councilVoteResults').slider('enable');
 			} else {
 				$('#officialVoteResults').slider('disable');
+				$('#parliamentVoteResults').slider('disable');
+				$('#councilVoteResults').slider('disable');
 			}
 		}
 
 		//----------------------------------------------//
+		
+		function updateSlider(sel,fld) {
+			var tally = vm.crtQuestion[fld]>0?Math.ceil(vm.crtQuestion[fld] * 100):0;
+			$(('#'+sel+'Results')).slider('setValue',tally);
+			if (tally>0) {
+				$(('#'+sel+'Label')).text(' Yes/No: ' + tally+'/'+ (100-tally)+' %');
+			} else {
+				$(('#'+sel+'Label')).text('No voting registered');
+			}
+		}
+		
+		function saveSlider(sel) {
+			var tally = $(('#'+sel+'Results')).slider('getValue');
+			if (tally>0) {
+				return new Number((tally / 100).toPrecision(3));
+			}
+			return null;
+		}
 
 	}
 

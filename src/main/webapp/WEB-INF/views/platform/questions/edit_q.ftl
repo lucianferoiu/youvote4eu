@@ -23,7 +23,9 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancelEdit()"><span aria-hidden="true">&times;</span></button>
 					<h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width:95%;">
-						<span class="text-primary">Question  {{vm.crtQuestion.id|pad:3:'0'}}</span>&nbsp; {{vm.crtQuestion.title}}
+						<span>Question</span> 
+						<span class="text-primary" ng-show="vm.crtQuestion.id>0">[{{vm.crtQuestion.id|pad:3:'0'}}]</span> 
+						<span class="text-primary" ng-show="!(vm.crtQuestion.id>0)"><em>[new]</em></span> {{vm.crtQuestion.title}}
 					</h3>
 				</div>
 				<div class="modal-body">
@@ -98,7 +100,7 @@
 					<!-- metadata question panel -->
 					<div class="q-panel" ng-show="vm.crtQActivePanel=='pub'">
 						<div class="panel">
-							<h4><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp; Status</h4>
+							<h4><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp; Publication Details</h4>
 							<div class="form-inline">
 								<div class="form-group disabled">
 									<label class="control-label" for="questionIsPublished">Published &nbsp;&nbsp;&nbsp;</label>
@@ -129,10 +131,49 @@
 									</div>
 								</div>
 							</div>
-							
 							<br/>
+							<div class="form-horizontal container">
+								<div class="form-group">
+									<label for="campaignName" class="col-sm-3 control-label">Related Campaign Name</label>
+									<div class="col-sm-5 input-group">
+										<div class="input-group-addon"><span class="glyphicon glyphicon-volume-up"></span></div>
+										<input type="text" class="form-control" id="campaignName" ng-model="vm.crtQuestion.campaign_name" maxlength="100">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="campaignLink" class="col-sm-3 control-label">Link to Campaign Page</label>
+									<div class="col-sm-5 input-group">
+										<div class="input-group-addon"><span class="glyphicon glyphicon-link"></span></div>
+										<input type="text" class="form-control" id="campaignName" ng-model="vm.crtQuestion.campaign_link" maxlength="400">
+										<a ng-show="vm.crtQuestion.campaign_link.length>6" href="{{vm.crtQuestion.campaign_link}}" class="input-group-addon" target="_new">[try it]</a>
+									</div>
+									
+								</div>
+								<div class="form-group">
+									<label for="facebookPage" class="col-sm-3 control-label">Dedicated Facebook Page</label>
+									<div class="col-sm-5 input-group">
+										<div class="input-group-addon">&nbsp;&nbsp;<strong>f</strong> </div>
+										<input type="text" class="form-control" id="facebookPage" ng-model="vm.crtQuestion.facebook_page" maxlength="400">
+										<a ng-show="vm.crtQuestion.facebook_page.length>6" href="{{vm.crtQuestion.facebook_page}}" class="input-group-addon" target="_new">[try it]</a>
+									</div>
+									
+								</div>
+								<div class="form-group">
+									<label for="twitterHashtag" class="col-sm-3 control-label">Dedicated #hashtag on Twitter</label>
+									<div class="col-sm-2 input-group">
+										<div class="input-group-addon">&nbsp;<strong>#</strong> </div>
+										<input type="text" class="form-control" id="twitterHashtag" ng-model="vm.crtQuestion.twitter_hashtag" maxlength="32">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="correspondenceEmail" class="col-sm-3 control-label">Dedicated Correspondence Email</label>
+									<div class="col-sm-5 input-group">
+										<div class="input-group-addon">&nbsp;<strong>@</strong> </div>
+										<input type="email" class="form-control" id="correspondenceEmail" ng-model="vm.crtQuestion.correspondence_email" maxlength="100">
+									</div>
+								</div>
+							</div>
 							
-							<br/>
 						</div>	
 							
 						<!-- tags cloud -->
@@ -224,22 +265,19 @@
 							</div>
 							<div class="form-group" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
 							<div class="container">
-									
 								<div class="row">
 									<label for="officialVoteResults" class="control-label col-sm-2">Official Vote Result</label>
-									<input id="officialVoteResults" type="text" class="col-sm-6" 
+									<p id="officialVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="officialVoteResults" type="text" class="col-sm-6" 
 										data-slider-min="0" data-slider-id='officialVoteSlider'
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
 									&nbsp;&nbsp;&nbsp;
-									<p id="officialVoteLabel" class="form-control-static col-sm-3" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+
 								</div>
 								<div class="row">
 									<label for="parliamentVoteResults" class="control-label col-sm-2">Parliament Vote</label>
-									<input id="parliamentVoteResults" type="text" class="col-sm-6" 
+									<p id="parliamentVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="parliamentVoteResults" type="text" class="col-sm-6 voteSlider" 
 										data-slider-min="0" data-slider-id='parliamentVoteSlider' data-slider-tooltip="hide"
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-									&nbsp;&nbsp;&nbsp;
-									<p id="parliamentVoteLabel" class="form-control-static pull-right" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
 								</div>
 								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
 									<label for="parliamentVoteDP" class="control-label col-sm-2">Parliament Voted On</label>
@@ -252,22 +290,19 @@
 								</div>
 								<div class="row">
 									<label for="parliamentVoteLink" class="control-label col-sm-2">Link to EP Vote</label>
-									<div class="input-group col-sm-8">
-										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="parliamentVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.parliament_vote_link"/>
+									<div class="input-group col-sm-6">
+										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="parliamentVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.parliament_vote_link"  maxlength="400"/>
+										<a ng-show="vm.crtQuestion.parliament_vote_link.length>6" href="{{vm.crtQuestion.parliament_vote_link}}"
+											class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
-									&nbsp;&nbsp;&nbsp;
-									<a ng-show="vm.crtQuestion.parliament_vote_link.length>6" href="{{vm.crtQuestion.parliament_vote_link}}" class="pull-right"
-										target="_new">(try it)</a>
 								</div>
 								
 								<div class="row">
 									<label for="councilVoteResults" class="control-label col-sm-2">Council Vote</label>
-									<input id="councilVoteResults" type="text" class="col-sm-6" 
+									<p id="councilVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="councilVoteResults" type="text" class="col-sm-6 voteSlider" 
 										data-slider-min="0" data-slider-id='councilVoteSlider' data-slider-tooltip="hide"
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-									&nbsp;&nbsp;&nbsp;
-									<p id="councilVoteLabel" class="form-control-static pull-right" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
 								</div>
 								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
 									<label for="councilVoteDP" class="control-label col-sm-2">Council Voted On</label>
@@ -280,25 +315,24 @@
 								</div>
 								<div class="row">
 									<label for="councilVoteLink" class="control-label col-sm-2">Link to Council Vote</label>
-									<div class="input-group col-sm-8">
-										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="councilVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.council_vote_link"/>
+									<div class="input-group col-sm-6">
+										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="councilVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.council_vote_link"  maxlength="400"/>
+									<a ng-show="vm.crtQuestion.council_vote_link.length>6" href="{{vm.crtQuestion.council_vote_link}}"
+										 class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
-									&nbsp;&nbsp;&nbsp;
-									<a ng-show="vm.crtQuestion.council_vote_link.length>6" href="{{vm.crtQuestion.council_vote_link}}" class="pull-right"
-										target="_new">(try it)</a>
 								</div>
 								
 								<div class="row">
 									<label for="commissionVoteResults" class="control-label col-sm-2">Commission Decision</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Approve
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="true"> Approve
 									</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Reject
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="false"> Reject
 									</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Postpone
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="null" ng-disable="!(vm.crtQuestion.commission_decision_link.length>7)"> Undecided/Postpone
 									</label>
 								</div>
 								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
@@ -312,13 +346,12 @@
 								</div>
 								<div class="row">
 									<label for="commissionVoteLink" class="control-label col-sm-2">Link to Decision Details</label>
-									<div class="input-group col-sm-8">
-										<span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="commissionVoteLink" type="text" class="form-control input-sm" ng-model="vm.crtQuestion.commission_decision_link"/>
+									<div class="input-group col-sm-6">
+										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
+										<input id="commissionVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.commission_decision_link"  maxlength="400"/>
+										<a ng-show="vm.crtQuestion.commission_decision_link.length>6" href="{{vm.crtQuestion.commission_decision_link}}"
+											class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
-									&nbsp;&nbsp;&nbsp;
-									<a ng-show="vm.crtQuestion.commission_decision_link.length>6" href="{{vm.crtQuestion.commission_decision_link}}" class="pull-right"
-										target="_new">(try it)</a>
 								</div>
 								
 							</div>
@@ -330,9 +363,9 @@
 						<div class="form">
 							<div class="form-group">
 								<label for="questionDescription" class="control-label">Archival Conclusion</label>
-								<textarea class="form-control" rows="2" id="archivalConclusion" 
+								<textarea class="form-control" rows="3" id="archivalConclusion" 
 									ng-model="vm.crtQuestion.archival_conclusion" 
-									placeholder="Concise remarks as conclusion at the archival of this question (eulogy)" maxlength="500"></textarea>
+									placeholder="Concise remarks as conclusion at the archival of this question (eulogy)" maxlength="2000"></textarea>
 							</div>
 						</div>
 					</div>
@@ -425,10 +458,9 @@
 		//tags typeahead -> see questionsCtrl::initTags
 		
 		//vote results slider
-		var zliders = ['official','parliament','council'];
-		for (var i = zliders.length - 1; i >= 0; i--) {
-			var zlider = $(('#'+zliders[i]+'VoteResults'));
-			// var zliderLabel = $(('#'+zliders[i]+'VoteLabel'));
+		var makeSlider = function (z) {
+			var zlider = $(('#'+z+'Results'));
+			var linkedLabel = $(('#'+z+'Label'));
 			zlider.slider({
 				formatter: function(value) {
 					return 'Yes: ' + value+'% - No: '+ (100-value)+'%';
@@ -440,10 +472,12 @@
 					txt = ' Yes/No: ' + slideEvt.value+'/'+ (100-slideEvt.value)+' %';
 				} else {
 				}
-				$(('#'+zliders[i]+'VoteLabel')).text(txt);
+				linkedLabel.text(txt);
 			});
-			
-		}
+		};
+		makeSlider('officialVote');
+		makeSlider('parliamentVote');
+		makeSlider('councilVote');
 		
 	});
 </script>[/@content]
