@@ -265,90 +265,106 @@
 							</div>
 							<div class="form-group" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
 							<div class="container">
-								<div class="row">
+								<div class="row" style="padding: 4px;">
 									<label for="officialVoteResults" class="control-label col-sm-2">Official Vote Result</label>
-									<p id="officialVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="officialVoteResults" type="text" class="col-sm-6" 
+									<p id="officialVoteLabel" class="form-control-static col-sm-2" 
+										ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									
+									<input id="officialVoteResults" type="text" class="col-sm-6" 
+										ng-disabled="!vm.crtQuestion.is_public_agenda"
 										data-slider-min="0" data-slider-id='officialVoteSlider'
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
 									&nbsp;&nbsp;&nbsp;
 
 								</div>
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="parliamentVoteResults" class="control-label col-sm-2">Parliament Vote</label>
-									<p id="parliamentVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="parliamentVoteResults" type="text" class="col-sm-6 voteSlider" 
+									<p id="parliamentVoteLabel" class="form-control-static col-sm-2" 
+										ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+									<input id="parliamentVoteResults" type="text" class="col-sm-6 voteSlider" 
+										ng-disabled="!vm.crtQuestion.is_public_agenda"
 										data-slider-min="0" data-slider-id='parliamentVoteSlider' data-slider-tooltip="hide"
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
 								</div>
-								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="parliamentVoteDP" class="control-label col-sm-2">Parliament Voted On</label>
 									<div class="input-group date" id="parliamentVoteDP">
-										<input type='text' class="form-control"/>
+										<input type='text' class="form-control" ng-disabled="!vm.crtQuestion.is_public_agenda"/>
 										<span class="input-group-addon">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="parliamentVoteLink" class="control-label col-sm-2">Link to EP Vote</label>
 									<div class="input-group col-sm-6">
 										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="parliamentVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.parliament_vote_link"  maxlength="400"/>
+										<input id="parliamentVoteLink" type="text" class="form-control" 
+											ng-model="vm.crtQuestion.parliament_vote_link" ng-disabled="!vm.crtQuestion.is_public_agenda" maxlength="400"/>
 										<a ng-show="vm.crtQuestion.parliament_vote_link.length>6" href="{{vm.crtQuestion.parliament_vote_link}}"
 											class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
 								</div>
 								
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="councilVoteResults" class="control-label col-sm-2">Council Vote</label>
-									<p id="councilVoteLabel" class="form-control-static col-sm-2" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>									<input id="councilVoteResults" type="text" class="col-sm-6 voteSlider" 
+									<p id="councilVoteLabel" class="form-control-static col-sm-2" 
+										ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">No voting registered</p>
+									<input id="councilVoteResults" type="text" class="col-sm-6 voteSlider" 
+										ng-disabled="!vm.crtQuestion.is_public_agenda"
 										data-slider-min="0" data-slider-id='councilVoteSlider' data-slider-tooltip="hide"
 										data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
 								</div>
 								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
 									<label for="councilVoteDP" class="control-label col-sm-2">Council Voted On</label>
 									<div class="input-group date" id="councilVoteDP">
-										<input type='text' class="form-control"/>
+										<input type='text' class="form-control" ng-disabled="!vm.crtQuestion.is_public_agenda"/>
 										<span class="input-group-addon">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="councilVoteLink" class="control-label col-sm-2">Link to Council Vote</label>
 									<div class="input-group col-sm-6">
 										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="councilVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.council_vote_link"  maxlength="400"/>
-									<a ng-show="vm.crtQuestion.council_vote_link.length>6" href="{{vm.crtQuestion.council_vote_link}}"
-										 class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
+										<input id="councilVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.council_vote_link"  
+											ng-disabled="!vm.crtQuestion.is_public_agenda" maxlength="400"/>
+										<a ng-show="vm.crtQuestion.council_vote_link.length>6" href="{{vm.crtQuestion.council_vote_link}}"
+											class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
 								</div>
 								
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="commissionVoteResults" class="control-label col-sm-2">Commission Decision</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="true"> Approve
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision"
+											ng-value="true"ng-disabled="!vm.crtQuestion.is_public_agenda"> Approve
 									</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="false"> Reject
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision" 
+											ng-disabled="!vm.crtQuestion.is_public_agenda" ng-value="false"> Reject
 									</label>
 									<label class="radio-inline col-sm-2">
-										<input type="radio" ng-model="vm.crtQuestion.commission_decision" ng-value="null" ng-disable="!(vm.crtQuestion.commission_decision_link.length>7)"> Undecided/Postpone
+										<input type="radio" ng-model="vm.crtQuestion.commission_decision" 
+											ng-disabled="!vm.crtQuestion.is_public_agenda" ng-value="null"
+											ng-disable="!(vm.crtQuestion.commission_decision_link.length>7)"> Undecided/Postpone
 									</label>
 								</div>
-								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}">
+								<div class="row" ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="commissionDecisionDP" class="control-label col-sm-2">Commission Decided On</label>
 									<div class="input-group date" id="commissionDecisionDP">
-										<input type='text' class="form-control"/>
+										<input type='text' class="form-control" ng-disabled="!vm.crtQuestion.is_public_agenda"/>
 										<span class="input-group-addon">
 											<span class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row"  ng-class="{'disabled':!vm.crtQuestion.is_public_agenda}" style="padding: 4px;">
 									<label for="commissionVoteLink" class="control-label col-sm-2">Link to Decision Details</label>
 									<div class="input-group col-sm-6">
 										<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-link"></span></span>
-										<input id="commissionVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.commission_decision_link"  maxlength="400"/>
+										<input id="commissionVoteLink" type="text" class="form-control" ng-model="vm.crtQuestion.commission_decision_link" 
+											ng-disabled="!vm.crtQuestion.is_public_agenda" maxlength="400"/>
 										<a ng-show="vm.crtQuestion.commission_decision_link.length>6" href="{{vm.crtQuestion.commission_decision_link}}"
 											class="input-group-addon" target="_new" style="width:1%;">[try it]</a>
 									</div>
