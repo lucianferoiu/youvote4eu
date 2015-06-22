@@ -16,6 +16,8 @@ public class HomeController extends PlatformController {
 
 	public void help() {}
 
+	public void about() {}
+
 	public void catchall() {
 		redirect("/platform/home");
 	}
