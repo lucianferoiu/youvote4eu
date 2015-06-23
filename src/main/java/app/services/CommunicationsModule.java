@@ -7,7 +7,7 @@ import com.google.inject.AbstractModule;
 /**
  * Module gathering the communications-related services
  */
-public class CommModule extends AbstractModule {
+public class CommunicationsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
