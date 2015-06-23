@@ -26,7 +26,7 @@ public class HomeController extends AnonAuthController {
 
 		ArrayList alreadyVotedQuestions = (ArrayList) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 		if (alreadyVotedQuestions == null) {
-			alreadyVotedQuestions = (ArrayList) Base.firstColumn("select question_id from vote where citizen_id=?", citizenId);
+			alreadyVotedQuestions = (ArrayList) Base.firstColumn("select question_id from votes where citizen_id=?", citizenId);
 			session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
 		}
 
