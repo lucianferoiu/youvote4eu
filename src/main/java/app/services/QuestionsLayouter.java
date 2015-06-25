@@ -2,16 +2,9 @@ package app.services;
 
 import java.util.List;
 
+import app.util.dto.Square;
+
 public interface QuestionsLayouter {
-	public enum Element {
-		BIG('B'), MEDIUM('M'), EMPTY('0'), SMALL('S');
-		public char code;
-
-		private Element(char c) {
-			code = c;
-		}
-	}
-
-	List<Element> randomLayout();
+	List<Square> randomLayout();
 
 }

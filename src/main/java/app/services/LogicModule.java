@@ -1,5 +1,7 @@
 package app.services;
 
+import app.services.impl.ImperfectSquaresLayouter;
+
 import com.google.inject.AbstractModule;
 
 /**
@@ -9,7 +11,7 @@ public class LogicModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		//		bind(QuestionsLayouter.class).to(ImperfectSquaresLayouter.class).asEagerSingleton();
+		bind(QuestionsLayouter.class).to(ImperfectSquaresLayouter.class).asEagerSingleton();
 	}
 
 }
