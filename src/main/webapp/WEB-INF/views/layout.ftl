@@ -8,6 +8,7 @@
 		<link rel="shortcut icon" href="${context_path}/img/favicon.ico" type="image/x-icon">
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/flatstrap.min.css' rel="stylesheet" media="screen">
+		<link href='${context_path}/css/yv4eu.css' rel="stylesheet" media="screen">
 		<!--[if lt IE 9]>
 			<script src="${context_path}/js/html5.js"></script>
 			<script src="${context_path}/js/json2.js"></script>
@@ -24,7 +25,6 @@
 	<script src='${context_path}/js/jquery.min.js'></script>
 	<script src='${context_path}/js/aw.js'></script>
 	<script src='${context_path}/js/flatstrap.min.js'></script>
-	<script src='${context_path}/js/angular.min.js'></script>
 	[@yield to="footer_script"/]
 </body>
 </html>

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.services.QuestionsLayouter;
-import app.util.BitMap;
+import app.util.LayoutTemplate;
 import app.util.dto.Coord;
 import app.util.dto.Square;
 
@@ -17,34 +17,11 @@ public class ImperfectSquaresLayouter implements QuestionsLayouter {
 	static final Logger log = LoggerFactory.getLogger(ImperfectSquaresLayouter.class);
 	static final Random random = new Random();//unsecure random, but we don't care..
 
-	public static class LayoutTemplate {
-		protected int width;
-		protected int height;
-		public List<Square> squares;
-		public BitMap map;
-
-		public LayoutTemplate(int w, int h, Square... sq) {
-			width = w;
-			height = h;
-			map = new BitMap(width, height);
-			for (int i = 0; i < sq.length; i++) {
-				Square s = sq[i];
-				squares.add(s);
-				for (int x = s.x; x < s.x + s.sz; x++) {
-					for (int y = s.y; y < s.y + s.sz; y++) {
-						map.set(x, y);
-					}
-				}
-			}
-
-		}
-	}
-
 	protected List<LayoutTemplate> templates;
 	protected int templatesCount = 0;
 
 	public ImperfectSquaresLayouter() {
-		templates = new ArrayList<ImperfectSquaresLayouter.LayoutTemplate>();
+		templates = new ArrayList<LayoutTemplate>();
 		hydrateTemplates();
 	}
 
