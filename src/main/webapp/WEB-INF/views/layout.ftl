@@ -9,6 +9,7 @@
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/flatstrap.min.css' rel="stylesheet" media="screen">
 		<link href='${context_path}/css/yv4eu.css' rel="stylesheet" media="screen">
+		[@yield to="header_css"/]
 		<!--[if lt IE 9]>
 			<script src="${context_path}/js/html5.js"></script>
 			<script src="${context_path}/js/json2.js"></script>

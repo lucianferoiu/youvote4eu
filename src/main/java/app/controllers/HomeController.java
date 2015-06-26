@@ -1,8 +1,6 @@
 package app.controllers;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,8 +13,9 @@ import app.models.Citizen;
 import app.models.Lang;
 import app.models.Question;
 import app.services.QuestionsLayouter;
+import app.util.JsonHelper;
+import app.util.dto.QuestionCell;
 import app.util.dto.Square;
-import app.util.dto.model.FrontpageQuestion;
 
 import com.google.inject.Inject;
 
@@ -51,35 +50,16 @@ public class HomeController extends AnonAuthController {
 		List<Question> newestQuestions = Question
 				.findBySQL("SELECT id,title,description,popular_votes,open_at FROM questions WHERE is_published=true AND is_archived=false AND is_deleted=false ORDER BY open_at desc, popular_votes desc ");
 
-		List<Square> layouts = layouter.randomLayout();
-		List<FrontpageQuestion> questions = new ArrayList<FrontpageQuestion>();
-		final Set<Long> renderedQuestions = new HashSet<Long>();
-		/*
-		String q = " SELECT 0 as kind,id,title,description,popular_votes,open_at FROM questions WHERE is_published=true AND is_archived=false AND is_deleted=false ORDER BY popular_votes desc, open_at desc "
-				+ " UNION "
-				+ " SELECT 1 as kind,id,title,description,popular_votes,open_at FROM questions WHERE is_published=true AND is_archived=false AND is_deleted=false ORDER BY open_at desc, popular_votes desc ";
-		Base.find(q).with(new RowListenerAdapter() {
-			@Override
-			public void onNext(Map<String, Object> row) {
-				Long id = (Long) row.get("id");
-				if (id != null && !renderedQuestions.contains(id)) {
-					FrontpageQuestion fq = new FrontpageQuestion();
-					fq.id = id;
-					fq.title = (String) row.get("title");
-					fq.description = (String) row.get("description");
-					fq.votesCount = (Long) row.get("popular_votes");
-					Timestamp pubOn = (Timestamp) row.get("open_at");
-					if (pubOn != null) fq.publishedOn = new Date(pubOn.toInstant().getEpochSecond());
-					questions.add(fq);
-					renderedQuestions.add(id);
-				}
-			}
-		});
-		*/
+		List<QuestionCell> cells = new ArrayList<QuestionCell>();
+		List<Question> questions = new ArrayList<Question>();
 
+		final Set<Long> renderedQuestions = new HashSet<Long>();
+		List<Square> layouts = layouter.randomLayout();
+		int offset = 0;
 		while ((!mostSupportedQuestions.isEmpty()) || (!newestQuestions.isEmpty())) {
 			if (layouts == null || layouts.isEmpty()) {
 				layouts = layouter.randomLayout();
+				offset += 10;
 			}
 			Square sq = layouts.remove(0);
 			if (sq == null) break;
@@ -94,18 +74,16 @@ public class HomeController extends AnonAuthController {
 			if (q == null) continue;
 			Long qid = q.getLongId();
 			renderedQuestions.add(qid);
-			FrontpageQuestion fq = new FrontpageQuestion();
-			fq.id = qid;
-			fq.title = (String) q.get("title");
-			fq.description = (String) q.get("description");
-			fq.votesCount = (Long) q.get("popular_votes");
-			Timestamp pubOn = q.getTimestamp("open_at");
-			if (pubOn != null) fq.publishedOn = new Date(pubOn.toInstant().getEpochSecond());
-			fq.layout = sq;
-			questions.add(fq);
+			questions.add(q);
+			cells.add(new QuestionCell(sq.x, sq.y + offset, sq.sz, qid));
 
 		}
+
+		String cellsJSON = JsonHelper.toListJson(cells);
 		view("questions", questions);
+		view("cells", cells);
+		view("cellsAsJSON", cellsJSON);
+		view("maxGridHeight", offset + 10);
 
 	}
 
