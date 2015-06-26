@@ -11,6 +11,7 @@
 	<div id="q${q.id}" class="q">
 		<div id="qq${q.id}" class="qq">
 			<div class="q-title">${q.title}</div>
+			<br/>
 			<div class="q-counter text-muted">
 				&nbsp;
 				<br/>
@@ -18,14 +19,22 @@
 				<br/>
 			</div>
 			<div class="q-desc">
+				
+				<em class="pull-right">Published at ${q.open_at?string["dd/MM/yyyy HH:mm"]}</em>
+				<br/><br/>
 				${q.description}
 			</div>
 			<div class="q-voting">
-				<strong>${q.popular_votes}</strong> votes so far... 
-				<span class="label label-info pull-right" style="margin:2px;"> Details.. </span>
-				<span class="label label-danger pull-right" style="margin:2px;"> No </span>
-				<span class="label label-success pull-right" style="margin:2px;"> Yes </span>
-				<span class="pull-right" style="margin:2px;"> Vote now! </span>
+				<div>
+					<br/>
+					<strong>${q.popular_votes}</strong> votes so far... 
+				</div>
+				<div>
+					<span class="label label-info pull-right" style="margin:2px;"> Details.. </span>
+					<span class="label label-danger pull-right" style="margin:2px;"> No </span>
+					<span class="label label-success pull-right" style="margin:2px;"> Yes </span>
+					<span class="pull-right" style="margin:2px;"> Vote now! </span>
+				</div>
 			</div>
 		</div>
 	</div>
