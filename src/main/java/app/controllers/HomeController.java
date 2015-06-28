@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.javalite.activejdbc.Base;
 
-import app.base.AnonAuthController;
 import app.base.Const;
+import app.base.QuestionsListController;
 import app.models.Citizen;
 import app.models.Lang;
 import app.models.Question;
@@ -23,12 +23,12 @@ import com.google.inject.Inject;
  * Responds to homepage request and to small ancillary requests for fragments
  * such as citizen preferences, etc.
  */
-public class HomeController extends AnonAuthController {
+public class HomeController extends QuestionsListController {
 
 	@Inject
 	protected QuestionsLayouter layouter;
 
-	public void index() {
+	public void indexx() {
 		List<Lang> langs = Lang.findAll().orderBy("code");//TODO add the languages to the app context - they are immutable and we can save a DB roundtrip
 		view("langs", langs);
 
