@@ -30,14 +30,25 @@
 			var from = YV.ds.revealed;
 			var to = Math.min(YV.ds.revealed+howMany,len);
 			var maxY = Math.max(0,YV.dim.maxY);
+			var yoff = 0;
 			for (var i=from;i<to;i++) {
 				var c = YV.ds.cells[i];
 				var qid = '#q'+c.q;
 				var h = YV.dim.gh*c.sz;
-				var w = YV.dim.gw*c.sz;
-				var y = YV.dim.gh*c.y;
-				var x = YV.dim.gw*c.x;
-				maxY = Math.max(maxY,(c.y+c.sz));
+				var w = YV.dim.grid==5?YV.dim.gw*c.sz:(YV.dim.grid==3?(c.sz>2?YV.dim.gw*2:YV.dim.gw):YV.dim.gw);
+				var x = Math.floor(YV.dim.gw*c.x);
+				if (YV.dim.grid==3) {
+					if (c.sz==3) {
+						yoff = Math.max(yoff,c.y-1);
+						x = Math.floor(YV.dim.gw*(c.x-1));
+					}
+					if (c.sz==2) {
+						yoff = Math.max(yoff,c.y-1);
+						x = Math.floor(YV.dim.gw*(c.x-1));
+					}
+				}
+				var y = Math.floor(YV.dim.gh*(c.y-yoff));
+				maxY = Math.max(maxY,y);
 				$(qid).css('top',''+y+'px').css('left',''+x+'px').css('height',''+h+'px').css('width',''+w+'px').show();//'scale',{ percent: 80 },500+(i*25));
 				
 				var qqid = '#qq'+c.q;
@@ -48,6 +59,7 @@
 			YV.ds.revealed = to;
 			YV.dim.maxY = maxY;
 			YV.dim.h = (YV.dim.gh*maxY)+100;
+			
 			$('.q-cont').css('height',''+YV.dim.h+'px');
 		}
 	};
@@ -67,19 +79,31 @@
 		};
 		YV.dim.gw = Math.floor(YV.dim.w/YV.dim.grid);
 		YV.dim.gh = Math.floor((YV.dim.w/YV.dim.grid)/YV.dim.aspect);
-		$('.q-cont').css('width',''+YV.dim.w+'px').css('height',''+YV.dim.h+'px').show();
+		YV.dim.l = Math.floor(YV.dim.gw*0.15);
+		$('.q-cont').css('width',''+YV.dim.w+'px').css('height',''+YV.dim.h+'px').css('left',''+YV.dim.l+'px').show();
 
 		if (YV.ds) {
 			var maxY = 0;
+			var yoff = 0;
 			for (var i=0;i<YV.ds.revealed;i++) {
 				var c = YV.ds.cells[i];
 				var qid = '#q'+c.q;
 				var h = YV.dim.gh*c.sz;
-				var w = YV.dim.gw*c.sz;
-				var y = YV.dim.gh*c.y;
-				var x = YV.dim.gw*c.x;
+				var w = YV.dim.grid==5?YV.dim.gw*c.sz:(YV.dim.grid==3?(c.sz>1?YV.dim.gw*2:YV.dim.gw):YV.dim.gw);
+				var x = Math.floor(YV.dim.gw*c.x);
+				if (YV.dim.grid==3) {
+					if (c.sz==3) {
+						yoff = Math.max(yoff,c.y-1);
+						x = Math.floor(YV.dim.gw*(c.x-1));
+					}
+					if (c.sz==2) {
+						yoff = Math.max(yoff,c.y-1);
+						x = Math.floor(YV.dim.gw*(c.x-1));
+					}
+				}
+				var y = Math.floor(YV.dim.gh*(c.y-yoff));
+				maxY = Math.max(maxY,y);
 				$(qid).css('top',''+y+'px').css('left',''+x+'px').css('height',''+h+'px').css('width',''+w+'px');
-				maxY = Math.max(maxY,(c.y+c.sz));
 			}
 			YV.dim.maxY = maxY;
 			YV.dim.h = (YV.dim.gh*maxY)+100;

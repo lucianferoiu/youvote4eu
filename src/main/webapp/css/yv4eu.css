@@ -24,13 +24,13 @@
 }
 
 .q-sz-2 {
-	font-size: 17px;
-	line-height: 17px;
+	font-size: 15px;
+	line-height: 15px;
 }
 
 .q-sz-3 {
-	font-size: 22px;
-	line-height: 22px;
+	font-size: 18px;
+	line-height: 18px;
 }
 
 .qq {
@@ -55,18 +55,25 @@
 }
 
 .q-sz-3:hover {
-	-webkit-transform:scale(1.13);
-	transform:scale(1.13);
+	-webkit-transform:scale(1.07);
+	transform:scale(1.07);
+	font-size: 17px;
+	line-height: 17px;
 }
 
 .q-sz-2:hover {
-	-webkit-transform:scale(1.23);
-	transform:scale(1.23);
+	-webkit-transform:scale(1.13);
+	transform:scale(1.13);
+	font-size: 15px;
+	line-height: 15px;
 }
 
 .q-sz-1:hover {
-	-webkit-transform:scale(1.79);
-	transform:scale(1.79);
+	-webkit-transform:scale(1.73) translateX(23%);
+	transform:scale(1.73) translateX(23%);
+	font-size: 9px;
+	line-height: 9px;
+	padding: 4px;
 }
 
 .q-counter {

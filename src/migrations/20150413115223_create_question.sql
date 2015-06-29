@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS questions (
 	description VARCHAR(4080) NOT NULL,				/* a short description of the question (english version) */
 	html_content VARCHAR(65000),					/* question body (English version), allowing for HTML content */
 	picture_path VARCHAR(120),						/* relative server path for picture accompanying the question */
+	wordy_url_id VARCHAR(120),						/* reasonable identifier by words in the title to form an URL id */
 	picture_attribution VARCHAR(120),				/* copyright notice or attribution of the picture */
 	is_published BOOLEAN DEFAULT false,				/* is this question approved/published and ready for voting */
 	is_archived BOOLEAN DEFAULT false,				/* is this question archived */

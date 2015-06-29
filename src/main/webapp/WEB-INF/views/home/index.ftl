@@ -8,6 +8,17 @@
 <div id="questionsContainer" class="q-cont">
 	
 	[#list questions as q]
+	<div id="q${q.id}" class="q" data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" data-q-sort="[#if q.new]newer[#else]popular[/#if]">
+		<div id="qq${q.id}" class="qq">
+			<div class="q-title">${q.title}</div>
+			<div class="q-desc">${q.description}</div>
+			<div class="q-pub hide">Published: ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</div>
+		</div>
+	</div>
+	[/#list]
+	
+	
+	[#-- [#list questions as q]
 	<div id="q${q.id}" class="q">
 		<div id="qq${q.id}" class="qq">
 			<div class="q-title">${q.title}</div>
@@ -16,18 +27,16 @@
 				&nbsp;
 				<br/>
 				<strong>${q.popular_votes}</strong> votes so far...
-				<br/>
 			</div>
 			<div class="q-desc">
-				
-				<em class="pull-right">Published at ${q.open_at?string["dd/MM/yyyy HH:mm"]}</em>
+				<em class="pull-right muted" style="color:gray;">Published at ${q.open_at?string["dd/MM/yyyy HH:mm"]}</em>
 				<br/><br/>
 				${q.description}
 			</div>
 			<div class="q-voting">
 				<div>
 					<br/>
-					<strong>${q.popular_votes}</strong> votes so far... 
+					<strong>${q.popular_votes}</strong> votes so far...
 				</div>
 				<div>
 					<span class="label label-info pull-right" style="margin:2px;"> Details.. </span>
@@ -42,7 +51,7 @@
 	<br/>
 	<div id="q-loading" class="loading" style="display:none; color:red;">
 		Loading more questions...
-	</div>
+	</div> --]
 </div>
 <div class="aq-cont">
 	Archived questions...
@@ -51,12 +60,12 @@
 
 
 
-[@content for="footer_script"]<script  type="text/javascript">
-	
+[#--[@content for="footer_script"]<script  type="text/javascript">
+
 	var cells=${cellsAsJSON};
 	$(function () {
 		YV.init(cells,{
 			maxOffset: ${maxGridHeight}
 		});
 	});
-</script>[/@content]
+</script>[/@content] --]
