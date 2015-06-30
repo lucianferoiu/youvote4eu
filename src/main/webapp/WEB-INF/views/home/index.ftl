@@ -17,55 +17,7 @@
 	</div>
 	[/#list]
 	
-	
-	[#-- [#list questions as q]
-	<div id="q${q.id}" class="q">
-		<div id="qq${q.id}" class="qq">
-			<div class="q-title">${q.title}</div>
-			<br/>
-			<div class="q-counter text-muted">
-				&nbsp;
-				<br/>
-				<strong>${q.popular_votes}</strong> votes so far...
-			</div>
-			<div class="q-desc">
-				<em class="pull-right muted" style="color:gray;">Published at ${q.open_at?string["dd/MM/yyyy HH:mm"]}</em>
-				<br/><br/>
-				${q.description}
-			</div>
-			<div class="q-voting">
-				<div>
-					<br/>
-					<strong>${q.popular_votes}</strong> votes so far...
-				</div>
-				<div>
-					<span class="label label-info pull-right" style="margin:2px;"> Details.. </span>
-					<span class="label label-danger pull-right" style="margin:2px;"> No </span>
-					<span class="label label-success pull-right" style="margin:2px;"> Yes </span>
-					<span class="pull-right" style="margin:2px;"> Vote now! </span>
-				</div>
-			</div>
-		</div>
-	</div>
-	[/#list]
-	<br/>
-	<div id="q-loading" class="loading" style="display:none; color:red;">
-		Loading more questions...
-	</div> --]
 </div>
 <div class="aq-cont">
-	Archived questions...
-	
+	TODO: Archived questions...
 </div>
-
-
-
-[#--[@content for="footer_script"]<script  type="text/javascript">
-
-	var cells=${cellsAsJSON};
-	$(function () {
-		YV.init(cells,{
-			maxOffset: ${maxGridHeight}
-		});
-	});
-</script>[/@content] --]
