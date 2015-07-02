@@ -1,10 +1,10 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
-[#setting url_escaping_charset='ISO-8859-1']
+[#setting url_escaping_charset='UTF-8']
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<link rel="shortcut icon" href="${context_path}/img/favicon.ico" type="image/x-icon">
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/flatstrap.min.css' rel="stylesheet" media="screen">

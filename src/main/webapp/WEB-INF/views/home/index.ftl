@@ -5,10 +5,11 @@
 [@content for="footer_script"]<script src='${context_path}/app/home.js'></script>[/@content]
 
 
-<div id="questionsContainer" class="q-cont">
+<div id="questionsContainer" class="q-cont container-fluid">
 	
 	[#list questions as q]
-	<div id="q${q.id}" class="q" data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" data-q-sort="[#if q.new]newer[#else]popular[/#if]">
+	<div id="q${q.id}" class="q" data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" 
+		data-q-id="${q.id}" data-q-sort="[#if q.new]newer[#else]popular[/#if]">
 		<div id="qq${q.id}" class="qq">
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc">${q.description}</div>
