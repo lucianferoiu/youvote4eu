@@ -5,7 +5,7 @@
 [@content for="footer_script"]<script src='${context_path}/app/home.js'></script>[/@content]
 
 
-<div id="questionsContainer" class="q-cont container-fluid">
+<div id="questionsContainer" class="q-cont">
 	
 	[#list questions as q]
 	<div id="q${q.id}" class="q" data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" 
@@ -19,6 +19,12 @@
 	[/#list]
 	
 </div>
-<div class="aq-cont">
+[#-- <div class="aq-cont">
 	TODO: Archived questions...
-</div>
+</div> --]
+
+[@content for="footer_script"]
+<script type="text/javascript">
+	
+</script>
+[/@content]

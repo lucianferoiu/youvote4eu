@@ -13,8 +13,32 @@
 	position: relative;
 }
 
-.qz {
+.q {
 	position: absolute;
 	display: none;
+	border-style: dotted;
+	border-width: 1px;
 }
 
+.q:hover {
+	border-color: red;
+}
+
+.q-title {
+	font-weight: 900;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+.q-desc {
+	overflow:hidden;
+	text-overflow: ellipsis;
+	display: none;
+}
+.qq:hover .q-desc {
+	display: block;
+}
+
+.aq-cont {
+	position: relative;
+}
