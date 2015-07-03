@@ -32,6 +32,7 @@ public class HomeController extends QuestionsListController {
 	public void index() {
 		List<Lang> langs = Lang.findAll().orderBy("code");//TODO add the languages to the app context - they are immutable and we can save a DB roundtrip
 		view("langs", langs);
+		//		setEncoding("UTF-8");
 
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
