@@ -14,8 +14,10 @@ import app.models.Lang;
 import app.models.Question;
 import app.services.QuestionsLayouter;
 import app.util.JsonHelper;
+import app.util.StringUtils;
 import app.util.dto.QuestionCell;
 import app.util.dto.Square;
+import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
 import com.google.inject.Inject;
@@ -38,6 +40,15 @@ public class HomeController extends QuestionsListController {
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 
 		String lang = preferredLang();
+		Long tagId = null;
+		String tagParam = param("tag");
+		if (!StringUtils.nullOrEmpty(tagParam)) {
+			tagId = Long.decode(tagParam);
+		}
+		String searchParam = param("searchKeyword");
+		String word = StringUtils.nullOrEmpty(searchParam) || (!searchParam.matches("\\w+")) ? null : searchParam;
+		view("searchKeyword", word);
+		String filter = param("filter");
 
 		ArrayList alreadyVotedQuestions = (ArrayList) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 		if (alreadyVotedQuestions == null) {
@@ -45,29 +56,39 @@ public class HomeController extends QuestionsListController {
 			session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
 		}
 
+		List<CountedTag> tags = tagsByPubQuestionsCount();
+		view("tags", tags);
+
 		//TODO: add the questions to the session and manage them with eventual re-ordering; maybe a caching mechanism..
 		//TODO: extract the questions as FrontpageQuestion DTOs
 		//TODO: consider the citizen language for translated title and description
-
-		List<FrontpageQuestion> newerQuestions = findQuestions(lang, false, true, null, null);
-		List<FrontpageQuestion> popularQuestions = findQuestions(lang, false, false, null, null);
-
-		//a bit inefficient, but it's more tedious to walk both lists at the same time in a freemarker template...
 		List<FrontpageQuestion> questions = new ArrayList<FrontpageQuestion>();
-		final Set<Long> renderedQuestions = new HashSet<Long>();
-		int howManyNewerQuestions = newerQuestions.size();
-		int howManyPopularQuestions = popularQuestions.size();//these two should be equal, but...
-		for (int i = 0; i < Math.max(howManyNewerQuestions, howManyPopularQuestions); i++) {
-			if (i < howManyPopularQuestions) {
-				FrontpageQuestion fpq = popularQuestions.get(i);
-				if (fpq != null && !renderedQuestions.contains(fpq.id)) {
-					questions.add(fpq);
+		if ("archived".equalsIgnoreCase(filter)) {
+			questions = findQuestions(lang, true, true, word, tagId);
+		} else if ("newest".equalsIgnoreCase(filter)) {
+			questions = findQuestions(lang, false, true, word, tagId);
+		} else {
+			List<FrontpageQuestion> newerQuestions = findQuestions(lang, false, true, word, tagId);
+			List<FrontpageQuestion> popularQuestions = findQuestions(lang, false, false, word, tagId);
+
+			//a bit inefficient, but it's more tedious to walk both lists at the same time in a freemarker template...
+			final Set<Long> renderedQuestions = new HashSet<Long>();
+			int howManyNewerQuestions = newerQuestions.size();
+			int howManyPopularQuestions = popularQuestions.size();//these two should be equal, but...
+			for (int i = 0; i < Math.max(howManyNewerQuestions, howManyPopularQuestions); i++) {
+				if (i < howManyPopularQuestions) {
+					FrontpageQuestion fpq = popularQuestions.get(i);
+					if (fpq != null && !renderedQuestions.contains(fpq.id)) {
+						questions.add(fpq);
+						renderedQuestions.add(fpq.id);
+					}
 				}
-			}
-			if (i < howManyNewerQuestions) {
-				FrontpageQuestion fpq = newerQuestions.get(i);
-				if (fpq != null && !renderedQuestions.contains(fpq.id)) {
-					questions.add(fpq);
+				if (i < howManyNewerQuestions) {
+					FrontpageQuestion fpq = newerQuestions.get(i);
+					if (fpq != null && !renderedQuestions.contains(fpq.id)) {
+						questions.add(fpq);
+						renderedQuestions.add(fpq.id);
+					}
 				}
 			}
 		}

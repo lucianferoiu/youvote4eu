@@ -11,23 +11,26 @@ import org.javalite.activejdbc.RowListenerAdapter;
 
 import app.models.Citizen;
 import app.util.StringUtils;
+import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
 public abstract class QuestionsListController extends AnonAuthController {
 
-	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, open_at as pub_date,"
-			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description " + " FROM questions q "
+	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date,"
+			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description "
+			+ " FROM questions q "
 			+ " LEFT OUTER JOIN translations tt ON (tt.parent_id=q.id AND tt.field_type='title' AND tt.lang=?) "
 			+ " LEFT OUTER JOIN translations td ON (td.parent_id=q.id AND td.field_type='description' AND td.lang=?) "
 			+ " WHERE q.is_deleted=false ";
 	protected static final String WHERE_PUBLISHED = " AND q.is_published=true AND q.is_archived=false ";
 	protected static final String WHERE_ARCHIVED = " AND q.is_published=true AND q.is_archived=true ";
 	protected static final String WHERE_TAG = " AND q.id IN (SELECT question_id FROM questions_tags WHERE tag_id=?) ";
-	protected static final String WHERE_SEARCH_BY_WORD = " AND (lower(COALESCE(t_title,en_title)) LIKE '%:word%' OR lower(COALESCE(t_description,en_description)) LIKE '%:word%' ) ";
+	protected static final String WHERE_SEARCH_BY_WORD = " AND (lower(COALESCE(tt.text,q.title)) LIKE '%:word%' OR lower(COALESCE(tt.text,q.description)) LIKE '%:word%' ) ";
 	protected static final String ORDER_BY_SUPPORT = " ORDER BY q.popular_votes desc, q.open_at desc ";
-	protected static final String ORDER_BY_NEWNESS = " ORDER BY q.open_at desc, q.popular_votes desc ";
+	protected static final String ORDER_BY_NEWNESS = " ORDER BY q.archived_at desc NULLS FIRST, q.open_at desc, q.popular_votes desc ";
 	//////////
-	protected static final String TAGS_OF_QUESTIONS_QUERY = "SELECT t.id id, count(t.id) cnt, t.text txt FROM tags t JOIN questions_tags qt ON (t.id=qt.tag_id) "
+	protected static final String TAGS_OF_PUB_QUESTIONS_QUERY = "SELECT t.id id, count(t.id) cnt, t.text txt FROM tags t JOIN questions_tags qt ON (t.id=qt.tag_id) "
+			+ " WHERE qt.question_id IN (SELECT id FROM questions WHERE is_deleted=false AND is_published=true AND is_archived=false) "
 			+ " GROUP BY t.id ORDER BY count(t.id) DESC ";
 
 	protected List<FrontpageQuestion> findQuestions(final String lang, final boolean archived, final boolean byNewness, final String word,
@@ -69,6 +72,7 @@ public abstract class QuestionsListController extends AnonAuthController {
 			public void onNext(Map<String, Object> row) {
 				FrontpageQuestion fpq = new FrontpageQuestion();
 				fpq.isNew = byNewness;
+				fpq.isArch = archived;
 				fpq.rank = i;
 				fpq.id = (Long) row.get("qid");
 
@@ -82,6 +86,10 @@ public abstract class QuestionsListController extends AnonAuthController {
 				Timestamp pub_date = (Timestamp) row.get("pub_date");
 				if (pub_date != null) {
 					fpq.publishedOn = new Date((pub_date).toInstant().toEpochMilli());
+				}
+				Timestamp arch_date = (Timestamp) row.get("arch_date");
+				if (arch_date != null) {
+					fpq.archivedOn = new Date((arch_date).toInstant().toEpochMilli());
 				}
 				fpq.votesCount = (Long) row.get("votes");
 
@@ -108,5 +116,21 @@ public abstract class QuestionsListController extends AnonAuthController {
 			}
 		}
 		return lang;
+	}
+
+	protected List<CountedTag> tagsByPubQuestionsCount() {
+		final List<CountedTag> tags = new ArrayList<CountedTag>();
+		Base.find(TAGS_OF_PUB_QUESTIONS_QUERY, new RowListenerAdapter() {
+
+			@Override
+			public void onNext(Map<String, Object> row) {
+				CountedTag tag = new CountedTag();
+				tag.id = (Long) row.get("id");
+				tag.count = (Long) row.get("cnt");
+				tag.text = (String) row.get("txt");
+				tags.add(tag);
+			}
+		});
+		return tags;
 	}
 }

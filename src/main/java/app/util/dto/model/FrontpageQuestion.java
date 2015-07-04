@@ -9,7 +9,9 @@ public class FrontpageQuestion {
 	public String description;
 	public Long votesCount;
 	public Date publishedOn;
+	public Date archivedOn;
 	public boolean isNew;
+	public boolean isArch;
 	public Integer rank;
 
 	//bloody freemarker, makes me generate cluttering getters/setters
@@ -67,6 +69,22 @@ public class FrontpageQuestion {
 
 	public void setRank(Integer rank) {
 		this.rank = rank;
+	}
+
+	public boolean isArch() {
+		return isArch;
+	}
+
+	public void setArch(boolean isArch) {
+		this.isArch = isArch;
+	}
+
+	public Date getArchivedOn() {
+		return archivedOn;
+	}
+
+	public void setArchivedOn(Date archivedOn) {
+		this.archivedOn = archivedOn;
 	}
 
 }
