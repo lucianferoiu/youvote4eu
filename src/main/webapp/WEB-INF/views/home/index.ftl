@@ -3,6 +3,7 @@
 [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/app/home.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/app/layout.js'></script>[/@content]
 
 
 <div id="questionsContainer" class="q-cont">
@@ -28,6 +29,15 @@
 
 [@content for="footer_script"]
 <script type="text/javascript">
-	
+(function() {
+	var root = this;
+
+	$(document).ready(function(){
+		$('.logo').click(function () {
+			window.location='${context_path}';
+		});
+	});
+
+}());
 </script>
 [/@content]
