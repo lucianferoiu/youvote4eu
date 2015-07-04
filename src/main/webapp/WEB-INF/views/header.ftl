@@ -1,5 +1,5 @@
 [#ftl encoding='UTF-8']
-<div class="navbar navbar-default navbar-fixed-top container-fluid hidden-xs nav-block" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top container-fluid hidden-xs hidden-sm nav-block" role="navigation">
 	<div class="row">
 		<div class="logo col-sm-2 navbar-brand">
 			Logo<br/>
@@ -24,67 +24,76 @@
 	<div class="row hidden-sm">
 		<div class="tags col-sm-offset-2 col-sm-7">
 			<ol class="breadcrumb pull-right" style="margin-bottom:2px;">
-				<li><a href="#">#citizen <span class="badge">43</span></a></li>
-				<li><a href="#">#policy <span class="badge">17</span></a></li>
-				<li><a href="#">#privacy <span class="badge">37</span></a></li>
-				<li><a href="#">#social <span class="badge">31</span></a></li>
-				<li><a href="#">#trade <span class="badge">11</span></a></li>
+				<li><strong>Filter</strong>: &nbsp;&nbsp;<a href="?filter=newest">Newest</a></li>
+				<li><a href="?filter=archived">Archived</a></li>
+				[#list tags as tg]
+				[#if (tg_index<3) ]
+				<li># <a href="?tag=${tg.id}">${tg.text}</a> <span class="badge">${tg.count}</span></li>
+				[/#if]
+				[/#list]
 				<li> 
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">...</a>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">more tags</a>..
 				<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tags-dropdown">
-					<li><a href="#">#environment <span class="badge">24</span></a></li>
+					[#list tags as tg]
+					[#if (tg_index>=3) ]
 					<li>
-						<a href="#">#law <span class="badge">9</span></a>
+						<a href="?tag=${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a>
 					</li>
-					<li>
-						<a href="#">#emigration <span class="badge">9</span></a>
-					</li>
-					<li>
-						<a href="#">#EP-2015 <span class="badge">7</span></a>
-					</li>
-					<li>
-						<a href="#">#EP-2016 <span class="badge">2</span></a>
-					</li>
+					[/#if]
+					[/#list]
 				</ul>
 				</li>
 			</ol>
 		</div>
-			<div class="input-group col-sm-3 pull-right">
-				<input type="text" class="form-control" id="questionSearch" placeholder="search by keyword" role="search">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></button>
-				</span>
-		</div>
+		<form class="input-group col-sm-3 pull-right" action="?" method="get" accept-charset="utf-8">
+			<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search by keyword" role="search" value="${searchKeyword!}">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></button>
+			</span>
+		</form>
 	</div>
 </div>
 
-<div class="navbar navbar-default navbar-fixed-top container-fluid visible-xs-block" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top container-fluid visible-xs-block visible-sm-block" role="navigation">
 	<div class="row">
-		<div class="logo col-xs-4 navbar-brand">
+		<div class="logo col-xs-7 navbar-brand">
 			You Vote for EU
 		</div>
-		<div class="prefs">
-			<form class="search navbar-form">
-				<div class="dropdown input-group pull-right col-xs-2">
-					<button class="btn btn-default dropdown-toggle " type="button" id="lang-dropdown" 
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">en &nbsp;<span class="caret"></span></button>
+		<div class="prefs col-xs-5" style="padding:8px 2px 2px 0px;">
+				<div class="dropdown input-group pull-right">
+					<button class="btn btn-default dropdown-toggle" type="button" id="lang-dropdown" 
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">English &nbsp;<span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="lang-dropdown">
 					[#list langs as lg]
 						<li><a href="#">${lg.native} <span class="label label-default">${lg.code}</span></a></li>
 					[/#list]
 					</ul>
 				</div>
-					<div class="input-group col-xs-6">
-						<input type="text" class="form-control" id="questionSearch" placeholder="search by keyword" role="search">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></button>
-						</span>
-					</div>
-			</form>
 		</div>
+	</div>
+	<div class="row">
+		<div class="tags col-xs-9" style="padding: 8px 4px 2px 8px;">
+			<ol class="breadcrumb" style="padding: 0px;">
+				<li><a href="?filter=newest">Newest</a></li>
+				<li><a href="?filter=archived">Archived</a></li>
+				<li> 
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">by #tag</a>..
+				<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tags-dropdown">
+					[#list tags as tg]
+					<li><a href="?tag=${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a></li>
+					[/#list]
+				</ul>
+				</li>
+			</ol>
+		</div>
+		<form action="?" method="get" accept-charset="utf-8" class="pull-right col-xs-3"  style="padding: 2px 4px 2px 8px;">
+			<div class="input-group">
+				<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search" role="search" value="${searchKeyword!}">
+			</div>
+		</form>
 	</div>
 </div>
 
-<div class="nav-buffer hidden-xs">
+[#-- <div class="nav-buffer">
 	&nbsp;
-</div>
+</div> --]

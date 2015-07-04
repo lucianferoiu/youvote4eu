@@ -4,20 +4,36 @@
 /*	height: 125px;*/
 }
 .nav-buffer {
-	height: 120px;
+/*	height: 120px;*/
 }
 
-/*** Questions display ***/
+/*** Containers ***/
 
 .q-cont {
 	position: relative;
+	top: 120px; /* containersTopPos */
 }
+
+.side-cont {
+	position: fixed;
+	top: 120px;  /* containersTopPos */
+	background: lightcyan;
+}
+
+
+/*** Questions display ***/
 
 .q {
 	position: absolute;
 	display: none;
 	border-style: dotted;
-	border-width: 1px;
+	border-width: 2px;
+	background: lightgray;
+}
+
+.q-sz-1 {
+	border-color: green;
+	border-style: solid;
 }
 
 .q:hover {
@@ -35,10 +51,7 @@
 	text-overflow: ellipsis;
 	display: none;
 }
-.qq:hover .q-desc {
+.q:hover .q-desc {
 	display: block;
 }
 
-.aq-cont {
-	position: relative;
-}

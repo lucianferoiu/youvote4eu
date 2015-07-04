@@ -8,20 +8,23 @@
 <div id="questionsContainer" class="q-cont">
 	
 	[#list questions as q]
-	<div id="q${q.id}" class="q" data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" 
-		data-q-id="${q.id}" data-q-sort="[#if q.new]newer[#else]popular[/#if]">
+	<div id="q${q.id}" class="q" data-q-votes="${q.votesCount}" data-q-rank="${q.rank}" 
+		data-q-id="${q.id}" data-q-sort="[#if q.new]newer[#else]popular[/#if]" [#if q.arch] data-q-archived="yes"[/#if]
+		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 		<div id="qq${q.id}" class="qq">
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc">${q.description}</div>
 			<div class="q-pub hide">Published: ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</div>
+			[#if q.archivedOn??]<div class="q-arch hide">Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</div>[/#if]
 		</div>
 	</div>
 	[/#list]
 	
 </div>
-[#-- <div class="aq-cont">
+
+<div class="side-cont hidden-xs">
 	TODO: Archived questions...
-</div> --]
+</div>
 
 [@content for="footer_script"]
 <script type="text/javascript">
