@@ -1,12 +1,9 @@
 (function() {
 	var root = this;
 	var YV = {
-		randomSquares:randomSquares,
 		init: init,
 		resize: resize,
-		layout: layout,
-		onScroll: onScroll
-		
+		layout: layout
 	};
 	root.YV = YV;
 	$(document).ready(function () {
@@ -35,68 +32,82 @@
 			windowHeight: wh,
 			gridSize: ((ww>=1200)?5:((ww>=992)?3:(ww>=768?2:1))),
 			aspectRatio: 1.5,
-			qcontainerWidth: Math.floor(ww*.76),
-			qcontainerHeight: Math.floor(1.5*wh)
+			containersTop: (ww>=768?10:4),
+			qContainerWidth: Math.floor( ww * (ww>=768?0.75:1) ),
+			qContainerHeight: Math.floor(1.5*wh),
+			aqContainerWidth: Math.floor( ww * (ww>=768?0.25:0) ),
+			aqContainerHeight: Math.floor(1.5*wh),
 		};
-		YV.dim.gridCellWidth = Math.floor( YV.dim.qcontainerWidth/YV.dim.gridSize );
-		YV.dim.gridCellHeight = Math.floor( (YV.dim.qcontainerWidth/YV.dim.gridSize)/YV.dim.aspectRatio );
-		YV.dim.leftGutter = Math.floor(YV.dim.gridCellWidth*0.10);
-		$('.q-cont').css('width',''+YV.dim.qcontainerWidth+'px').css('height',''+YV.dim.qcontainerHeight+'px').css('left',''+YV.dim.leftGutter+'px');
+		YV.dim.gridCellWidth = Math.floor( YV.dim.qContainerWidth/YV.dim.gridSize );
+		YV.dim.gridCellHeight = Math.floor( (YV.dim.qContainerWidth/YV.dim.gridSize)/YV.dim.aspectRatio );
+		// YV.dim.leftGutter = Math.floor(YV.dim.gridCellWidth * (ww>=992?0.02:0.02));//TODO: maybe use padding here...
+		$('.q-cont').css('width',''+YV.dim.qContainerWidth+'px').css('height',''+YV.dim.qContainerHeight+'px').css('left','0px');
+		$('.side-cont').css('width',''+YV.dim.aqContainerWidth+'px').css('height',''+(wh-120)+'px').css('left',''+YV.dim.qContainerWidth+'px');
 		
 		if ( (!YV.cells) || (YV.dim.gridSize!=oldGridSize) ) {
+			$('.q').hide();
 			YV.layout();
 		}
 		resizeCells();
 		$('.q-cont').show();
 	};
 	
+	function resizeCells() {
+		if (YV.dim.maxY) {
+			YV.dim.qContainerHeight = YV.dim.maxY*YV.dim.gridCellHeight;
+			$('.q-cont').css('height',''+YV.dim.qContainerHeight+'px');
+		}
+		
+		var cellsCount = YV.cells.length;
+		for(var i=0;i<cellsCount;i++) {
+			var c = YV.cells[i];
+			var sel = c[3];
+			if (sel) {
+				var x = c[0]*YV.dim.gridCellWidth;
+				var y = c[1]*YV.dim.gridCellHeight;
+				var w = c[2]*YV.dim.gridCellWidth;
+				var h = c[2]*YV.dim.gridCellHeight;
+				$(sel).css('top',''+y+'px').css('left',''+x+'px').css('height',''+h+'px').css('width',''+w+'px').show();
+			}
+		}
+		
+	};
+	
+	
 	function layout() {
-		/*
-		random layout batch
-		do while more questions and layout squares
-			next square
-			if square is for new
-				extract new question
-				assign square to it
-			else
-				extract new question
-				assign square to it
-			endif
-			build cell and add it to the batch
-			if no more layout options => random layout batch
-		done
-		*/
 		
 		YV.cells = [];
 		var gridSize = YV.dim.gridSize;
-		var offset = 0;
+		var maxY = 0;
 		var smallSquarePopularChance = 1/Math.pow(2,gridSize);//chances that a small square is a popular question instead of a newer question
-		var noMoreNewerQuestions = false;
-		var noMorePopularQuestions = false;
 		var newerQuestions = $('.q[data-q-sort=newer]');
 		var popularQuestions = $('.q[data-q-sort=popular]');
 		var newerQuestionsCount = newerQuestions.length;
 		var popularQuestionsCount = popularQuestions.length;
+		var noMoreNewerQuestions = (newerQuestionsCount<=0);
+		var noMorePopularQuestions = (popularQuestionsCount<=0);
 		var newerQuestionsIndex = 0;
 		var popularQuestionsIndex = 0;
+		var howManyPerSquaresBatch = Math.max(6,Math.min(17,Math.floor(newerQuestionsCount/4)));
 		
 		while(newerQuestionsIndex<newerQuestionsCount || popularQuestionsIndex<popularQuestionsCount) {
-			var squares = randomSquares(gridSize,offset);
+			var squares = randomSquares(gridSize,maxY,howManyPerSquaresBatch);
 			var squaresCount = squares.length;
-			var maxY = offset;
 			for(var i=0;i<squaresCount;i++) {
 				var square = squares[i];
-				maxY = Math.max(maxY,square[1]+square[2]);
+				var x=square[0],y=square[1],sz=square[2];
 				var q = null;
-				if (square[2]===1) {//small square
-					if ( (!noMorePopularQuestions) && (Math.random()<smallSquarePopularChance) ) {//popular question
-						q = popularQuestions[popularQuestionsIndex];
-						popularQuestionsIndex++;
-					} else {//newer question
-						if (!noMoreNewerQuestions) {
-							q = newerQuestions[newerQuestionsIndex];
-							newerQuestionsIndex++; 
+				maxY = Math.max(maxY,y+sz);
+				
+				if (sz===1 && (Math.random()<smallSquarePopularChance) ) {//small square
+					if (noMoreNewerQuestions) {//popular questions when the newer ones are done...
+						if (!noMorePopularQuestions) {
+							q = popularQuestions[popularQuestionsIndex];
+							popularQuestionsIndex++;
 						}
+					} else {//newer question
+						q = newerQuestions[newerQuestionsIndex];
+						newerQuestionsIndex++; 
 					}
 				} else {//popular question
 					if (!noMorePopularQuestions) {
@@ -105,11 +116,11 @@
 					}
 				}
 				if (q==null) {
+					if (noMoreNewerQuestions && noMorePopularQuestions) break;
 					if (noMoreNewerQuestions && !noMorePopularQuestions) {
 						q = popularQuestions[popularQuestionsIndex];
 						popularQuestionsIndex++;
-					}
-					if (noMorePopularQuestions && !noMoreNewerQuestions) {
+					} else if (noMorePopularQuestions && !noMoreNewerQuestions) {
 						q = newerQuestions[newerQuestionsIndex];
 						newerQuestionsIndex++; 
 					}
@@ -118,12 +129,10 @@
 				
 				if (q) {//finally
 					var qid = $(q).attr('data-q-id');
-					var sel = '#'+$(q).attr('id');
-					YV.cells.push([square[0],square[1],square[2],sel,qid]);
+					var sel = '#q'+qid;
+					YV.cells.push([x,y,sz,sel,qid]);
 					//TODO: remove these...
-					$(q).attr('data-q-x',square[0]);
-					$(q).attr('data-q-y',square[1]);
-					$(q).attr('data-q-sz',square[2]);
+					$(q).attr('data-q-x',x).attr('data-q-y',y).attr('data-q-sz',sz).removeClass('q-sz-1 q-sz-2 q-sz-3').addClass('q-sz-'+sz);
 				}
 			
 				if (newerQuestionsIndex>=newerQuestionsCount) {
@@ -134,10 +143,9 @@
 				}
 				if (noMoreNewerQuestions && noMorePopularQuestions) break;
 			}
-			offset = maxY;
 		}
 		
-		YV.dim.maxY = offset;
+		YV.dim.maxY = maxY;
 	};
 	
 	var layoutTemplates = {
@@ -160,61 +168,67 @@
 			{ sq:[ [1,0,3] ], h:4 },
 			{ sq:[ [2,0,3] ], h:4 }, { sq:[ [2,0,3], [0,1,2] ], h:4 }, { sq:[ [2,0,3], [0,2,2] ], h:4 }, 
 			//...
-			{ sq:[ [0,0,2], [0,1,2] ], h:4 }
+			{ sq:[ [0,0,2], [0,2,2] ], h:4 }
 		]
 	};
 	
-	function randomSquares(gridSize, initialY) {
-		var HOW_MANY = 25;
-		var offset = initialY || 0;
+	function randomSquares(gridSize, initialY, howManyPerSquaresBatch) {
+		var howMany = howManyPerSquaresBatch;
+		var offset = 0;
 		var templates = layoutTemplates['grid-'+gridSize];
 		var maxTemplates = templates.length;
 		
 		var bitmap = [];
 		for (var k=0;k<gridSize;k++) {
 			bitmap[k] = [];
-			for(var l=0;l<=HOW_MANY;l++) {
-				bitmap[k][l] = 0;
-			}
+			// for(var l=0;l<howMany+initialY;l++) {
+			// 	bitmap[k][l] = 0;
+			// }
 		}
 		
 		var ret = [];
-		
-		for(var i=0;i<HOW_MANY;i++) {
+		var count = 0;
+		for(var i=0;i<howMany;i++) {
 			var idx = randomInt(0,maxTemplates-1);
 			var template = templates[idx];
 			var sqaresCount = template.sq.length;
 			for(var j=0;j<sqaresCount;j++) {
 				var square = template.sq[j];
 				var x = square[0];
-				var y = square[1]+offset;
+				var y = square[1]+offset+initialY;
 				var sz = square[2];
 				ret.push([x,y,sz]);
+				count = count+1;
 				for (var k=x;k<x+sz;k++) {
+					if (!bitmap[k]) bitmap[k] = [];
 					for(var l=y;l<y+sz;l++) {
-						bitmap[k][l] = 1;
+						bitmap[k][l-initialY] = 1;
 					}
 				}
 			}
 			offset += template.h;
-			if (offset>=HOW_MANY) break;
+			if (count>=howMany) break;
 		}
 		
 		//add 1-size random squares for the newer questions
-		//var txt = '';
-		for(var l=0;l<=HOW_MANY;l++) {
-			//txt +='\n';
-			for (var k=0;k<gridSize;k++) {
+		for (var k=0;k<gridSize;k++) {
+			for(var l=0;l<offset;l++) {
 				var bit = bitmap[k][l];
-				if (bit===0) {
-					if (Math.random()<1/gridSize) {//gridSize% chances
-						ret.push([k,l,1]);
-						//{txt+='.';}
-					} //else {txt+=' ';}
-				} //else {txt+='*';}
+				if (bit!==1) {
+					var emptyRow = true;
+					for(r=0;r<gridSize;r++) {
+						if (bitmap[r][l]===1) emptyRow=false;
+					}
+					if (emptyRow) {
+						var randCol = randomInt(k,gridSize-1);
+						bitmap[randCol][l]=1;
+						ret.push([randCol,l+initialY,1]);
+					} else if ( Math.random() < ( (1/gridSize) + (0.3*(offset-l)/offset)) ) {//%chances
+						ret.push([k,l+initialY,1]);
+					}
+				}
 			}
 		}
-		//console.log(txt);
 		
 		return ret;
 	};
@@ -231,30 +245,6 @@
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 	
-	function resizeCells() {
-		/*
-		for each cell
-			compute position and dimensions
-			set css of question div
-		*/
-		if (YV.dim.maxY) {
-			YV.dim.qcontainerHeight = YV.dim.maxY*YV.dim.gridCellHeight;
-			$('.q-cont').css('height',''+YV.dim.qcontainerHeight+'px');
-		}
-		
-		var cellsCount = YV.cells.length;
-		for(var i=0;i<cellsCount;i++) {
-			var c = YV.cells[i];
-			if (c[3]) {
-				var x = c[0]*YV.dim.gridCellWidth;
-				var y = c[1]*YV.dim.gridCellHeight;
-				var w = c[2]*YV.dim.gridCellWidth;
-				var h = c[2]*YV.dim.gridCellHeight;
-				$(c[3]).css('top',''+y+'px').css('left',''+x+'px').css('height',''+h+'px').css('width',''+w+'px').show();
-			}
-		}
-		
-	};
 	
 	function onScroll() {
 		
