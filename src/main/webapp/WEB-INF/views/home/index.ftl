@@ -13,9 +13,16 @@
 		data-q-id="${q.id}" data-q-sort="[#if q.new]newer[#else]popular[/#if]" [#if q.arch] data-q-archived="yes"[/#if]
 		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 		<div id="qq${q.id}" class="qq">
+			<div class="q-votes">${q.votesCount}</div>
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc">${q.description}</div>
 			<div class="q-pub hide">Published: ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</div>
+			<div class="q-vote-bar con">
+				 Vote now: 
+				 <button class="btn btn-success">Yes</button> 
+				 <button class="btn btn-danger">No</button> 
+				 <button class="btn btn-default"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+			</div>
 			[#if q.archivedOn??]<div class="q-arch hide">Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</div>[/#if]
 		</div>
 	</div>
