@@ -14,7 +14,7 @@
 			 is of great value to the public so your well-thought contributions will be prized by us all!</p>
 		<p>Your help will be especially appreciated in providing translations for the existing questions, so that all European citizens can easily understand the problems and contextual details of the various topics under public scrutiny. Our goal is to present the topics in a clear, concise and spin-free manner so that we can make well-informed decisions as citizens and participants in our democratic system.</p>
 		<p>You may propose new questions on topics that you believe are of interest to many EU citizens.</p>
-		<p>Likewise, you may upvote the questions you value so once they gain enough support and with enough completed details we may publish them. Afterwards, all European citizens may express their stance on those issues and signal to our representatives of the change we actually want to happen in the EU.</p>
+		<p>Likewise, you may upvote the questions you value, so once they gain enough support &mdash; and with enough completed and translated details &mdash; we may publish them. Afterwards, all European citizens may show their stance on those issues and signal to our representatives of the change we <em>actually</em> want to happen in the EU.</p>
 		<br/>
 		<p><a class="btn btn-primary btn-lg" href="${context_path}/platform/questions" role="button">Head on to the list of Questions</a></p>
 	</div>

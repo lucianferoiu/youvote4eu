@@ -1,5 +1,10 @@
 /*** Setup ***/
 
+.hover {
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+}
+
 /*** Color palette ***/
 .rotten-cherry { color: #990012 }
 .rotten-cherry-dark { color: #6D000D }
@@ -114,6 +119,14 @@ a:hover, a:focus {
 	box-shadow: 2px 2px 7px -8px black;
 /*	border-radius: 8px;*/
 }
+.aq {
+/*	height: 200px;*/
+/*	width: 90%;*/
+	padding: 4px;
+	margin: 10px 4px 10px 4px;
+	border: 1px solid #e7e7e7;
+	position: relative;
+}
 
 .q:hover {
 	z-index:100;
@@ -148,7 +161,7 @@ a:hover, a:focus {
 }
 
 .q-sz-3 {
-	font-size: 1.8em;
+	font-size: 1.7em;
 /*	line-height: 2em;*/
 }
 
@@ -213,19 +226,35 @@ a:hover, a:focus {
 
 .q-title {
 	font-weight: 900;
-	padding: 0.67em;
+	padding: 0.3em;
 	overflow:hidden;
 	text-overflow: ellipsis;
 	position: absolute;
-	bottom: 0;
+	bottom: 1em;
 	left: 0;
 	height-min: 3em;
 }
 
-.q:hover .q-title {
+.aq-title {
+	font-weight: 900;
+/*	padding: 0.67em;*/
+	overflow:hidden;
+	text-overflow: ellipsis;
+	position: static;
+	height-min: 4em;
+}
+
+.q:hover .q-title, .q .touch_as_hover {
 	top: 0;
 	z-index: 102;
+	padding: 8px 16px 12px 8px;
+	overflow:hidden;
+	text-overflow: ellipsis;
 }
+
+.q-sz-3:hover .q-title {
+}
+
 
 .q-desc {
 	overflow-y:scroll;
@@ -236,7 +265,32 @@ a:hover, a:focus {
 	height: 50%;
 	display: none;
 }
-.q:hover .q-desc {
+.q:hover .q-desc, .q .touch_as_hover {
+	display: block;
+}
+
+.q-sz-1:hover .q-desc {
+	display: none;
+}
+
+.q-sz-2:hover .q-desc {
+	top: 4em;
+	font-size: 0.72em;
+}
+
+.q-sz-3:hover .q-desc {
+	top: 4em;
+	font-size: 0.72em;
+}
+
+.q-sz-1 .touch_as_hover .q-desc {
+	top: 2.3em;
+	font-size: 0.9em;
+	display: block;
+}
+
+
+.aq-desc {
 	display: block;
 }
 
@@ -246,9 +300,14 @@ a:hover, a:focus {
 	height:100%;
 }
 
-.q:hover .q-votes {
+.q:hover .q-votes, .q .touch_as_hover {
 	display: none;
 }
+
+.q-pub {
+	font-weight: 200;
+}
+
 
 .q-vote-bar {
 	border: 1px solid transparent;
@@ -264,8 +323,20 @@ a:hover, a:focus {
 	width: 100%;
 	display: none;
 	color: #990012;
+	z-index: 107;
 }
 
-.q:hover .q-vote-bar {
+.q:hover .q-vote-bar, .q .touch_as_hover {
 	display: block;
+	font-size: 1em;
+}
+
+.q-sz-1 .q-vote-bar {
+	font-size: 0.6em;
+}
+
+.q-new-hint {
+	font-size:12px; 
+	line-height:12px; 
+	vertical-align:super;
 }

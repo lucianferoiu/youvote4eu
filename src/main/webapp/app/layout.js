@@ -35,7 +35,7 @@
 			containersTop: (ww>=768?10:4),
 			qContainerWidth: Math.floor( ww * (ww>=768?0.75:0.96) ),
 			qContainerHeight: Math.floor(1.5*wh),
-			aqContainerWidth: Math.floor( ww * (ww>=768?0.25:0) ),
+			aqContainerWidth: Math.floor( ww * (ww>=768?0.23:0) ),
 			aqContainerHeight: Math.floor(1.5*wh),
 		};
 		YV.dim.gridCellWidth = Math.floor( YV.dim.qContainerWidth/YV.dim.gridSize );
@@ -90,7 +90,7 @@
 		var noMorePopularQuestions = (popularQuestionsCount<=0);
 		var newerQuestionsIndex = 0;
 		var popularQuestionsIndex = 0;
-		var howManyPerSquaresBatch = Math.max(6,Math.min(17,Math.floor(newerQuestionsCount/4)));
+		var howManyPerSquaresBatch = Math.max(3,Math.floor(newerQuestionsCount/2));
 		
 		while(newerQuestionsIndex<newerQuestionsCount || popularQuestionsIndex<popularQuestionsCount) {
 			var squares = randomSquares(gridSize,maxY,howManyPerSquaresBatch);
@@ -101,8 +101,8 @@
 				var q = null;
 				maxY = Math.max(maxY,y+sz);
 				
-				if (sz===1 && (Math.random()<smallSquarePopularChance) ) {//small square
-					if (noMoreNewerQuestions) {//popular questions when the newer ones are done...
+				if (sz===1) {//small square
+					if ( (i>5 && Math.random()<smallSquarePopularChance) || noMoreNewerQuestions || (gridSize==1 && i%2==0)) {//popular questions when the newer ones are done or when the grid is small we intertwine the two...
 						if (!noMorePopularQuestions) {
 							q = popularQuestions[popularQuestionsIndex];
 							popularQuestionsIndex++;
@@ -135,7 +135,8 @@
 					var selqq = '#qq'+qid;
 					YV.cells.push([x,y,sz,sel,qid]);
 					var clr = randomInt(1,6);
-					$(q).attr('data-q-x',x).attr('data-q-y',y).attr('data-q-sz',sz).removeClass('q-sz-1 q-sz-2 q-sz-3').addClass('q-sz-'+sz).addClass('q-bs-'+clr);
+					var relSzClass = (gridSize==1)?(YV.dim.windowWidth>=480?'q-sz-2':'q-sz-1'):('q-sz-'+sz);
+					$(q).attr('data-q-x',x).attr('data-q-y',y).attr('data-q-sz',sz).removeClass('q-sz-1 q-sz-2 q-sz-3').addClass(relSzClass).addClass('q-bs-'+clr);
 					$(selqq).addClass('qq-bg-'+clr);
 				}
 			
@@ -205,9 +206,6 @@
 		var bitmap = [];
 		for (var k=0;k<gridSize;k++) {
 			bitmap[k] = [];
-			// for(var l=0;l<howMany+initialY;l++) {
-			// 	bitmap[k][l] = 0;
-			// }
 		}
 		
 		
@@ -246,9 +244,9 @@
 					if (emptyRow) {
 						var randCol = randomInt(k,gridSize-1);
 						bitmap[randCol][l]=1;
-						ret.push([randCol,l+initialY,1]);
+						ret.unshift([randCol,l+initialY,1]);
 					} else if ( Math.random() < ( (1/gridSize) + (0.3*(offset-l)/offset)) ) {//%chances
-						ret.push([k,l+initialY,1]);
+						ret.unshift([k,l+initialY,1]);
 					}
 				}
 			}

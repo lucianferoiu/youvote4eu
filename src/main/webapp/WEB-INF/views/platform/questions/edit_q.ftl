@@ -186,9 +186,9 @@
 						<!-- comments -->
 						<div class="panel">
 							<h4><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp; Flags and Comments</h4>
-							<div class="scroll-block">
+							<div class="scroll-block"  style="min-height:100px;">
 								<ul class="list-group">
-									<li class="list-group-item" style="min-height:22px;"
+									<li class="list-group-item" style="min-height:28px;"
 										ng-repeat="c in vm.crtQuestion.children.comments "
 										ng-class="{'text-primary':c.id==null}">
 										{{c.text}}
