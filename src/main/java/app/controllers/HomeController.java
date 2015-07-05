@@ -59,6 +59,9 @@ public class HomeController extends QuestionsListController {
 		List<CountedTag> tags = tagsByPubQuestionsCount();
 		view("tags", tags);
 
+		List<FrontpageQuestion> last3ArchivedQuestions = findQuestions(lang, true, true, null, null, 0L, 3L);
+		view("last3ArchivedQuestions", last3ArchivedQuestions);
+
 		//TODO: add the questions to the session and manage them with eventual re-ordering; maybe a caching mechanism..
 		//TODO: extract the questions as FrontpageQuestion DTOs
 		//TODO: consider the citizen language for translated title and description
@@ -66,10 +69,11 @@ public class HomeController extends QuestionsListController {
 		if ("archived".equalsIgnoreCase(filter)) {
 			questions = findQuestions(lang, true, true, word, tagId);
 		} else if ("newest".equalsIgnoreCase(filter)) {
-			questions = findQuestions(lang, false, true, word, tagId);
+			questions = findQuestions(lang, false, true, word, tagId, 0L, 33L);
 		} else {
 			List<FrontpageQuestion> newerQuestions = findQuestions(lang, false, true, word, tagId);
 			List<FrontpageQuestion> popularQuestions = findQuestions(lang, false, false, word, tagId);
+			int howManyNew = Math.floorDiv(newerQuestions.size(), 20);//~%5% newer questions
 
 			//a bit inefficient, but it's more tedious to walk both lists at the same time in a freemarker template...
 			final Set<Long> renderedQuestions = new HashSet<Long>();
@@ -83,7 +87,7 @@ public class HomeController extends QuestionsListController {
 						renderedQuestions.add(fpq.id);
 					}
 				}
-				if (i < howManyNewerQuestions) {
+				if (i < howManyNewerQuestions && i <= howManyNew) {
 					FrontpageQuestion fpq = newerQuestions.get(i);
 					if (fpq != null && !renderedQuestions.contains(fpq.id)) {
 						questions.add(fpq);

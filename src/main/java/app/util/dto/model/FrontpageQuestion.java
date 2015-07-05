@@ -13,6 +13,7 @@ public class FrontpageQuestion {
 	public boolean isNew;
 	public boolean isArch;
 	public Integer rank;
+	public Double voteTally;
 
 	//bloody freemarker, makes me generate cluttering getters/setters
 	public Long getId() {
@@ -85,6 +86,14 @@ public class FrontpageQuestion {
 
 	public void setArchivedOn(Date archivedOn) {
 		this.archivedOn = archivedOn;
+	}
+
+	public Double getVoteTally() {
+		return voteTally;
+	}
+
+	public void setVoteTally(Double voteTally) {
+		this.voteTally = voteTally;
 	}
 
 }

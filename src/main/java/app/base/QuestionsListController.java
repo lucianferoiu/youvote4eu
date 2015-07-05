@@ -1,5 +1,6 @@
 package app.base;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +17,7 @@ import app.util.dto.model.FrontpageQuestion;
 
 public abstract class QuestionsListController extends AnonAuthController {
 
-	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date,"
+	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, "
 			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description "
 			+ " FROM questions q "
 			+ " LEFT OUTER JOIN translations tt ON (tt.parent_id=q.id AND tt.field_type='title' AND tt.lang=?) "
@@ -27,7 +28,10 @@ public abstract class QuestionsListController extends AnonAuthController {
 	protected static final String WHERE_TAG = " AND q.id IN (SELECT question_id FROM questions_tags WHERE tag_id=?) ";
 	protected static final String WHERE_SEARCH_BY_WORD = " AND (lower(COALESCE(tt.text,q.title)) LIKE '%:word%' OR lower(COALESCE(tt.text,q.description)) LIKE '%:word%' ) ";
 	protected static final String ORDER_BY_SUPPORT = " ORDER BY q.popular_votes desc, q.open_at desc ";
-	protected static final String ORDER_BY_NEWNESS = " ORDER BY q.archived_at desc NULLS FIRST, q.open_at desc, q.popular_votes desc ";
+	protected static final String ORDER_BY_NEWNESS = " ORDER BY q.open_at desc, q.popular_votes desc ";
+	protected static final String ORDER_BY_NEWNESS_ARCH = " ORDER BY q.archived_at desc NULLS FIRST, q.open_at desc, q.popular_votes desc ";
+	protected static final String LIMIT = " LIMIT ";
+	protected static final String OFFSET = " OFFSET ";
 	//////////
 	protected static final String TAGS_OF_PUB_QUESTIONS_QUERY = "SELECT t.id id, count(t.id) cnt, t.text txt FROM tags t JOIN questions_tags qt ON (t.id=qt.tag_id) "
 			+ " WHERE qt.question_id IN (SELECT id FROM questions WHERE is_deleted=false AND is_published=true AND is_archived=false) "
@@ -35,6 +39,11 @@ public abstract class QuestionsListController extends AnonAuthController {
 
 	protected List<FrontpageQuestion> findQuestions(final String lang, final boolean archived, final boolean byNewness, final String word,
 			final Long tagId) {
+		return findQuestions(lang, archived, byNewness, word, tagId, null, null);
+	}
+
+	protected List<FrontpageQuestion> findQuestions(final String lang, final boolean archived, final boolean byNewness, final String word,
+			final Long tagId, Long offset, Long limit) {
 		final List<FrontpageQuestion> questions = new ArrayList<FrontpageQuestion>();
 		List<Object> params = new ArrayList<>();
 
@@ -59,9 +68,22 @@ public abstract class QuestionsListController extends AnonAuthController {
 		}
 
 		if (byNewness) {
-			query += ORDER_BY_NEWNESS;
+			if (archived) {
+				query += ORDER_BY_NEWNESS_ARCH;
+			} else {
+				query += ORDER_BY_NEWNESS;
+			}
 		} else {
 			query += ORDER_BY_SUPPORT;
+		}
+
+		if (limit != null && limit > 0) {
+			query += LIMIT;
+			query += limit;
+		}
+		if (offset != null && offset > 0) {
+			query += OFFSET;
+			query += offset;
 		}
 
 		Base.find(query, params.toArray()).with(new RowListenerAdapter() {
@@ -92,6 +114,8 @@ public abstract class QuestionsListController extends AnonAuthController {
 					fpq.archivedOn = new Date((arch_date).toInstant().toEpochMilli());
 				}
 				fpq.votesCount = (Long) row.get("votes");
+				BigDecimal vTally = (BigDecimal) row.get("vote_tally");
+				if (vTally != null) fpq.voteTally = vTally.doubleValue();
 
 				questions.add(fpq);
 				i++;
