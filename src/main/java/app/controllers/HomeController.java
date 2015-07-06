@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Set;
 
 import org.javalite.activejdbc.Base;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.base.Const;
 import app.base.QuestionsListController;
 import app.models.Citizen;
 import app.models.Lang;
 import app.models.Question;
+import app.models.Tag;
+import app.models.Translation;
 import app.services.QuestionsLayouter;
-import app.util.JsonHelper;
 import app.util.StringUtils;
-import app.util.dto.QuestionCell;
-import app.util.dto.Square;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
@@ -28,14 +29,12 @@ import com.google.inject.Inject;
  */
 public class HomeController extends QuestionsListController {
 
+	static final Logger log = LoggerFactory.getLogger(HomeController.class);
+
 	@Inject
 	protected QuestionsLayouter layouter;
 
 	public void index() {
-		List<Lang> langs = Lang.findAll().orderBy("code");//TODO add the languages to the app context - they are immutable and we can save a DB roundtrip
-		view("langs", langs);
-		//		setEncoding("UTF-8");
-
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 
@@ -56,8 +55,7 @@ public class HomeController extends QuestionsListController {
 			session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
 		}
 
-		List<CountedTag> tags = tagsByPubQuestionsCount();
-		view("tags", tags);
+		prepareHeaderValues();
 
 		List<FrontpageQuestion> last3ArchivedQuestions = findQuestions(lang, true, true, null, null, 0L, 3L);
 		view("last3ArchivedQuestions", last3ArchivedQuestions);
@@ -100,64 +98,43 @@ public class HomeController extends QuestionsListController {
 
 	}
 
-	@Deprecated
-	public void indexx() {
-		List<Lang> langs = Lang.findAll().orderBy("code");//TODO add the languages to the app context - they are immutable and we can save a DB roundtrip
-		view("langs", langs);
-
+	public void question() {
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
-		Long citizenId = -1L;//TODO retrieve the real citizen ID
+		Long citizenId = citizen == null ? -1L : citizen.getLongId();
+		String lang = preferredLang();
 
-		ArrayList alreadyVotedQuestions = (ArrayList) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
-		if (alreadyVotedQuestions == null) {
-			alreadyVotedQuestions = (ArrayList) Base.firstColumn("select question_id from votes where citizen_id=?", citizenId);
-			session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
+		Long qId = null;
+		String qIdParam = param("id");
+		if (StringUtils.nullOrEmpty(qIdParam)) {
+			log.warn("Missing question ID param - citizen id: " + citizenId);
+			redirect("/home");
+			return;
 		}
-
-		//TODO: add the questions to the session and manage them with eventual re-ordering; maybe a caching mechanism..
-		//TODO: extract the questions as FrontpageQuestion DTOs
-		//TODO: consider the citizen language for translated title and description
-
-		List<Question> mostSupportedQuestions = Question
-				.findBySQL("SELECT id,title,description,popular_votes,open_at FROM questions WHERE is_published=true AND is_archived=false AND is_deleted=false ORDER BY popular_votes desc, open_at desc ");
-		List<Question> newestQuestions = Question
-				.findBySQL("SELECT id,title,description,popular_votes,open_at FROM questions WHERE is_published=true AND is_archived=false AND is_deleted=false ORDER BY open_at desc, popular_votes desc ");
-
-		List<QuestionCell> cells = new ArrayList<QuestionCell>();
-		List<Question> questions = new ArrayList<Question>();
-
-		final Set<Long> renderedQuestions = new HashSet<Long>();
-		List<Square> layouts = layouter.randomLayout();
-		int offset = 0;
-		while ((!mostSupportedQuestions.isEmpty()) || (!newestQuestions.isEmpty())) {
-			if (layouts == null || layouts.isEmpty()) {
-				layouts = layouter.randomLayout();
-				offset += 10;
-			}
-			Square sq = layouts.remove(0);
-			if (sq == null) break;
-			List<Question> runningList = (sq.sz == 1) ? (newestQuestions.isEmpty() ? mostSupportedQuestions : newestQuestions)
-					: (mostSupportedQuestions.isEmpty() ? newestQuestions : mostSupportedQuestions);
-			Question q = null;
-			do {
-				if (runningList.isEmpty()) break;
-				q = runningList.remove(0);
-			}
-			while (renderedQuestions.contains(q.getLongId()));
-			if (q == null) continue;
-			Long qid = q.getLongId();
-			renderedQuestions.add(qid);
-			questions.add(q);
-			cells.add(new QuestionCell(sq.x, sq.y + offset, sq.sz, qid));
+		qId = Long.decode(qIdParam);
+		if (qId == null) {
+			log.warn("Wrong question ID param: " + qIdParam + " - citizen id: " + citizenId);
+			redirect("/home");
+			return;
 
 		}
 
-		String cellsJSON = JsonHelper.toListJson(cells);
-		view("questions", questions);
-		view("cells", cells);
-		view("cellsAsJSON", cellsJSON);
-		view("maxGridHeight", offset + 10);
+		Question question = Question.findById(qId);
+		if (question == null) {
+			log.warn("Cannot find question with ID: " + qIdParam + " - citizen id: " + citizenId);
+			redirect("/home");
+			return;
+		}
+		view("question", question);
 
+		List<Tag> questionTags = question.getAll(Tag.class);
+		view("questionTags", questionTags);
+
+		prepareQuestionTranslations(question, lang);
+		prepareHeaderValues();
+	}
+
+	public void archived() {
+		question();
 	}
 
 	public void help() {}
@@ -166,6 +143,41 @@ public class HomeController extends QuestionsListController {
 
 	public void catchall() {
 		redirect("/home");
+	}
+
+	//////////////////////////////////
+
+	protected void prepareHeaderValues() {
+		List<Lang> langs = Lang.findAll().orderBy("code");//TODO add the languages to the app context - they are immutable and we can save a DB roundtrip
+		view("langs", langs);
+		List<CountedTag> tags = tagsByPubQuestionsCount();
+		view("tags", tags);
+	}
+
+	protected void prepareQuestionTranslations(Question question, String lang) {
+		String title = question.getString("title");
+		String description = question.getString("description");
+		String html_content = question.getString("html_content");
+		if (!"en".equalsIgnoreCase(lang)) {
+			List<Translation> translations = question.get(Translation.class, "lang=?", lang);
+			for (Translation tr : translations) {
+				String field_type = tr.getString("field_type");
+				String text = tr.getString("text");
+				if ("title".equalsIgnoreCase(field_type)) {
+					title = text;
+				} else if ("description".equalsIgnoreCase(field_type)) {
+					description = text;
+				} else if ("html_content".equalsIgnoreCase(field_type)) {
+					html_content = text;
+				} else {
+					log.warn("Superfluous translation of field {} (id={}) for question {}", field_type, tr.getLongId(),
+							question.getLongId());
+				}
+			}
+		}
+		view("questionTitle", title);
+		view("questionDescription", description);
+		view("questionHtmlContent", html_content);
 	}
 
 }

@@ -38,7 +38,7 @@
 <div class="side-cont hidden-xs" style="margin-top:0px;">
 	<div class="panel panel-default">
 		<div class="panel-heading">Archived recently</div>
-		  <div class="panel-body">
+		<div class="panel-body">
 			[#list last3ArchivedQuestions as q]
 			<div id="aq${q.id}" class="aq" data-q-id="${q.id}" [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 					<div class="aq-title">${q.title}</div>
