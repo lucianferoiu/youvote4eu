@@ -135,6 +135,9 @@ public class HomeController extends QuestionsListController {
 
 	public void archived() {
 		question();
+		String lang = preferredLang();
+		List<FrontpageQuestion> moreArchivedQuestions = findQuestions(lang, true, false, null, null, 0L, 10L);
+		view("moreArchivedQuestions", moreArchivedQuestions);
 	}
 
 	public void help() {}

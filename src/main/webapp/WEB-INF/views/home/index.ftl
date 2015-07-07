@@ -26,7 +26,7 @@
 				 Vote now: 
 				 <button class="btn btn-success">Yes</button> 
 				 <button class="btn btn-danger">No</button> 
-				 <button class="btn btn-default"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+				 <button class="btn btn-default q-details-btn" data-q-id="${q.id}" [#if q.arch] data-q-archived="yes"[/#if]><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
 			</div>
 			[#if q.archivedOn??]<div class="q-arch hide">Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</div>[/#if]
 		</div>
@@ -40,7 +40,7 @@
 		<div class="panel-heading">Archived recently</div>
 		<div class="panel-body">
 			[#list last3ArchivedQuestions as q]
-			<div id="aq${q.id}" class="aq" data-q-id="${q.id}" [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
+			<div id="aq${q.id}" class="aq" data-q-archived="yes" data-q-id="${q.id}" [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 					<div class="aq-title">${q.title}</div>
 					<hr/>
 					[#if q.archivedOn??]<div class="aq-arch"><em>Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</em></div>[/#if]
@@ -49,7 +49,7 @@
 						<div class="aq-vote-tally row">
 							<span class="label label-success text-left">Yes: ${((q.voteTally)*100)?string["0.##"]} %</span>&nbsp;
 							<span class="label label-danger text-right">No: ${((1-(q.voteTally))*100)?string["0.##"]} %</span>
-							<button class="btn btn-default pull-right"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+							<button class="btn btn-default pull-right q-details-btn" data-q-id="${q.id}" data-q-archived="yes"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
 						</div>
 					</div>
 					[/#if]

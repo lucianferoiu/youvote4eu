@@ -12,6 +12,21 @@
 		$('.q').click(function () {
 			if (!App.preventTouchClick) {
 				var qid = $(this).attr('data-q-id');
+				var isArch = $(this).attr('data-q-archived');
+				if (isArch==='yes') {
+					window.location=App.contextPath+'/archived/'+qid;
+				} else {
+					window.location=App.contextPath+'/question/'+qid;
+				}
+			}
+		});
+		
+		$('.q-details-btn').click(function () {
+			var qid = $(this).attr('data-q-id');
+			var isArch = $(this).attr('data-q-archived');
+			if (isArch==='yes') {
+				window.location=App.contextPath+'/archived/'+qid;
+			} else {
 				window.location=App.contextPath+'/question/'+qid;
 			}
 		});

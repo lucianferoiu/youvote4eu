@@ -62,6 +62,14 @@
 [@content for="footer_script"]
 <script type="text/javascript">
 (function() {
+	var root = this;
+	var idx = window.location.href.lastIndexOf("${context_path}");
+	idx = (idx<=0?window.location.href.lastIndexOf("?")-1:idx);
+	var App = {
+		contextPath:'${context_path}',
+		rootPath: idx<=0?window.location.href:window.location.href.substr(0,idx)
+	};
+	root.App = App;
 }());
 </script>
 [/@content]

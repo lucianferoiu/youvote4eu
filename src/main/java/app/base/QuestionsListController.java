@@ -17,7 +17,7 @@ import app.util.dto.model.FrontpageQuestion;
 
 public abstract class QuestionsListController extends AnonAuthController {
 
-	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, "
+	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, q.official_vote_tally off_vote_tally,"
 			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description "
 			+ " FROM questions q "
 			+ " LEFT OUTER JOIN translations tt ON (tt.parent_id=q.id AND tt.field_type='title' AND tt.lang=?) "
@@ -116,6 +116,8 @@ public abstract class QuestionsListController extends AnonAuthController {
 				fpq.votesCount = (Long) row.get("votes");
 				BigDecimal vTally = (BigDecimal) row.get("vote_tally");
 				if (vTally != null) fpq.voteTally = vTally.doubleValue();
+				BigDecimal offVTally = (BigDecimal) row.get("official_vote_tally");
+				if (offVTally != null) fpq.officialVoteTally = offVTally.doubleValue();
 
 				questions.add(fpq);
 				i++;
