@@ -16,8 +16,8 @@
 			</div>
 			<div class="pub-q-desc">
 				<blockquote>
-				<p>${questionDescription}</p>
-				<footer>Published on ${question.open_at?string["dd/MM/yyyy HH:mm"]}</footer>
+					<p>${questionDescription}</p>
+					<footer>Published on ${question.open_at?string["dd/MM/yyyy HH:mm"]}</footer>
 				</blockquote>
 			</div>
 			<div class="pub-q-info">

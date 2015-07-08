@@ -369,10 +369,12 @@ a:hover, a:focus {
 
 .pub-q-vote-stats {
 	padding: 1em;
+	min-height: 100px
 }
 
 .pub-q-vote-distribution {
 	padding: 1em;
+	min-height: 200px;
 }
 
 .pub-q-sidebar {
