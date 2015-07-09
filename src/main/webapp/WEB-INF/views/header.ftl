@@ -1,101 +1,87 @@
 [#ftl encoding='UTF-8']
-<div class="logo logo-big visible-md-block visible-lg-block"></div>
-<div class="logo logo-med visible-sm-block"></div>
-<div class="logo logo-sml visible-xs-block"></div>
 
-<div class="navbar navbar-default navbar-fixed-top container-fluid hidden-xs" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top container-fluid" role="navigation">
 	<div class="row">
-		<div class="col-sm-offset-4 col-sm-7 ">
-			<div class="slogan hidden-sm hidden-xs">
-				Show the MEPs how to vote!
-			</div>
+		<div class="col-md-3 col-sm-4">
+			<div class="logo logo-big visible-md-block visible-lg-block"></div>
+			<div class="logo logo-sml visible-sm-block"></div>
+			<div class="brand-sm visible-sm-block">You VOTE for EU</div>
 		</div>
-		<div class="dropdown input-group pull-right">
-			<button class="btn btn-default dropdown-toggle " type="button" id="lang-dropdown" 
-				data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">English<span class="caret"></span></button>
-			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="lang-dropdown">
-			[#list langs as lg]
-				<li><a href="#">${lg.native}</a></li>
-			[/#list]
-			</ul>
-		</div>
-	</div>
-	<div class="row hidden-xs">
-		<div class="tags col-sm-offset-2 col-sm-7">
-			<ol class="breadcrumb pull-right" style="margin-bottom:2px;">
-				<li><strong>Filter</strong>:&nbsp;<a href="?filter=newest">Newest</a></li>
-				<li><a href="?filter=archived">Archived</a></li>
-				[#list tags as tg]
-				[#if (tg_index<2) ]
-				<li class="hidden-sm hidden-xs">#<a href="?tag=${tg.id}">${tg.text}</a> <span class="badge">${tg.count}</span></li>
-				[/#if]
-				[#if (tg_index>=2 && tg_index<3) ]
-				<li class="hidden-md hidden-sm hidden-xs">#<a href="?tag=${tg.id}">${tg.text}</a> <span class="badge">${tg.count}</span></li>
-				[/#if]
-				[/#list]
-				<li> 
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">more tags</a>..
-				<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tags-dropdown">
-					[#list tags as tg]
-					[#if (tg_index>=2) ]
-					<li>
-						<a href="?tag=${tg.id}">#${tg.text} <span class="badge">${tg.count}</span></a>
-					</li>
-					[/#if]
-					[/#list]
-				</ul>
-				</li>
-			</ol>
-		</div>
-		<form class="input-group col-sm-3 pull-right" action="?" method="get" accept-charset="utf-8">
-			<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search by keyword" role="search" value="${searchKeyword!}">
-			<span class="input-group-btn">
-				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></button>
-			</span>
-		</form>
-	</div>
-</div>
-
-<div class="navbar navbar-default navbar-fixed-top container-fluid visible-xs-block " role="navigation">
-	<div class="row">
-		<div class="logo col-xs-offset-1 col-xs-8 logo-text">
-			You Vote for EU
-		</div>
-		<div class="prefs col-xs-3" style="padding:8px 2px 2px 0px;">
-				<div class="dropdown input-group pull-right">
-					<button class="btn btn-default dropdown-toggle" type="button" id="lang-dropdown" 
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">English &nbsp;<span class="caret"></span></button>
-					<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="lang-dropdown">
-					[#list langs as lg]
-						<li><a href="#">${lg.native} <span class="label label-default">${lg.code}</span></a></li>
-					[/#list]
-					</ul>
+		<div class="col-md-9 col-sm-8">
+			<div class="container">
+				<div class="row visible-md-block visible-lg-block">
+					<div class="col-sm-12 slogan">
+						Show the MEPs how to vote!
+					</div>
 				</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="tags col-xs-9" style="padding: 8px 4px 2px 8px;">
-			<ol class="breadcrumb" style="padding: 0px;">
-				<li><a href="?filter=newest">Newest</a></li>
-				<li><a href="?filter=archived">Archived</a></li>
-				<li> 
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">by #tag</a>..
-				<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tags-dropdown">
-					[#list tags as tg]
-					<li><a href="?tag=${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a></li>
-					[/#list]
-				</ul>
-				</li>
-			</ol>
-		</div>
-		<form action="?" method="get" accept-charset="utf-8" class="pull-right col-xs-3"  style="padding: 2px 4px 2px 8px;">
-			<div class="input-group">
-				<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search" role="search" value="${searchKeyword!}">
+				<div class="row">
+					<div class="col-sm-12 navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-filters" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<div class="logo logo-sml visible-xs-block"></div>
+						<div class="brand-xs visible-xs-block">You VOTE for EU</div>
+					</div>
+					<div class="collapse navbar-collapse col-xs-12" id="navbar-filters">
+						<ul class="nav navbar-nav">
+							<li class="hidden-sm [#if activeFilter=='trending'] active[/#if]"><a href="${context_path}">Trending</a></li>
+							<li class="hidden-sm [#if activeFilter=='newest'] active[/#if]"><a href="${context_path}?filter=newest">Newest</a></li>
+							<li class="hidden-sm [#if activeFilter=='archived'] active[/#if]"><a href="${context_path}?filter=archived">Archived</a></li>
+							<!-- collapsed menu filters for rather small resolutions -->
+							<li class="dropdown visible-sm-block ">
+								<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" 
+									aria-expanded="false">Filters <span class="caret"></span></a>
+								<ul class="dropdown-menu multi-level">
+									<li class="[#if activeFilter=='trending'] disabled[/#if]"><a href="${context_path}">Trending</a></li>
+									<li class="[#if activeFilter=='newest'] disabled[/#if]"><a href="${context_path}?filter=newest">Newest</a></li>
+									<li class="[#if activeFilter=='archived'] disabled[/#if]"><a href="${context_path}?filter=archived">Archived</a></li>
+									<li class="dropdown-submenu ">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+											aria-expanded="false">Filter by tag: </span></a>
+										<ul class="dropdown-menu">
+											[#list tags as tg]
+											<li class="[#if filterTag??][#if filterTag==tg.id]active[/#if][/#if]"><a href="${context_path}?tag=${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a></li>
+											[/#list]
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<!-- /menu filters -->
+							<li class="dropdown hidden-sm [#if activeFilter=='tag']active[/#if]">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+									aria-expanded="false">Filter by tag <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									[#list tags as tg]
+									<li class="[#if filterTag??][#if filterTag==tg.id]active[/#if][/#if]"><a href="${context_path}?tag=${tg.id}" ># ${tg.text} <span class="badge">${tg.count}</span></a></li>
+									[/#list]
+								</ul>
+							</li>
+							<form class="navbar-form navbar-left" action="?" method="get" accept-charset="utf-8">
+								<div class="form-group">
+									<div class="input-group">
+										<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search by keyword" role="search"
+											 value="${searchKeyword!}"><span class="input-group-btn"><button class="btn btn-default" type="submit"><span 
+												 class="glyphicon glyphicon-search"></button></span>
+									</div>
+								</div>
+							</form>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+									aria-expanded="false"><span class="">English</span> <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									[#list langs as lg]
+										<li><a href="#">${lg.native}</a></li>
+									[/#list]
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
-		</form>
+		</div>
 	</div>
+	
 </div>
-
-[#-- <div class="nav-buffer">
-	&nbsp;
-</div> --]
