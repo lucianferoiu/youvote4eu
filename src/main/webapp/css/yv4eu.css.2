@@ -1,0 +1,469 @@
+/*** Setup ***/
+
+.hover {
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+}
+
+/*** Color palette ***/
+.rotten-cherry { color: #990012 }
+.rotten-cherry-dark { color: #6D000D }
+
+/*** Theme ***/
+
+a {
+	color: #990012;
+	text-decoration: none;
+}
+a:hover, a:focus {
+	color: #6D000D;
+	text-decoration: underline;
+}
+
+.logo {
+	cursor: pointer;
+}
+
+.logo-big {
+	background: url(../img/YV-logo-med.png) left top no-repeat;
+	height: 116px;
+	width: 282px;
+	position: fixed;
+	top: 8px;
+	left:8px;
+	z-index: 3300;
+}
+
+.logo-med {
+	background: url(../img/YV-logo-sml.png) left top no-repeat;
+	height: 72px;
+	width: 178px;
+	position: fixed;
+	top: 4px;
+	left:4px;
+	z-index: 3300;
+}
+
+.logo-sml {
+	background: url(../img/YV-hands-sml.png) left top no-repeat;
+	height: 40px;
+	width: 50px;
+	position: fixed;
+	top: 4px;
+	left:7px;
+	z-index: 3300;
+}
+
+.logo-text {
+	font-weight: 900;
+	color: #990012;
+	font-size: 1.4em;
+	line-height: 1.4em;
+}
+
+
+.slogan {
+	font-weight: 900;
+	font-size: 2.4em;
+	line-height: 2.4em;
+	color: #990012;
+}
+
+.slogan-sml {
+	font-weight: 900;
+	font-size: 1.6em;
+	line-height: 1.6em;
+	color: #990012;
+}
+
+.nav-buffer {
+	height: 120px;
+}
+
+/*** Containers ***/
+
+.q-cont {
+	position: relative;
+	top: 120px; /* containersTopPos */
+}
+
+.side-cont {
+	position: fixed;
+	top: 120px;  /* containersTopPos */
+	/*	
+	background: #f8f8f8;
+	border-top-color: #e7e7e7;
+	*/
+	border: 1px solid transparent;
+	border-left-color: #e7e7e7;
+	padding: 8px;
+	margin: 16px;
+}
+
+.loading-cont {
+	z-index:2000;
+	background-color: rgba(170,170,170,0.3) !important;
+}
+
+/*** Questions display ***/
+
+.q {
+	position: absolute;
+	display: none;
+	overflow:hidden;
+	text-overflow: ellipsis;
+/*	padding: 20px;*/
+	box-shadow: 2px 2px 7px -8px black;
+/*	border-radius: 8px;*/
+}
+.aq {
+/*	height: 200px;*/
+/*	width: 90%;*/
+	padding: 4px;
+	margin: 10px 4px 10px 4px;
+	border: 1px solid #e7e7e7;
+	position: relative;
+}
+
+.q:hover {
+	z-index:100;
+/*	box-shadow: 0px 40px 50px -35px #B5C4B1;*/
+}
+
+
+.qq {
+	position: relative;
+	margin: 16px;
+	padding: 12px;
+	width: 100%;
+	height: 100%;
+	text-overflow: ellipsis;
+	overflow:hidden;
+/*	border-radius: 8px;*/
+	-webkit-transition: all 0.7s ease;
+	transition: all 0.7s ease;
+}
+
+.qq:hover {
+}
+
+.q-sz-1 {
+	font-size: 1em;
+/*	line-height: 1em;*/
+}
+
+.q-sz-2 {
+	font-size: 1.5em;
+/*	line-height: 1.6em;*/
+}
+
+.q-sz-3 {
+	font-size: 1.7em;
+/*	line-height: 2em;*/
+}
+
+.q-sz-3:hover {
+	-webkit-transform:scale(1.02);
+	transform:scale(1.02);
+}
+
+.q-sz-2:hover {
+	-webkit-transform:scale(1.04);
+	transform:scale(1.04);
+}
+
+.q-sz-1:hover {
+	-webkit-transform:scale(1.07);
+	transform:scale(1.07);
+}
+
+.q-bs-1 { box-shadow: 0px 35px 25px -50px #A88D90;}
+.q-bs-1:hover { box-shadow: 0px 30px 40px -30px #A88D90;}
+.qq-bg-1 {	background: #CBBEC0; }
+.qq-bg-1:hover {	background: #A88D90; }
+.q-bs-2 { box-shadow: 0px 35px 25px -50px #A0907D;}
+.q-bs-2:hover { box-shadow: 0px 30px 40px -30px #A0907D;}
+.qq-bg-2 {	background:#D3CDC6 ;}
+.qq-bg-2:hover {	background: #A0907D; }
+.q-bs-3 { box-shadow: 0px 35px 25px -50px #978B9A;}
+.q-bs-3:hover { box-shadow: 0px 30px 40px -30px #978B9A;}
+.qq-bg-3 {	background: #DAD4DC }
+.qq-bg-3:hover {	background: #978B9A; }
+.q-bs-4 { box-shadow: 0px 35px 25px -50px #DFCACC;}
+.q-bs-4:hover { box-shadow: 0px 30px 40px -30px #DFCACC;}
+.qq-bg-4 {	background: #F5E3E5; }
+.qq-bg-4:hover {	background: #DFCACC;}
+.q-bs-5 { box-shadow: 0px 35px 25px -50px #FFDAAD;}
+.q-bs-5:hover { box-shadow: 0px 30px 40px -30px #FFDAAD;}
+.qq-bg-5 {	background: #FFEBD3; }
+.qq-bg-5:hover {	background: #FFDAAD; }
+.q-bs-6 { box-shadow: 0px 35px 25px -50px #B5C4B1;}
+.q-bs-6:hover { box-shadow: 0px 30px 40px -30px #B5C4B1;}
+.qq-bg-6 {	background: #E8EFE6; }
+.qq-bg-6:hover {	background: #B5C4B1; }
+
+
+.qq-bg-7 {	background: #FFEBD3; }
+.qq-bg-7:hover {	background: #FFDAAD; }
+.qq-bg-8 {	background: #E3F2FB; }
+.qq-bg-8:hover {	background: #B5D7EB; }
+.qq-bg-9 {	background: #CDE6F4; }
+.qq-bg-9:hover {	background: #9CC6DF; }
+.qq-bg-10 {	background: #E9FDE4; }
+.qq-bg-10:hover {	background: #C6F6BA; }
+.qq-bg-11 {	background: #938889; }
+.qq-bg-11:hover {	background: #766466; }
+.qq-bg-12 {	background: #99948E; }
+.qq-bg-12:hover {	background: #7B7268; }
+.qq-bg-13 {	background: #5B5F61; }
+.qq-bg-13:hover {	background: #374045; }
+.qq-bg-14 {	background: #798177; }
+.qq-bg-14:hover {	background: #5B6857; }
+
+
+.q-title {
+	font-weight: 900;
+	padding: 0.3em;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	position: absolute;
+	bottom: 1em;
+	left: 0;
+	height-min: 3em;
+}
+
+.aq-title {
+	font-weight: 900;
+/*	padding: 0.67em;*/
+	overflow:hidden;
+	text-overflow: ellipsis;
+	position: static;
+	height-min: 4em;
+}
+
+.q:hover .q-title, .q .touch_as_hover {
+	top: 0;
+	z-index: 102;
+	padding: 8px 16px 12px 8px;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+.q-sz-3:hover .q-title {
+}
+
+
+.q-desc {
+	overflow-y:scroll;
+	padding: 0.67em;
+	text-overflow: ellipsis;
+	position: absolute;
+	top: 4em;
+	height: 50%;
+	display: none;
+}
+.q:hover .q-desc, .q .touch_as_hover {
+	display: block;
+}
+
+.q-sz-1:hover .q-desc {
+	display: none;
+}
+
+.q-sz-2:hover .q-desc {
+	top: 4em;
+	font-size: 0.72em;
+}
+
+.q-sz-3:hover .q-desc {
+	top: 4em;
+	font-size: 0.72em;
+}
+
+.q-sz-1 .touch_as_hover .q-desc {
+	top: 2.3em;
+	font-size: 0.9em;
+	display: block;
+}
+
+
+.aq-desc {
+	display: block;
+}
+
+.q-votes {
+	font-family: Monospace;
+	font-size: 2.3em;
+	height:100%;
+}
+
+.q:hover .q-votes, .q .touch_as_hover {
+	display: none;
+}
+
+.q-pub {
+	font-weight: 200;
+}
+
+
+.q-vote-bar {
+	border: 1px solid transparent;
+	border-top-color: #e7e7e7;
+	background: #f8f8f8;
+	padding: 2px 6px 2px 6px;
+	font-size: 0.8em;
+	font-weight: 900;
+	height: 56px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	display: none;
+	color: #990012;
+	z-index: 107;
+}
+
+.q:hover .q-vote-bar, .q .touch_as_hover {
+	display: block;
+	font-size: 1em;
+}
+
+.q-sz-1 .q-vote-bar {
+	font-size: 0.6em;
+}
+
+.q-new-hint {
+	font-size:12px; 
+	line-height:12px; 
+	vertical-align:super;
+}
+
+
+/*** Question details ***/
+
+.pub-q-cont {
+	padding: 2em;
+}
+
+.pub-q-title {
+	font-weight:900;
+	font-size: 2em;
+	padding: 0px 16px 10px 16px;
+	color: #6D000D
+}
+
+.pub-q-desc {
+	padding: 10px 16px 4px 16px;
+	font-weight:200;
+	font-size: 1.3em;
+	color: #990012
+}
+
+.pub-q-content {
+	padding: 1em;
+}
+
+.pub-q-votes {
+	padding: 1em;
+}
+
+.pub-q-vote-stats {
+	padding: 1em;
+	min-height: 100px
+}
+
+.pub-q-vote-distribution {
+	padding: 1em;
+	min-height: 200px;
+}
+
+.pub-q-sidebar {
+	padding: 2em;
+}
+
+/*** Question archival details ***/
+
+.arch-q-cont {
+	padding: 2em;
+}
+
+.arch-q-title {
+	font-weight:900;
+	font-size: 2em;
+	padding: 0px 16px 10px 16px;
+	color: #6D000D
+}
+
+.arch-q-desc {
+	padding: 10px 16px 4px 16px;
+	font-weight:200;
+	font-size: 1.3em;
+	color: #990012
+}
+
+.arch-q-content {
+	padding: 1em;
+}
+
+.arch-q-votes {
+	padding: 1em;
+}
+
+.arch-q-vote-stats {
+	padding: 1em;
+}
+
+.arch-q-vote-distribution {
+	padding: 1em;
+}
+
+.arch-q-sidebar {
+	padding: 2em;
+}
+
+.arch-q-summary {
+	
+}
+
+.arch-q-vote-citizen {
+	border: 1px solid transparent;
+	border-right-color: #990012;
+	
+}
+
+.arch-q-s-title {
+	font-weight: 900;
+	font-size: 1.1em;
+}
+
+.arch-q-s-desc {
+	font-weight:200;
+}
+
+.arch-q-vote-citizen-concl {
+	font-weight: 900;
+	font-size: 3em;
+	color: #990012
+}
+
+.arch-q-vote-official-concl {
+	font-weight: 900;
+	font-size: 3em;
+	color: #990012
+}
+
+.arch-q-vote-tally {
+	font-weight: 900;
+	font-size: 1.2em;
+}
+
+.arch-q-vote-offcial blockquote {
+	font-weight: 300;
+	font-size: 1em;
+	text-align: left;
+}
+
+.arch-q-vote-offcial-council, .arch-q-vote-offcial-commission, .arch-q-vote-offcial-parliament {
+/*	border: 1px solid #e7e7e7;*/
+/*	border-right-color: #e7e7e7;*/
+}

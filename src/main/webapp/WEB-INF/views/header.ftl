@@ -27,23 +27,23 @@
 					</div>
 					<div class="collapse navbar-collapse col-xs-12" id="navbar-filters">
 						<ul class="nav navbar-nav">
-							<li class="hidden-sm [#if activeFilter=='trending'] active[/#if]"><a href="${context_path}">Trending</a></li>
-							<li class="hidden-sm [#if activeFilter=='newest'] active[/#if]"><a href="${context_path}?filter=newest">Newest</a></li>
-							<li class="hidden-sm [#if activeFilter=='archived'] active[/#if]"><a href="${context_path}?filter=archived">Archived</a></li>
+							<li class="hidden-sm [#if activeFilter=='popular'] active[/#if]"><a href="/list/popular">Popular</a></li>
+							<li class="hidden-sm [#if activeFilter=='newest'] active[/#if]"><a href="/list/newest">Newest</a></li>
+							<li class="hidden-sm [#if activeFilter=='archived'] active[/#if]"><a href="/list/archived">Archived</a></li>
 							<!-- collapsed menu filters for rather small resolutions -->
 							<li class="dropdown visible-sm-block ">
 								<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" 
 									aria-expanded="false">Filters <span class="caret"></span></a>
 								<ul class="dropdown-menu multi-level">
-									<li class="[#if activeFilter=='trending'] disabled[/#if]"><a href="${context_path}">Trending</a></li>
-									<li class="[#if activeFilter=='newest'] disabled[/#if]"><a href="${context_path}?filter=newest">Newest</a></li>
-									<li class="[#if activeFilter=='archived'] disabled[/#if]"><a href="${context_path}?filter=archived">Archived</a></li>
+									<li class="[#if activeFilter=='popular'] disabled[/#if]"><a href="/list/popular">Popular</a></li>
+									<li class="[#if activeFilter=='newest'] disabled[/#if]"><a href="/list/newest">Newest</a></li>
+									<li class="[#if activeFilter=='archived'] disabled[/#if]"><a href="/list/archived">Archived</a></li>
 									<li class="dropdown-submenu ">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
 											aria-expanded="false">Filter by tag: </span></a>
 										<ul class="dropdown-menu">
 											[#list tags as tg]
-											<li class="[#if filterTag??][#if filterTag==tg.id]active[/#if][/#if]"><a href="${context_path}?tag=${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a></li>
+											<li class="[#if filterTagId??][#if filterTagId==tg.id]active[/#if][/#if]"><a href="/list/tag/${tg.id}"># ${tg.text} <span class="badge">${tg.count}</span></a></li>
 											[/#list]
 										</ul>
 									</li>
@@ -55,7 +55,7 @@
 									aria-expanded="false">Filter by tag <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									[#list tags as tg]
-									<li class="[#if filterTag??][#if filterTag==tg.id]active[/#if][/#if]"><a href="${context_path}?tag=${tg.id}" ># ${tg.text} <span class="badge">${tg.count}</span></a></li>
+									<li class="[#if filterTagId??][#if filterTagId==tg.id]active[/#if][/#if]"><a href="/list/tag/${tg.id}" ># ${tg.text} <span class="badge">${tg.count}</span></a></li>
 									[/#list]
 								</ul>
 							</li>
@@ -70,10 +70,10 @@
 							</form>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
-									aria-expanded="false"><span class="">English</span> <span class="caret"></span></a>
+									aria-expanded="false"><span class="">[#if preferredLang??]${preferredLang.native}[#else]English[/#if]</span> <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									[#list langs as lg]
-										<li><a href="#">${lg.native}</a></li>
+										<li [#if preferredLang??][#if preferredLang.code==lg.code]class="disabled"[/#if][/#if]><a href="/lang/${lg.code}">${lg.native}</a></li>
 									[/#list]
 								</ul>
 							</li>

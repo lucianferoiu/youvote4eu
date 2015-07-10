@@ -1,7 +1,7 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 [#setting url_escaping_charset='UTF-8']
 <!DOCTYPE html>
-<html lang="en">
+<html lang="[#if preferredLang??]${preferredLang.code}[#else]en[/#if]">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
