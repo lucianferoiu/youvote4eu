@@ -1,9 +1,7 @@
 package app.controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.javalite.activejdbc.Base;
 import org.slf4j.Logger;
@@ -38,16 +36,17 @@ public class HomeController extends QuestionsListController {
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 
-		String lang = preferredLang();
+		String lang = preferredLangCode();
 		Long tagId = null;
-		String tagParam = param("tag");
+		String tagParam = param("tagId");
 		if (!StringUtils.nullOrEmpty(tagParam)) {
 			tagId = Long.decode(tagParam);
 		}
 		String searchParam = param("searchKeyword");
 		String word = StringUtils.nullOrEmpty(searchParam) || (!searchParam.matches("\\w+")) ? null : searchParam;
 		view("searchKeyword", word);
-		String filter = param("filter");
+
+		String questionsKind = param("questionsKind");
 
 		ArrayList alreadyVotedQuestions = (ArrayList) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 		if (alreadyVotedQuestions == null) {
@@ -60,38 +59,20 @@ public class HomeController extends QuestionsListController {
 		List<FrontpageQuestion> last3ArchivedQuestions = findQuestions(lang, true, true, null, null, 0L, 3L);
 		view("last3ArchivedQuestions", last3ArchivedQuestions);
 
-		//TODO: add the questions to the session and manage them with eventual re-ordering; maybe a caching mechanism..
-		//TODO: extract the questions as FrontpageQuestion DTOs
-		//TODO: consider the citizen language for translated title and description
-		List<FrontpageQuestion> questions = new ArrayList<FrontpageQuestion>();
-		if ("archived".equalsIgnoreCase(filter)) {
+		List<FrontpageQuestion> questions = null;//new ArrayList<FrontpageQuestion>();
+		if ("archived".equalsIgnoreCase(questionsKind)) {
 			questions = findQuestions(lang, true, true, word, tagId);
-		} else if ("newest".equalsIgnoreCase(filter)) {
+			view("activeFilter", "archived");
+		} else if ("newest".equalsIgnoreCase(questionsKind)) {
 			questions = findQuestions(lang, false, true, word, tagId, 0L, 33L);
+			view("activeFilter", "newest");
 		} else {
-			List<FrontpageQuestion> newerQuestions = findQuestions(lang, false, true, word, tagId);
-			List<FrontpageQuestion> popularQuestions = findQuestions(lang, false, false, word, tagId);
-			int howManyNew = Math.floorDiv(newerQuestions.size(), 20);//~%5% newer questions
-
-			//a bit inefficient, but it's more tedious to walk both lists at the same time in a freemarker template...
-			final Set<Long> renderedQuestions = new HashSet<Long>();
-			int howManyNewerQuestions = newerQuestions.size();
-			int howManyPopularQuestions = popularQuestions.size();//these two should be equal, but...
-			for (int i = 0; i < Math.max(howManyNewerQuestions, howManyPopularQuestions); i++) {
-				if (i < howManyPopularQuestions) {
-					FrontpageQuestion fpq = popularQuestions.get(i);
-					if (fpq != null && !renderedQuestions.contains(fpq.id)) {
-						questions.add(fpq);
-						renderedQuestions.add(fpq.id);
-					}
-				}
-				if (i < howManyNewerQuestions && i <= howManyNew) {
-					FrontpageQuestion fpq = newerQuestions.get(i);
-					if (fpq != null && !renderedQuestions.contains(fpq.id)) {
-						questions.add(fpq);
-						renderedQuestions.add(fpq.id);
-					}
-				}
+			questions = findQuestions(lang, false, false, word, tagId);
+			if (tagId != null) {
+				view("activeFilter", "tag");
+				view("filterTagId", tagId);
+			} else {
+				view("activeFilter", "popular");
 			}
 		}
 		view("questions", questions);
@@ -101,7 +82,7 @@ public class HomeController extends QuestionsListController {
 	public void question() {
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
-		String lang = preferredLang();
+		String lang = preferredLangCode();
 
 		Long qId = null;
 		String qIdParam = param("id");
@@ -135,7 +116,7 @@ public class HomeController extends QuestionsListController {
 
 	public void archived() {
 		question();
-		String lang = preferredLang();
+		String lang = preferredLangCode();
 		List<FrontpageQuestion> moreArchivedQuestions = findQuestions(lang, true, false, null, null, 0L, 10L);
 		view("moreArchivedQuestions", moreArchivedQuestions);
 	}
@@ -155,6 +136,8 @@ public class HomeController extends QuestionsListController {
 		view("langs", langs);
 		List<CountedTag> tags = tagsByPubQuestionsCount();
 		view("tags", tags);
+		Lang sessionLang = (Lang) session(Const.CURRENT_LANGUAGE);
+		view("preferredLang", sessionLang);
 	}
 
 	protected void prepareQuestionTranslations(Question question, String lang) {

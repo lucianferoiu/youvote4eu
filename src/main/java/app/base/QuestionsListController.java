@@ -10,7 +10,6 @@ import java.util.Map;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.RowListenerAdapter;
 
-import app.models.Citizen;
 import app.util.StringUtils;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
@@ -125,23 +124,6 @@ public abstract class QuestionsListController extends AnonAuthController {
 		});
 
 		return questions;
-	}
-
-	protected String preferredLang() {
-		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
-		String lang = "en";
-		if (citizen != null) {
-			String citizenLang = citizen.getString("lang");
-			if (!StringUtils.nullOrEmpty(citizenLang)) {
-				lang = citizenLang;
-			}
-		} else {
-			String sessionLang = (String) session(Const.CURRENT_LANGUAGE);
-			if (!StringUtils.nullOrEmpty(sessionLang)) {
-				lang = sessionLang;
-			}
-		}
-		return lang;
 	}
 
 	protected List<CountedTag> tagsByPubQuestionsCount() {
