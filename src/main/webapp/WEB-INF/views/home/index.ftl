@@ -8,7 +8,7 @@
 	&nbsp;
 </div>
 
-<!-- questions container: mobile rendering -->
+<!-- questions container: "mobile" rendering -->
 <div id="qContainerFlow" class="q-cont q-cont-static container-fluid visible-xs-block">
 	[#list questions as q]
 	<div id="q${q.id}" class="q" 
@@ -29,83 +29,76 @@
 	[/#list]
 </div>
 
-<!-- questions container: small grid rendering -->
-<div id="qContainerMedium" class="q-cont container-fluid visible-sm-block visible-md-block">
+<!-- questions container: grid rendering -->
+<div id="qContainerGrid" class="q-cont container-fluid hidden-xs">
+
+<div id="questions-grid-carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="60000" data-keyboard="true">
+  <!-- Indicators -->
+  <ol class="carousel-indicators" >
+    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="0" class="active"></li>
+    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="1"></li>
+    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+		<div class="q-page" style="width:100%; height:800px; position:relative;">
+			<div class="q-bg-2" style="position: absolute; top:150px;left:300px;width:150px;height:100px;">
+				
+			</div>
+			<div class="q-bg-4" style="position: absolute; top:400px;left:100px;width:150px;height:100px;">
+				
+			</div>
+			<div class="q-bg-5" style="position: absolute; top:500px;left:150px;width:150px;height:100px;">
+				
+			</div>
+		</div>
+    </div>
+    <div class="item">
+		<div class="q-page" style="width:100%; height:800px; position:relative;">
+			<div class="q-bg-1" style="position: absolute; top:100px;left:200px;width:150px;height:100px;">
+				
+			</div>
+			<div class="q-bg-6" style="position: absolute; top:300px;left:150px;width:150px;height:100px;">
+				
+			</div>
+			
+		</div>
+    </div>
+    <div class="item">
+		<div class="q-page" style="width:100%; height:800px; position:relative;">
+			<div class="q-bg-5" style="position: absolute; top:100px;left:100px;width:150px;height:100px;">
+				
+			</div>
+			<div class="q-bg-3" style="position: absolute; top:200px;left:300px;width:150px;height:100px;">
+				
+			</div>
+			<div class="q-bg-1" style="position: absolute; top:300px;left:500px;width:150px;height:100px;">
+				
+			</div>
+		</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#questions-grid-carousel" role="button" data-slide="prev" style="width:5%; color:#6D000D;">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#questions-grid-carousel" role="button" data-slide="next" style="width:5%; color:#6D000D;" >
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 	
 </div>
 
-<!-- questions container: big grid rendering -->
-<div id="qContainerBig" class="q-cont container-fluid visible-lg-block">
-	
-</div>
-
-
-
-
-[#--<div id="questionsContainer" class="q-cont">
-
-	[#list questions as q]
-	<div id="q${q.id}" class="q" data-q-votes="${q.votesCount}" data-q-rank="${q.rank}"
-		data-q-id="${q.id}" data-q-sort="[#if q.new]newer[#else]popular[/#if]" [#if q.arch] data-q-archived="yes"[/#if]
-		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
-		<div id="qq${q.id}" class="qq hover">
-			<div class="q-votes">${q.votesCount}[#if q.new && !(q.archivedOn??)][#assign diff = (.now?long / 86400000)?floor - (q.publishedOn?long / 86400000)?floor /]<span class="glyphicon glyphicon-asterisk q-new-hint" aria-hidden="true"></span><span class="q-new-hint"> (${diff} days ago)</span>
-				[/#if]</div>
-			<div class="q-title">${q.title}</div>
-
-			<div class="q-desc">
-				${q.description}
-				<br/>
-				<p class="q-pub pull-right">Published: ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</p>
-			</div>
-			<div class="q-vote-bar">
-				 Vote now:
-				 <button class="btn btn-success">Yes</button>
-				 <button class="btn btn-danger">No</button>
-				 <button class="btn btn-default q-details-btn" data-q-id="${q.id}" [#if q.arch] data-q-archived="yes"[/#if]><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
-			</div>
-			[#if q.archivedOn??]<div class="q-arch hide">Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</div>[/#if]
-		</div>
-	</div>
-	[/#list]
-
-</div>
-
-<div class="side-cont hidden-xs" style="margin-top:0px;">
-	<div class="panel panel-default">
-		<div class="panel-heading">Archived recently</div>
-		<div class="panel-body">
-			[#list last3ArchivedQuestions as q]
-			<div id="aq${q.id}" class="aq" data-q-archived="yes" data-q-id="${q.id}" [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
-					<div class="aq-title">${q.title}</div>
-					<hr/>
-					[#if q.archivedOn??]<div class="aq-arch"><em>Archived: ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</em></div>[/#if]
-					[#if q.voteTally??]
-					<div class="container-fluid">
-						<div class="aq-vote-tally row">
-							<span class="label label-success text-left">Yes: ${((q.voteTally)*100)?string["0.##"]} %</span>&nbsp;
-							<span class="label label-danger text-right">No: ${((1-(q.voteTally))*100)?string["0.##"]} %</span>
-							<button class="btn btn-default pull-right q-details-btn" data-q-id="${q.id}" data-q-archived="yes"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
-						</div>
-					</div>
-					[/#if]
-			</div>
-			[/#list]
-		</div>
-	</div>
-</div> --]
 
 [@content for="footer_script"]
 <script type="text/javascript">
 (function() {
 	var root = this;
-	var idx = window.location.href.lastIndexOf("${context_path}");
-	idx = (idx<=0?window.location.href.lastIndexOf("?")-1:idx);
-	var App = {
-		contextPath:'${context_path}',
-		rootPath: idx<=0?window.location.href:window.location.href.substr(0,idx)
-	};
-	root.App = App;
 }());
 </script>
 [/@content]
