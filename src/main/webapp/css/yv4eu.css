@@ -243,6 +243,50 @@ a:hover, a:focus {
 
 /* ---------- q-cont-grid */
 
+.carousel {
+/*	width:100%;*/
+	top:120px;
+}
+
+.carousel-indicators li {
+	border-color:#6D000D;
+}
+
 .carousel-indicators .active {
 	background-color:#6D000D;
+}
+
+.carousel-inner .item {
+	left:5%;
+	width:90%;
+	background-color:#f8f8f8;
+}
+
+.carousel-inner .q-page {
+	position: relative;
+	padding: 2em;
+}
+
+a.carousel-control {
+	width:5%; 
+	color:#6D000D;
+	z-index: 200;
+}
+
+.carousel-control span {
+	z-index: 200;
+}
+
+.carousel .q {
+	overflow-y:hidden;
+	padding: 8px;
+	margin: 5px;
+	text-overflow: ellipsis;
+}
+
+.carousel-control .icon-prev, .carousel-control .icon-next, .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    z-index: 500;
 }

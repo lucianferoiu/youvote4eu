@@ -31,74 +31,48 @@
 
 <!-- questions container: grid rendering -->
 <div id="qContainerGrid" class="q-cont container-fluid hidden-xs">
+	<div id="qCarousel" class="carousel slide q-carousel" data-ride="carousel" data-wrap="true" data-interval="6000000" data-keyboard="true">
+		<!-- Indicators -->
+		<ol class="carousel-indicators" >
+		</ol>
 
-<div id="questions-grid-carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="60000" data-keyboard="true">
-  <!-- Indicators -->
-  <ol class="carousel-indicators" >
-    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="0" class="active"></li>
-    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="1"></li>
-    <li data-target="#questions-grid-carousel" style="border-color:#6D000D" data-slide-to="2"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-    <div class="item active">
-		<div class="q-page" style="width:100%; height:800px; position:relative;">
-			<div class="q-bg-2" style="position: absolute; top:150px;left:300px;width:150px;height:100px;">
-				
-			</div>
-			<div class="q-bg-4" style="position: absolute; top:400px;left:100px;width:150px;height:100px;">
-				
-			</div>
-			<div class="q-bg-5" style="position: absolute; top:500px;left:150px;width:150px;height:100px;">
-				
-			</div>
-		</div>
-    </div>
-    <div class="item">
-		<div class="q-page" style="width:100%; height:800px; position:relative;">
-			<div class="q-bg-1" style="position: absolute; top:100px;left:200px;width:150px;height:100px;">
-				
-			</div>
-			<div class="q-bg-6" style="position: absolute; top:300px;left:150px;width:150px;height:100px;">
-				
-			</div>
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner" role="listbox">
 			
 		</div>
-    </div>
-    <div class="item">
-		<div class="q-page" style="width:100%; height:800px; position:relative;">
-			<div class="q-bg-5" style="position: absolute; top:100px;left:100px;width:150px;height:100px;">
-				
-			</div>
-			<div class="q-bg-3" style="position: absolute; top:200px;left:300px;width:150px;height:100px;">
-				
-			</div>
-			<div class="q-bg-1" style="position: absolute; top:300px;left:500px;width:150px;height:100px;">
-				
-			</div>
-		</div>
-    </div>
-  </div>
 
-  <!-- Controls -->
-  <a class="left carousel-control" href="#questions-grid-carousel" role="button" data-slide="prev" style="width:5%; color:#6D000D;">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#questions-grid-carousel" role="button" data-slide="next" style="width:5%; color:#6D000D;" >
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+		<!-- Controls -->
+		<a class="left carousel-control" href="#qCarousel" role="button" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="right carousel-control" href="#qCarousel" role="button" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+		[#-- <div class="nav-buffer">
+			&nbsp;
+		</div> --]
+		
+	</div>
 </div>
+
+<div class="aq-cont">
 	
+</div>
+
+<div class="nav-buffer">
+	&nbsp;
 </div>
 
 
 [@content for="footer_script"]
 <script type="text/javascript">
-(function() {
-	var root = this;
-}());
+	var App = {
+		reqURL: '${reqURL}',
+		reqURI: '${reqURI}',
+		reqHostname: '${reqHostname}',
+		reqQuery: '${reqQuery}'
+	};
 </script>
 [/@content]

@@ -8,8 +8,9 @@
 		grids: {
 			'1': {},
 			'2': {},
+			'3': {pageSize:4},
 			'4': {pageSize:5},
-			'5': {}
+			'5': {pageSize:6}
 		}
 		
 	};
@@ -21,25 +22,54 @@
 	///////////////////////////////
 	function init() {
 		
+		//retrieve the quesions
+		var url = App.reqHostname+App.reqURI+(App.reqURI.length>1?'/':'')+'as/objects'+(App.reqQuery.length>0?'?'+App.reqQuery:'');
+		$.get(url,null,function (data,stat,xhr) {
+			YV.questions=data;
+			YV.resize();
+		},'json');
+		
 		$(document).ready(function(){
 			YV.resize();
 			
 			//handlers
 			$(window).resize(function () { YV.resize(); });
-			$(window).scroll(function () { onScroll(); });
+			// $(window).scroll(function () { onScroll(); });
 		});
 	};
+	
+	//	----- resizing -----
 	
 	function resize() {
 		var ww = $(window).width();
 		var wh = $(window).height();
 		relayout(ww,wh);
 		if (YV.gridSize==='3'||YV.gridSize==='4'||YV.gridSize==='5') {
-			resizeCells(YV.gridSize);
+			resizeCells(YV.gridSize,ww,wh);
 		} else {
 			
 		}
 	};
+	
+	function resizeCells(gridSize,winW,winH) {
+		var gridInfo = YV.grids[gridSize];
+		var qGridWidth = Math.min(Math.floor( (winW-30) * 0.90),1600);
+		var qCellWidth = Math.floor(qGridWidth/gridSize);
+		var qCellHeight = Math.floor(qCellWidth/1.5);
+		var qGridHeight = Math.ceil(qCellHeight*gridInfo.pageSize);
+		$('#qCarousel').css('height',qGridHeight+60);
+		$('#qCarousel .carousel-inner').css('height',qGridHeight+60);
+		$('#qCarousel .q-page').css('width',qGridWidth).css('height',qGridHeight);
+		var questions = $('#qCarousel .carousel-inner .q').each(function (idx,q) {
+			var square = $(q).data('square');
+			var x=square[0]*qCellWidth;var y=square[1]*qCellHeight;var sz=square[2];
+			var w = sz*qCellWidth;var h = sz*qCellHeight;
+			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px').css('height',''+(h-10)+'px').css('width',''+(w-10)+'px').show();
+		});
+		
+	}
+	
+	//	----- layouting -----
 	
 	function relayout(winW,winH) {
 		var appropriateLayout = '1';
@@ -49,7 +79,7 @@
 			appropriateLayout = '2';
 		} else if (winW<=992) {
 			appropriateLayout = '3';
-		} else if (winW<=1400) {
+		} else if (winW<=1300) {
 			appropriateLayout = '4';
 		} else {
 			appropriateLayout = '5';
@@ -68,14 +98,16 @@
 		} else if (gridSize==='2') {
 			layoutAsDoubleFlow(winW);
 		} else {
-			
+			$('#qCarousel').hide();
+			layoutAsGridCarousel(gridSize,winW,winH);
+			$('#qCarousel').show();
 		} 
 	}
 	
 	function layoutAsSimpleFlow(winW) {
 		var allQuestions = $('#qContainerFlow .q').detach().removeClass('col-xs-6').addClass('row').css('height','100%');
 		$('#qContainerFlow').empty().append(allQuestions);
-		colorQuestionsBg();
+		colorQuestionsBg('#qContainerFlow');
 		
 	}
 	
@@ -109,24 +141,136 @@
 				$(q1).css('height',maxHeight);$(q2).css('height',maxHeight);
 			});
 			
-			colorQuestionsBg();
+			colorQuestionsBg('#qContainerFlow');
 		},500);
 	}
 	
-	function colorQuestionsBg() {
-		var gs = parseInt(YV.gridSize)+1;
-		$('#qContainerFlow .q').each(function (idx) {
+	function layoutAsGridCarousel(gridSize,winW,winH) {
+		var gridInfo = YV.grids[gridSize];
+		var questions = $('#qContainerFlow .q');
+		if (questions) {
+			var carouselInner = $('#qCarousel .carousel-inner').first();
+			var carouselIndicators = $('#qCarousel .carousel-indicators').first();
+			$('#qCarousel .carousel-inner .item').remove();
+			$(carouselIndicators).empty();
+			// var qTempl = $('#qContainerFlow .q').first().clone(true,true);
+			
+			var idx=0;
+			var pagesCount=0;
+			var questionsInPageCount=0;
+			var questionsInTemplate=0;
+			var page=null;
+			var questionsCount = questions.length;
+			while(idx<questionsCount) {
+				var template=randomTemplate(gridSize,gridInfo.pageSize);
+				if (page==null||questionsInPageCount>=template.capacity) {
+					$('<div class="item"><div id="q-pg-'+pagesCount+'" class="q-page"></div></div>').appendTo(carouselInner);
+					$('<li data-target="#qCarousel" data-slide-to="'+pagesCount+'"></li>').appendTo(carouselIndicators);
+					page = $(('#q-pg-'+pagesCount));
+					pagesCount++;
+					questionsInPageCount=0;
+				}
+				for(var i=0;i<template.capacity;i++) {
+					if (idx>=questionsCount) break;
+					var square = template.squares[i];
+					var q = $(questions[idx]).clone(true,true);
+					$(q).attr('id','q-'+gridSize+'-'+idx);
+					//setup question
+					$(q).css('position','absolute').data('square',square);
+				
+					//
+					$(q).appendTo(page);
+					idx++;questionsInPageCount++;
+				}
+			}
+			$('#qCarousel .q .q-desc').removeClass('visible-xs-block');
+			$('#qCarousel .carousel-inner .item').first().addClass('active');
+			// $('#qCarousel').carousel(0);
+			colorQuestionsBg('#qCarousel');
+			
+		} else {//wait for the request to come through...
+			YV.gridSize=null;
+		}
+		
+	}
+	
+	var layoutTemplates = {
+		'3': [
+			[[0,0,2],[1,2,2]]
+		],
+		'4': [
+			[[0,0,3],[1,3,2]]
+		],
+		'5': [
+			[[0,0,3],[3,1,2],[0,3,2],[2,3,3]]
+		]
+	}
+	
+	function randomTemplate(gridSize,pageSize) {
+		var gridTemplates=layoutTemplates[gridSize];
+		var idx = randomInt(0,gridTemplates.length-1);//random template
+		var template = gridTemplates[idx];
+		var ret = [];
+		var count=0;
+		
+		var bitmap = [];
+		for (var k=0;k<gridSize;k++) {
+			bitmap[k] = [];
+		}
+		
+		var sqaresCount = template.length;
+		for(var j=0;j<sqaresCount;j++) {
+			var square = template[j];
+			var x = square[0];
+			var y = square[1];
+			var sz = square[2];
+			ret.push([x,y,sz]);
+			count = count+1;
+			for (var k=x;k<x+sz;k++) {
+				if (!bitmap[k]) bitmap[k] = [];
+				for(var l=y;l<y+sz;l++) {
+					bitmap[k][l] = 1;
+				}
+			}
+		}
+	
+		//add 1-size random squares for the additional questions
+		var oneSizeCount=0;
+		for (var k=0;k<gridSize;k++) {
+			for(var l=0;l<pageSize;l++) {
+				var bit = bitmap[k][l];
+				if (bit!==1) {
+					if ( Math.random() < ( (1/gridSize) + (0.7*(pageSize-l)/pageSize)) ) {//%chances
+						ret.push([k,l,1]);
+						count++;oneSizeCount++;
+					}
+				}
+			}
+		}
+		
+		return {
+			capacity: count,
+			smallSquares:oneSizeCount,
+			squares: ret
+		};
+	}
+	
+	//	----- UI veneer -----
+
+	function colorQuestionsBg(container) {
+		var gs = YV.gridSize=='1'||YV.gridSize=='2'?parseInt(YV.gridSize)+1:1;
+		$((container+' .q')).each(function (idx) {
 			var randCol = (idx%gs)==0?randomInt(1,5):0;
 			var colorClass = 'q-bg-'+(randCol+1);
 			$(this).removeClass('q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6').addClass(colorClass);
 		});
 	}
 	
-	function resizeCells(gridSize) {
-		
-	}
+	
+	//	----- event handlers -----
 	
 	
+	//	----- utils -----
 
 	function randomInRange(min, max) {
 		return Math.random() * (max - min) + min;
@@ -139,12 +283,5 @@
 	function randomInt(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-	
-	
-	function onScroll() {
-		
-	};
 
-	
-	
 }());
