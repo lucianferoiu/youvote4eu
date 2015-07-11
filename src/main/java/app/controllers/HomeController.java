@@ -1,6 +1,6 @@
 package app.controllers;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.javalite.activejdbc.Base;
@@ -15,6 +15,7 @@ import app.models.Question;
 import app.models.Tag;
 import app.models.Translation;
 import app.services.QuestionsLayouter;
+import app.util.JsonHelper;
 import app.util.StringUtils;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
@@ -33,6 +34,8 @@ public class HomeController extends QuestionsListController {
 	protected QuestionsLayouter layouter;
 
 	public void index() {
+		boolean asJson = "array".equalsIgnoreCase(param("format")) || "objects".equalsIgnoreCase(param("format"));//as/json or .json etc. are killed by the front-server, so they cannot be used as segments
+
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 
@@ -42,41 +45,58 @@ public class HomeController extends QuestionsListController {
 		if (!StringUtils.nullOrEmpty(tagParam)) {
 			tagId = Long.decode(tagParam);
 		}
+		String questionsKind = param("questionsKind");
 		String searchParam = param("searchKeyword");
 		String word = StringUtils.nullOrEmpty(searchParam) || (!searchParam.matches("\\w+")) ? null : searchParam;
-		view("searchKeyword", word);
+		if (!asJson) view("searchKeyword", word);
 
-		String questionsKind = param("questionsKind");
-
-		ArrayList alreadyVotedQuestions = (ArrayList) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
-		if (alreadyVotedQuestions == null) {
-			alreadyVotedQuestions = (ArrayList) Base.firstColumn("select question_id from votes where citizen_id=?", citizenId);
-			session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
+		HashSet<Long> alreadyVotedQuestions = null;
+		synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
+			alreadyVotedQuestions = (HashSet<Long>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
+			if (alreadyVotedQuestions == null) {
+				List<Long> votedQuestions = Base.firstColumn("select distinct question_id from votes where citizen_id=?", citizenId);
+				alreadyVotedQuestions = new HashSet<Long>(votedQuestions);
+				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
+			}
 		}
 
-		prepareHeaderValues();
+		if (!asJson) prepareHeaderValues();
 
-		List<FrontpageQuestion> last3ArchivedQuestions = findQuestions(lang, true, true, null, null, 0L, 3L);
-		view("last3ArchivedQuestions", last3ArchivedQuestions);
+		if (!asJson) {
+			List<FrontpageQuestion> last3ArchivedQuestions = findQuestions(lang, true, true, null, null, 0L, 3L);
+			view("last3ArchivedQuestions", last3ArchivedQuestions);
+		}
 
 		List<FrontpageQuestion> questions = null;//new ArrayList<FrontpageQuestion>();
 		if ("archived".equalsIgnoreCase(questionsKind)) {
 			questions = findQuestions(lang, true, true, word, tagId);
-			view("activeFilter", "archived");
+			if (!asJson) view("activeFilter", "archived");
 		} else if ("newest".equalsIgnoreCase(questionsKind)) {
 			questions = findQuestions(lang, false, true, word, tagId, 0L, 33L);
-			view("activeFilter", "newest");
+			if (!asJson) view("activeFilter", "newest");
 		} else {
 			questions = findQuestions(lang, false, false, word, tagId);
-			if (tagId != null) {
-				view("activeFilter", "tag");
-				view("filterTagId", tagId);
-			} else {
-				view("activeFilter", "popular");
+			if (!asJson) {
+				if (tagId != null) {
+					view("activeFilter", "tag");
+					view("filterTagId", tagId);
+				} else {
+					view("activeFilter", "popular");
+				}
 			}
 		}
-		view("questions", questions);
 
+		for (FrontpageQuestion fpq : questions) {
+			fpq.canVote = !(fpq.isArch || alreadyVotedQuestions.contains(fpq.id));
+		}
+
+		if (asJson) {
+			String json = JsonHelper.toListJson(questions);
+			respond(json).contentType("application/json").status(200);
+			return;
+		} else {
+			view("questions", questions);
+		}
 	}
 
 	public void question() {
@@ -138,6 +158,14 @@ public class HomeController extends QuestionsListController {
 		view("tags", tags);
 		Lang sessionLang = (Lang) session(Const.CURRENT_LANGUAGE);
 		view("preferredLang", sessionLang);
+
+		String url = StringUtils.nvl(url());
+		String uri = StringUtils.nvl(uri());
+		view("reqURL", url);
+		view("reqURI", uri);
+		int pos = url.indexOf(uri, protocol().length() + 1);
+		view("reqHostname", StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url));
+		view("reqQuery", StringUtils.nvl(queryString()));
 	}
 
 	protected void prepareQuestionTranslations(Question question, String lang) {

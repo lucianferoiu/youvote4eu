@@ -7,4 +7,8 @@ public class StringUtils {
 		return s.equalsIgnoreCase("") || s.trim().equalsIgnoreCase("");//it seems like a double test, but most often, the || will save the need for a call to trim() 
 	}
 
+	public static String nvl(Object obj) {
+		return obj == null ? "" : obj.toString();
+	}
+
 }
