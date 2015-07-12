@@ -43,6 +43,8 @@
 	function resize() {
 		var ww = $(window).width();
 		var wh = $(window).height();
+		var navBarH = $('.navbar').height();
+		$('.nav-buffer').css('height',''+(navBarH+20)+'px');
 		relayout(ww,wh);
 		if (YV.gridSize==='3'||YV.gridSize==='4'||YV.gridSize==='5') {
 			resizeCells(YV.gridSize,ww,wh);
@@ -57,15 +59,19 @@
 		var qCellWidth = Math.floor(qGridWidth/gridSize);
 		var qCellHeight = Math.floor(qCellWidth/1.5);
 		var qGridHeight = Math.ceil(qCellHeight*gridInfo.pageSize);
+		$('#qContainerGrid').css('height',qGridHeight+60);
 		$('#qCarousel').css('height',qGridHeight+60);
 		$('#qCarousel .carousel-inner').css('height',qGridHeight+60);
-		$('#qCarousel .q-page').css('width',qGridWidth).css('height',qGridHeight);
+		$('#qCarousel .q-page').css('width',qGridWidth-10).css('height',qGridHeight);
+		
 		var questions = $('#qCarousel .carousel-inner .q').each(function (idx,q) {
 			var square = $(q).data('square');
 			var x=square[0]*qCellWidth;var y=square[1]*qCellHeight;var sz=square[2];
 			var w = sz*qCellWidth;var h = sz*qCellHeight;
-			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px').css('height',''+(h-10)+'px').css('width',''+(w-10)+'px').show();
+			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px').css('height',''+(h-15)+'px').css('width',''+(w-15)+'px').show();
 		});
+		
+		$('.aq').height((qGridWidth-20)/4);
 		
 	}
 	
@@ -75,11 +81,11 @@
 		var appropriateLayout = '1';
 		if (winW<=480) {
 			appropriateLayout = '1';
-		} else if (winW<=768) {
+		} else if (winW<768) {
 			appropriateLayout = '2';
-		} else if (winW<=992) {
+		} else if (winW<992) {
 			appropriateLayout = '3';
-		} else if (winW<=1300) {
+		} else if (winW<1300) {
 			appropriateLayout = '4';
 		} else {
 			appropriateLayout = '5';
@@ -163,24 +169,25 @@
 			var questionsCount = questions.length;
 			while(idx<questionsCount) {
 				var template=randomTemplate(gridSize,gridInfo.pageSize);
-				if (page==null||questionsInPageCount>=template.capacity) {
+				// if (page==null||questionsInPageCount>=template.capacity) {
 					$('<div class="item"><div id="q-pg-'+pagesCount+'" class="q-page"></div></div>').appendTo(carouselInner);
 					$('<li data-target="#qCarousel" data-slide-to="'+pagesCount+'"></li>').appendTo(carouselIndicators);
 					page = $(('#q-pg-'+pagesCount));
 					pagesCount++;
-					questionsInPageCount=0;
-				}
+					//questionsInPageCount=0;
+				// }
 				for(var i=0;i<template.capacity;i++) {
 					if (idx>=questionsCount) break;
 					var square = template.squares[i];
 					var q = $(questions[idx]).clone(true,true);
 					$(q).attr('id','q-'+gridSize+'-'+idx);
 					//setup question
-					$(q).css('position','absolute').data('square',square);
+					$(q).css('position','absolute').data('square',square).addClass(('q-sz-'+square[2]));
 				
 					//
 					$(q).appendTo(page);
-					idx++;questionsInPageCount++;
+					idx++;
+					//questionsInPageCount++;
 				}
 			}
 			$('#qCarousel .q .q-desc').removeClass('visible-xs-block');

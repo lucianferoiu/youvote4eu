@@ -201,6 +201,45 @@ a:hover, a:focus {
 	text-overflow: ellipsis;
 }
 
+.q-tally {
+	font-weight: 900;
+	font-size: 1.2em;
+	line-height: 1.2em;
+	color: #990012;
+}
+
+.q:hover .q-tally {
+	color: white;
+}
+
+.aq-cont {
+	margin:2em;
+}
+
+.aq {
+	border: 1px solid transparent !important;
+	font-size: 0.9em;
+}
+
+.aq-votes-tally {
+	padding-left: 2.4em;
+	padding-right: 2.4em;
+}
+
+.aq-milestones {
+	padding-left: 2.4em;
+	padding-right: 2.4em;
+}
+
+.section-title {
+	color: #6D000D;
+	font-weight: 200;
+	font-size: 1.5em;
+	line-height: 1.4em;
+/*	padding-left: 1.4em;
+	padding-right: 1.4em;
+*/}
+
 /* ----- q-cont-static... */
 .q-cont-static {
 	padding: 1em;
@@ -219,11 +258,11 @@ a:hover, a:focus {
 }
 
 .q-cont-static, .q-cont-static footer {
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 
 .q-cont-static blockquote {
-	font-size: 1em;
+	font-size: 0.9em;
 }
 
 .q-cont-static .q-title {
@@ -241,11 +280,20 @@ a:hover, a:focus {
 	color: white;
 }
 
+.q-cont-static .aq-votes-tally {
+	font-size: 1.2em;
+}
+
+.q-cont-static .aq-milestones footer {
+	font-size: 1.1em;
+}
+
+
 /* ---------- q-cont-grid */
 
 .carousel {
 /*	width:100%;*/
-	top:120px;
+/*	top:120px;*/
 }
 
 .carousel-indicators li {
@@ -256,15 +304,19 @@ a:hover, a:focus {
 	background-color:#6D000D;
 }
 
-.carousel-inner .item {
+.carousel-inner {
+}
+
+.carousel-inner .item.active {
 	left:5%;
-	width:90%;
-	background-color:#f8f8f8;
+	width:89%;
+	background-color: white;
 }
 
 .carousel-inner .q-page {
 	position: relative;
-	padding: 2em;
+	padding: 1em;
+	width:90%;
 }
 
 a.carousel-control {
@@ -285,8 +337,31 @@ a.carousel-control {
 }
 
 .carousel-control .icon-prev, .carousel-control .icon-next, .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    z-index: 500;
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	z-index: 500;
 }
+
+.carousel-control:hover, .carousel-control:focus {
+	color: #990012;
+	opacity: 0.9;
+	outline: 0 none;
+	text-decoration: none;
+}
+
+/* ------- q-cont-grid sizes */
+
+.q-sz-1 {
+	
+}
+
+.q-sz-1 {
+	
+}
+
+.q-sz-1 {
+	
+}
+
+
