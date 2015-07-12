@@ -166,6 +166,7 @@ public class HomeController extends QuestionsListController {
 		int pos = url.indexOf(uri, protocol().length() + 1);
 		view("reqHostname", StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url));
 		view("reqQuery", StringUtils.nvl(queryString()));
+		view("isMobileAgent", isMobileAgent());
 	}
 
 	protected void prepareQuestionTranslations(Question question, String lang) {

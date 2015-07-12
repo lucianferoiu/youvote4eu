@@ -148,11 +148,12 @@
 			});
 			
 			colorQuestionsBg('#qContainerFlow');
-		},500);
+		},150);
 	}
 	
 	function layoutAsGridCarousel(gridSize,winW,winH) {
 		var gridInfo = YV.grids[gridSize];
+		$('#qCarousel').carousel('pause');
 		var questions = $('#qContainerFlow .q');
 		if (questions) {
 			var carouselInner = $('#qCarousel .carousel-inner').first();
@@ -169,13 +170,10 @@
 			var questionsCount = questions.length;
 			while(idx<questionsCount) {
 				var template=randomTemplate(gridSize,gridInfo.pageSize);
-				// if (page==null||questionsInPageCount>=template.capacity) {
 					$('<div class="item"><div id="q-pg-'+pagesCount+'" class="q-page"></div></div>').appendTo(carouselInner);
 					$('<li data-target="#qCarousel" data-slide-to="'+pagesCount+'"></li>').appendTo(carouselIndicators);
 					page = $(('#q-pg-'+pagesCount));
 					pagesCount++;
-					//questionsInPageCount=0;
-				// }
 				for(var i=0;i<template.capacity;i++) {
 					if (idx>=questionsCount) break;
 					var square = template.squares[i];
@@ -183,33 +181,36 @@
 					$(q).attr('id','q-'+gridSize+'-'+idx);
 					//setup question
 					$(q).css('position','absolute').data('square',square).addClass(('q-sz-'+square[2]));
-				
-					//
 					$(q).appendTo(page);
 					idx++;
-					//questionsInPageCount++;
 				}
 			}
 			$('#qCarousel .q .q-desc').removeClass('visible-xs-block');
 			$('#qCarousel .carousel-inner .item').first().addClass('active');
-			// $('#qCarousel').carousel(0);
+			
 			colorQuestionsBg('#qCarousel');
 			
 		} else {//wait for the request to come through...
 			YV.gridSize=null;
 		}
-		
+		setTimeout( function(){
+			$('#qCarousel').carousel('cycle');
+		},200);
 	}
 	
 	var layoutTemplates = {
 		'3': [
-			[[0,0,2],[1,2,2]]
+			[[0,0,2],[1,2,2]],[[1,0,2],[0,2,2]],[[0,1,2]],[[1,1,2]],[[0,0,2],[0,2,2]],[[1,0,2],[1,2,2]],[[0,1,3]]
 		],
 		'4': [
-			[[0,0,3],[1,3,2]]
+			[[0,0,3],[1,3,2]],[[0,0,3],[0,3,2],[2,3,2]],[[0,0,3],[2,3,2]],[[1,0,3],[0,3,2]],[[1,1,3]],[[0,0,2],[1,2,3]],
+			[[0,0,2],[2,0,2],[1,2,2]],[[0,0,2],[2,0,2],[1,3,2]],[[0,0,2],[2,0,2],[2,2,2],[0,3,2]],[[0,0,2],[2,0,2],[0,2,2],[2,3,2]],[[0,0,2],[2,1,2],[0,2,2]],[[0,0,2],[1,2,2]],
+			[[2,1,2],[0,2,2],[2,3,2]],[[2,0,2],[2,2,2],[0,3,2]],[[0,1,2],[2,2,2],[0,3,2]],[[0,1,2],[2,1,2],[2,3,2]],[[2,0,2],[0,2,2],[2,2,2]],[[0,1,2],[2,0,2],[0,3,2],[2,3,2]]
 		],
 		'5': [
-			[[0,0,3],[3,1,2],[0,3,2],[2,3,3]]
+			[[0,0,3],[3,1,2],[0,3,2],[2,3,3]],[[0,0,3],[3,1,2],[1,3,3]],[[1,0,3],[0,3,3],[3,3,2]],[[1,0,3],[0,3,2],[2,4,2]],[[0,0,2],[2,0,3],[0,3,3],[3,4,2]],
+			[[0,0,2],[2,0,3],[0,2,2],[3,3,2]],[[1,0,2],[3,0,2],[2,2,3],[0,3,2]],[[1,0,2],[0,2,2],[2,2,3],[0,4,2]],[[0,0,2],[2,0,2],[0,3,2],[2,3,3]],[[0,0,2],[2,1,2],[0,4,2],[2,3,3]],
+			[[0,0,3],[3,0,2],[0,3,2],[2,3,2]],[[0,0,3],[3,1,2],[0,3,2],[3,4,2]],[[0,1,3],[3,0,2],[3,3,2],[1,4,2]],[[1,0,2],[3,1,2],[0,2,3],[3,4,2]],[[1,0,2],[0,2,3],[3,1,2],[3,3,2]]
 		]
 	}
 	
