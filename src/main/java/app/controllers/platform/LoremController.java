@@ -16,6 +16,7 @@ import app.models.Partner;
 import app.models.Question;
 import app.models.QuestionsTags;
 import app.models.Translation;
+import app.models.Vote;
 import app.util.StringUtils;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -142,6 +143,8 @@ public class LoremController extends PlatformController {
 
 			for (int i = 0; i < howMany; i++) {
 				Question q = new Question();
+				Long popularVotes = null;
+				Double popularVoteTally = null;
 				q.set("title", toQuestion(titles.get(t++)));
 				q.set("description", descriptions.get(d++));
 				String text = htmlContents.get(h++).toString();
@@ -158,10 +161,13 @@ public class LoremController extends PlatformController {
 				q.setLong("support",
 						(random.nextInt(3) * (random.nextInt(11) * random.nextInt(17)) + random.nextInt(7)) + random.nextInt(23));
 				if (q.getBoolean("is_published")) {
-					q.setLong("popular_votes", (random.nextInt(3) * (random.nextInt(37) * random.nextInt(17)) + random.nextInt(19))
-							+ random.nextInt(79));
-					if (q.getLong("popular_votes") > 0) {
-						q.setDouble("popular_vote_tally", (3 + random.nextInt(90)) / 100.0D);
+					popularVotes = new Long(random.nextInt(3) * (random.nextInt(37) * random.nextInt(17)) + random.nextInt(19))
+							+ random.nextInt(79);
+					q.setLong("popular_votes", popularVotes);
+					if (popularVotes > 0) {
+						popularVoteTally = new Double((3 + random.nextInt(90)) / 100.0D);
+						q.setDouble("popular_vote_tally", popularVoteTally);
+
 					}
 					long openMillis = nextLong(aYearAgoMillis, nowMillis - (random.nextInt(150) * dayMillis));
 					long closedMillis = nextLong(Math.min(openMillis + (5 * dayMillis), openMillis + (random.nextInt(50) * dayMillis)),
@@ -198,6 +204,15 @@ public class LoremController extends PlatformController {
 
 				q.saveIt();
 				Long qId = q.getLongId();
+
+				//create fake votes
+				int yesVotes = (int) Math.round(popularVotes * popularVoteTally);
+				for (int k = 0; k < yesVotes; k++) {
+					Vote.createIt("questionId", qId, "value", 1, "validated", true, "citizen_id", -2L);
+				}
+				for (int k = yesVotes; k < popularVotes; k++) {
+					Vote.createIt("questionId", qId, "value", 0, "validated", true, "citizen_id", -3L);
+				}
 
 				//translations
 				for (Lang lang : langs) {

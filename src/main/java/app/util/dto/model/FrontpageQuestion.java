@@ -15,7 +15,8 @@ public class FrontpageQuestion {
 	public Integer rank;
 	public Double voteTally;
 	public Double officialVoteTally;
-	public boolean canVote;
+	public Boolean canVote;
+	public Integer voted;
 
 	//bloody freemarker, makes me generate cluttering getters/setters
 	public Long getId() {
@@ -112,6 +113,14 @@ public class FrontpageQuestion {
 
 	public void setCanVote(boolean canVote) {
 		this.canVote = canVote;
+	}
+
+	public Integer getVoted() {
+		return voted;
+	}
+
+	public void setVoted(Integer voted) {
+		this.voted = voted;
 	}
 
 }

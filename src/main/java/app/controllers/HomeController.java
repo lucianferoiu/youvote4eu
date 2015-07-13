@@ -1,19 +1,33 @@
 package app.controllers;
 
-import java.util.HashSet;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.RowListenerAdapter;
+import org.javalite.activeweb.Configuration;
+import org.javalite.activeweb.annotations.GET;
+import org.javalite.activeweb.annotations.POST;
+import org.javalite.activeweb.annotations.PUT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.base.Const;
 import app.base.QuestionsListController;
 import app.models.Citizen;
+import app.models.EmailValidation;
 import app.models.Lang;
 import app.models.Question;
 import app.models.Tag;
+import app.models.Token;
 import app.models.Translation;
+import app.models.Vote;
 import app.services.QuestionsLayouter;
 import app.util.JsonHelper;
 import app.util.StringUtils;
@@ -36,7 +50,7 @@ public class HomeController extends QuestionsListController {
 	public void index() {
 		boolean asJson = "array".equalsIgnoreCase(param("format")) || "objects".equalsIgnoreCase(param("format"));//as/json or .json etc. are killed by the front-server, so they cannot be used as segments
 
-		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
+		Citizen citizen = getOrCreateCitizen();
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 
 		String lang = preferredLangCode();
@@ -50,12 +64,22 @@ public class HomeController extends QuestionsListController {
 		String word = StringUtils.nullOrEmpty(searchParam) || (!searchParam.matches("\\w+")) ? null : searchParam;
 		if (!asJson) view("searchKeyword", word);
 
-		HashSet<Long> alreadyVotedQuestions = null;
+		HashMap<Long, Integer> alreadyVotedQuestions = null;
 		synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
-			alreadyVotedQuestions = (HashSet<Long>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
+			alreadyVotedQuestions = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 			if (alreadyVotedQuestions == null) {
-				List<Long> votedQuestions = Base.firstColumn("select distinct question_id from votes where citizen_id=?", citizenId);
-				alreadyVotedQuestions = new HashSet<Long>(votedQuestions);
+				final HashMap<Long, Integer> citizenVotes = new HashMap<Long, Integer>();
+				Base.find("select question_id, value from votes where citizen_id=?", citizenId).with(new RowListenerAdapter() {
+
+					@Override
+					public void onNext(Map<String, Object> row) {
+						Long id = (Long) row.get("question_id");
+						Integer value = (Integer) row.get("value");
+						citizenVotes.put(id, value);
+					}
+
+				});
+				alreadyVotedQuestions = new HashMap<Long, Integer>(citizenVotes);
 				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVotedQuestions);
 			}
 		}
@@ -87,8 +111,18 @@ public class HomeController extends QuestionsListController {
 		}
 
 		for (FrontpageQuestion fpq : questions) {
-			fpq.canVote = !(fpq.isArch || alreadyVotedQuestions.contains(fpq.id));
+			Integer voteValue = alreadyVotedQuestions.get(fpq.id);
+			if (voteValue != null) {
+				fpq.canVote = false;
+				fpq.voted = voteValue;
+			} else {
+				fpq.canVote = !(fpq.isArch);
+			}
+
 		}
+		view("validatedCitizen", citizen != null && citizen.getBoolean("validated"));
+		Long pendingValidations = EmailValidation.count("added_by=? AND validated=false AND is_citizen=true", citizenId);
+		view("pendingValidation", pendingValidations > 0);
 
 		if (asJson) {
 			String json = JsonHelper.toListJson(questions);
@@ -100,7 +134,7 @@ public class HomeController extends QuestionsListController {
 	}
 
 	public void question() {
-		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
+		Citizen citizen = getOrCreateCitizen();
 		Long citizenId = citizen == null ? -1L : citizen.getLongId();
 		String lang = preferredLangCode();
 
@@ -132,6 +166,10 @@ public class HomeController extends QuestionsListController {
 
 		prepareQuestionTranslations(question, lang);
 		prepareHeaderValues();
+		view("activeFilter", "none");
+		view("validatedCitizen", citizen != null && citizen.getBoolean("validated"));
+		Long pendingValidations = EmailValidation.count("added_by=? AND validated=false AND is_citizen=true", citizenId);
+		view("pendingValidation", pendingValidations > 0);
 	}
 
 	public void archived() {
@@ -147,6 +185,190 @@ public class HomeController extends QuestionsListController {
 
 	public void catchall() {
 		redirect("/home");
+	}
+
+	@PUT
+	public void vote() {
+		String qIdParam = param("qId");
+		String voteValueParam = param("voteValue");
+		Long qId = null;
+		Integer voteValue = null;
+		if (!StringUtils.nullOrEmpty(qIdParam)) {
+			qId = Long.decode(qIdParam);
+		}
+		if (!StringUtils.nullOrEmpty(voteValueParam)) {
+			voteValue = Integer.decode(voteValueParam);
+		}
+
+		if (qId == null || voteValue == null) {
+			respond("wrong parameters").contentType("application/json").status(400);
+			return;
+		}
+
+		Question q = Question.findById(qId);
+		if (q == null) {
+			respond("question not found").contentType("application/json").status(404);
+			return;
+		}
+
+		Citizen citizen = getOrCreateCitizen();
+		if (citizen != null) {
+			Vote vote = Vote.createIt("question_id", qId, "citizen_id", citizen.getLongId(), //
+					"value", voteValue, "validated", citizen.getBoolean("validated"));
+			synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
+				HashMap<Long, Integer> alreadyVoted = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
+				if (alreadyVoted == null) {
+					alreadyVoted = new HashMap<Long, Integer>();
+				}
+				alreadyVoted.put(qId, voteValue);
+				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVoted);
+			}
+
+			Long currentVoteCount = q.getLong("popular_votes");
+			BigDecimal currentVoteTally = q.getBigDecimal("popular_vote_tally");
+			//TODO: relegate theese as batch operations...
+			Long yesVotes = Vote.count("question_id=? AND value=1 AND validated=true", q.getLongId());
+			Long noVotes = Vote.count("question_id=? AND value=0 AND validated=true", q.getLongId());
+			//
+			if (yesVotes > 0 || noVotes > 0) {//no point in 
+				q.setLong("popular_votes", yesVotes + noVotes);
+				q.setBigDecimal("popular_vote_tally", new BigDecimal(yesVotes / yesVotes + noVotes));
+			} else {
+				q.setLong("popular_votes", currentVoteCount + 1);
+			}
+			q.saveIt();
+
+			respond("").contentType("application/json").status(204);
+		} else {
+			//respond("wrong parameters").contentType("application/json").status(400);
+			return;
+		}
+	}
+
+	protected Citizen getOrCreateCitizen() {
+		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
+		if (citizen == null) {//first-time voter
+			String token = cookieValue(Const.AUTH_COOKIE_NAME);
+			if (StringUtils.nullOrEmpty(token)) {
+				respond("no authentication token").contentType("application/json").status(403);
+				return null;
+			}
+			Token authToken = Token.findFirst("token=?", token);
+			if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
+				citizen = Citizen.createIt("validated", false);
+				authToken = Token.createIt("token", token, "validated", false, "citizen_id", citizen.getLongId());
+			} else {
+				citizen = Citizen.findById(authToken.getLong("citizen_id"));
+			}
+			if (citizen == null) {
+				respond("wrong citizen or token information").contentType("application/json").status(400);
+				return null;
+			}
+			session(Const.AUTH_CITIZEN, citizen);
+		}
+		return citizen;
+	}
+
+	@POST
+	public void sendValidationEmail() {
+		String email = param("citizen-email");
+		String countryCode = param("citizen-country");
+		if (StringUtils.nullOrEmpty(email) || (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
+			flash("citizen_identification_failure", "wrong_params");
+			redirect("/error");
+			return;
+		}
+		email = email.trim().toLowerCase();//sanitize the email address
+		String lang = preferredLangCode();
+
+		Citizen citizen = getOrCreateCitizen();
+
+		String url = StringUtils.nvl(url());
+		String uri = StringUtils.nvl(uri());
+		int pos = url.indexOf(uri, protocol().length() + 1);
+		String reqHostname = StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url);
+		String shaEmail = messageDigester.digest(email);
+		String valUrl = reqHostname + "/citizen/" + shaEmail;
+		String subj = "Validate your email so you may vote on YouVoteForEurope";
+		Map<String, Object> vals = new HashMap<String, Object>();
+		vals.put("url", valUrl);
+
+		StringWriter writer = new StringWriter();
+		Configuration.getTemplateManager().merge(vals, "/other/mail/citizenValidation", null, null, writer);
+
+		LocalDateTime now = LocalDateTime.now();
+		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
+		EmailValidation validation = EmailValidation.create("email", email, "token", shaEmail, "validated", false, "added_by",
+				citizen.getLongId());
+		validation.setTimestamp("valid_until", tomorrow);
+		validation.setBoolean("is_citizen", true);//the kind of email verification
+		validation.saveIt();
+
+		mailer.sendMail(email, subj, writer.toString(), true);
+		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}", validation, url);
+
+		redirect("/home");
+	}
+
+	@GET
+	public void validateCitizen() {
+		String code = param("validationCode");
+		if (StringUtils.nullOrEmpty(code)) {
+			flash("citizen_identification_failure", "validation_code_error");
+			redirect("/home");
+			return;
+		}
+
+		code = code.trim();
+		EmailValidation validation = EmailValidation.findFirst(
+				"token=? and validated=false and is_citizen=true and valid_until>=current_timestamp ", code);
+		if (validation == null) {//no validation or expired
+			log.warn("Email validation error: cannot find one for code {}", code);
+			flash("citizen_identification_failure", "validation_timeout");
+			redirect("/home");
+			return;
+		}
+
+		//all's well
+		Citizen citizen = null;
+		String token = cookieValue(Const.AUTH_COOKIE_NAME);
+		if (StringUtils.nullOrEmpty(token)) {
+			respond("no authentication token").status(403);
+			return;
+		}
+		Token authToken = Token.findFirst("token=?", token);
+		if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
+			citizen = Citizen.findById(validation.getLong("added_by"));
+		} else {
+			citizen = Citizen.findById(authToken.getLong("citizen_id"));
+		}
+		if (citizen == null) {
+			citizen = Citizen.createIt("");
+		}
+
+		List<EmailValidation> pastValidationsOfSameToken = EmailValidation.find("token=? and validated=true and is_citizen=true", code)
+				.orderBy("updated_at ASC");
+		if (!pastValidationsOfSameToken.isEmpty()) {//citizen re-logging from other machine... transfer all new votes to the old one
+			EmailValidation oldestValidation = pastValidationsOfSameToken.get(0);
+			Long pastCitizenId = oldestValidation.getLong("added_by");
+			Base.exec("UPDATE votes SET citizen_id=?, validated=? WHERE citizen_id=?", pastCitizenId, true, citizen.getLongId());
+			citizen = Citizen.findById(pastCitizenId);
+			session(Const.AUTH_CITIZEN, citizen);
+			if (authToken != null) {
+				authToken.setLong("citizen_id", pastCitizenId).setBoolean("validated", true).saveIt();
+			}
+		} else {//first validation ever
+			Base.exec("UPDATE votes SET validated=? WHERE citizen_id=?", true, citizen.getLongId());
+			citizen.setBoolean("validated", true).saveIt();
+			if (authToken != null) {
+				authToken.setBoolean("validated", true).saveIt();
+			}
+			session(Const.AUTH_CITIZEN, citizen);
+		}
+
+		validation.set("validated", true).saveIt();//for future reference
+		redirect("/home");
+
 	}
 
 	//////////////////////////////////

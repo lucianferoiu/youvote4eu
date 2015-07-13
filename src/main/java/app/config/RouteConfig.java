@@ -24,6 +24,10 @@ public class RouteConfig extends AbstractRouteConfig {
 		//individual questions
 		route("/question/{id}").to(app.controllers.HomeController.class).action("question").get();
 		route("/archived/{id}").to(app.controllers.HomeController.class).action("archived").get();
-		route("/vote/{id}/{value}").to(app.controllers.HomeController.class).action("vote").put();
+		//voting
+		route("/vote/{qId}/{voteValue}").to(app.controllers.HomeController.class).action("vote").put();
+		//citizen validation
+		route("/send-validation-mail").to(app.controllers.HomeController.class).action("sendValidationEmail").post();
+		route("/citizen/{validationCode}").to(app.controllers.HomeController.class).action("validateCitizen").get();
 	}
 }

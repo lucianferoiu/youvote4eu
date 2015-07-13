@@ -4,6 +4,8 @@ import org.javalite.activeweb.AppController;
 
 import app.models.Citizen;
 import app.models.Lang;
+import app.services.Mailer;
+import app.services.MessageDigester;
 import app.services.TokenGenerator;
 import app.util.StringUtils;
 
@@ -13,6 +15,12 @@ public abstract class AnonAuthController extends AppController {
 
 	@Inject
 	protected TokenGenerator tokenGenerator;
+
+	@Inject
+	protected MessageDigester messageDigester;
+
+	@Inject
+	protected Mailer mailer;
 
 	@Override
 	protected String getLayout() {
