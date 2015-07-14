@@ -63,7 +63,7 @@ public abstract class AnonAuthController extends AppController {
 				session(Const.CURRENT_LANGUAGE, sessionLang);
 				Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 				if (citizen != null) {
-					citizen.set("lang", langCode).save();
+					citizen.set("lang", langCode).saveIt();
 				}
 			}
 		}

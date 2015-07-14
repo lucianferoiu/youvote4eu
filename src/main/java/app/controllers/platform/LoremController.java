@@ -156,8 +156,8 @@ public class LoremController extends PlatformController {
 
 				q.setLong("proposed_by", partners.get(random.nextInt(partnersCount - 1)));
 				q.setBoolean("is_public_agenda", random.nextBoolean());
-				q.setBoolean("is_published", random.nextBoolean());
-				q.setBoolean("is_archived", q.getBoolean("is_published") && random.nextBoolean());
+				q.setBoolean("is_published", random.nextBoolean());//~ half are published
+				q.setBoolean("is_archived", q.getBoolean("is_published") && (random.nextBoolean() || random.nextBoolean()));// .. and ~ three quarters are archived
 				q.setLong("support",
 						(random.nextInt(3) * (random.nextInt(11) * random.nextInt(17)) + random.nextInt(7)) + random.nextInt(23));
 				if (q.getBoolean("is_published")) {

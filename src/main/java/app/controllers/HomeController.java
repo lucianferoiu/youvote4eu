@@ -213,15 +213,18 @@ public class HomeController extends QuestionsListController {
 
 		Citizen citizen = getOrCreateCitizen();
 		if (citizen != null) {
-			Vote vote = Vote.createIt("question_id", qId, "citizen_id", citizen.getLongId(), //
-					"value", voteValue, "validated", citizen.getBoolean("validated"));
-			synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
-				HashMap<Long, Integer> alreadyVoted = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
-				if (alreadyVoted == null) {
-					alreadyVoted = new HashMap<Long, Integer>();
+			Long duplicates = Vote.count("question_id=? AND citizen_id=?", qId, citizen.getLongId());
+			if (duplicates == null || duplicates <= 0) {//extra-cautious to avoid duplicates (i.e. when using two different devices simultaneously, the session questions can be obsolete)
+				Vote vote = Vote.createIt("question_id", qId, "citizen_id", citizen.getLongId(), //
+						"value", voteValue, "validated", citizen.getBoolean("validated"));
+				synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
+					HashMap<Long, Integer> alreadyVoted = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
+					if (alreadyVoted == null) {
+						alreadyVoted = new HashMap<Long, Integer>();
+					}
+					alreadyVoted.put(qId, voteValue);
+					session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVoted);
 				}
-				alreadyVoted.put(qId, voteValue);
-				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVoted);
 			}
 
 			Long currentVoteCount = q.getLong("popular_votes");
@@ -232,9 +235,9 @@ public class HomeController extends QuestionsListController {
 			//
 			if (yesVotes > 0 || noVotes > 0) {//no point in 
 				q.setLong("popular_votes", yesVotes + noVotes);
-				q.setBigDecimal("popular_vote_tally", new BigDecimal(yesVotes / yesVotes + noVotes));
+				q.setBigDecimal("popular_vote_tally", new BigDecimal(yesVotes / (yesVotes + noVotes)));
 			} else {
-				q.setLong("popular_votes", currentVoteCount + 1);
+				q.setLong("popular_votes", currentVoteCount + 1 - duplicates);
 			}
 			q.saveIt();
 
@@ -255,8 +258,10 @@ public class HomeController extends QuestionsListController {
 			}
 			Token authToken = Token.findFirst("token=?", token);
 			if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
-				citizen = Citizen.createIt("validated", false);
+				String lang = preferredLangCode();
+				citizen = Citizen.createIt("validated", false, "lang", lang);
 				authToken = Token.createIt("token", token, "validated", false, "citizen_id", citizen.getLongId());
+				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, null);
 			} else {
 				citizen = Citizen.findById(authToken.getLong("citizen_id"));
 			}
@@ -288,7 +293,7 @@ public class HomeController extends QuestionsListController {
 		int pos = url.indexOf(uri, protocol().length() + 1);
 		String reqHostname = StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url);
 		String shaEmail = messageDigester.digest(email);
-		String valUrl = reqHostname + "/citizen/" + shaEmail;
+		String valUrl = reqHostname + "/validate-citizen?code=" + shaEmail;
 		String subj = "Validate your email so you may vote on YouVoteForEurope";
 		Map<String, Object> vals = new HashMap<String, Object>();
 		vals.put("url", valUrl);
@@ -312,7 +317,7 @@ public class HomeController extends QuestionsListController {
 
 	@GET
 	public void validateCitizen() {
-		String code = param("validationCode");
+		String code = param("code");
 		if (StringUtils.nullOrEmpty(code)) {
 			flash("citizen_identification_failure", "validation_code_error");
 			redirect("/home");
@@ -345,6 +350,7 @@ public class HomeController extends QuestionsListController {
 		if (citizen == null) {
 			citizen = Citizen.createIt("");
 		}
+		session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, null);
 
 		List<EmailValidation> pastValidationsOfSameToken = EmailValidation.find("token=? and validated=true and is_citizen=true", code)
 				.orderBy("updated_at ASC");
