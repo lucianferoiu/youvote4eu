@@ -375,6 +375,7 @@ public class HomeController extends QuestionsListController {
 			Base.exec("UPDATE votes SET citizen_id=?, validated=? WHERE citizen_id=?", pastCitizenId, true, citizen.getLongId());
 			citizen = Citizen.findById(pastCitizenId);
 			session(Const.AUTH_CITIZEN, citizen);
+			citizen.setBoolean("validated", true).saveIt();
 			if (authToken != null) {
 				authToken.setLong("citizen_id", pastCitizenId).setBoolean("validated", true).saveIt();
 			}
@@ -388,6 +389,7 @@ public class HomeController extends QuestionsListController {
 		session(Const.AUTH_CITIZEN, citizen);
 
 		validation.set("validated", true).saveIt();//for future reference
+		view("validatedCitizen", true);
 		redirect("/home");
 
 	}
