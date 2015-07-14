@@ -212,7 +212,7 @@ public class LoremController extends PlatformController {
 						Vote.createIt("question_id", qId, "value", 1, "validated", true, "citizen_id", -2L);
 					}
 					for (int k = yesVotes; k < popularVotes; k++) {
-						Vote.createIt("questionId", qId, "value", 0, "validated", true, "citizen_id", -3L);
+						Vote.createIt("question_id", qId, "value", 0, "validated", true, "citizen_id", -3L);
 					}
 				}
 
