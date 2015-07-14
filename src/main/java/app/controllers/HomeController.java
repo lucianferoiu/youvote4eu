@@ -1,7 +1,10 @@
 package app.controllers;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -302,30 +305,34 @@ public class HomeController extends QuestionsListController {
 			return;
 		}
 
-		String url = StringUtils.nvl(url());
-		String uri = StringUtils.nvl(uri());
-		int pos = url.indexOf(uri, protocol().length() + 1);
-		String reqHostname = StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url);
-		String shaEmail = messageDigester.digest(email);
-		String valUrl = reqHostname + "/validate-citizen?code=" + shaEmail;
-		String subj = "Validate your email so you may vote on YouVoteForEurope";
-		Map<String, Object> vals = new HashMap<String, Object>();
-		vals.put("url", valUrl);
+		try {
+			String url = StringUtils.nvl(url());
+			String uri = StringUtils.nvl(uri());
+			int pos = url.indexOf(uri, protocol().length() + 1);
+			String reqHostname = StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url);
+			String shaEmail = messageDigester.digest(email);
+			String valUrl = reqHostname + "/validate-citizen?code=" + URLEncoder.encode(shaEmail, "UTF-8");
+			String subj = "Validate your email so you may vote on YouVoteForEurope";
+			Map<String, Object> vals = new HashMap<String, Object>();
+			vals.put("url", valUrl);
 
-		StringWriter writer = new StringWriter();
-		Configuration.getTemplateManager().merge(vals, "/other/mail/citizenValidation", null, null, writer);
+			StringWriter writer = new StringWriter();
+			Configuration.getTemplateManager().merge(vals, "/other/mail/citizenValidation", null, null, writer);
 
-		LocalDateTime now = LocalDateTime.now();
-		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
-		EmailValidation validation = EmailValidation.create("email", email, "token", shaEmail, "validated", false, "added_by",
-				citizen.getLongId());
-		validation.setTimestamp("valid_until", tomorrow);
-		validation.setBoolean("is_citizen", true);//the kind of email verification
-		validation.saveIt();
+			LocalDateTime now = LocalDateTime.now();
+			Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
+			EmailValidation validation = EmailValidation.create("email", email, "token", shaEmail, "validated", false, "added_by",
+					citizen.getLongId());
+			validation.setTimestamp("valid_until", tomorrow);
+			validation.setBoolean("is_citizen", true);//the kind of email verification
+			validation.saveIt();
 
-		mailer.sendMail(email, subj, writer.toString(), true);
-		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}", validation, url);
-
+			mailer.sendMail(email, subj, writer.toString(), true);
+			log.debug("Citizen identification: created email validation {} and sent the validation email for URL {}", validation, url);
+		}
+		catch (UnsupportedEncodingException uee) {
+			log.warn("Cannot encode SHA(email) as UTF-8", uee);
+		}
 		redirect("/home");
 	}
 
@@ -334,11 +341,18 @@ public class HomeController extends QuestionsListController {
 		String code = param("code");
 		if (StringUtils.nullOrEmpty(code)) {
 			flash("citizen_identification_failure", "validation_code_error");
+			log.warn("Error in citizen validation: missing code parameter");
 			redirect("/home");
 			return;
 		}
 
-		code = code.trim();
+		try {
+			code = URLDecoder.decode(code, "UTF-8");
+		}
+		catch (UnsupportedEncodingException uee) {
+			log.warn("Cannot decode SHA(email) from UTF-8", uee);
+		}
+
 		EmailValidation validation = EmailValidation.findFirst(
 				"token=? and validated=false and is_citizen=true and valid_until>=current_timestamp ", code);
 		if (validation == null) {//no validation or expired
@@ -350,7 +364,7 @@ public class HomeController extends QuestionsListController {
 
 		//all's well
 		Citizen citizen = null;
-		session().clear();
+		session(Const.AUTH_CITIZEN, null);
 		String token = cookieValue(Const.AUTH_COOKIE_NAME);
 		if (StringUtils.nullOrEmpty(token)) {
 			respond("no authentication token").status(403);
