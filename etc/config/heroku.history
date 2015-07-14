@@ -7,11 +7,12 @@
 		Git remote heroku added
 
 
-[mac] ~/work/youvote4eu/youvote4eu $ echo "web: mvn clean jetty:run">>Procfile
+[mac] ~/work/youvote4eu/youvote4eu $ echo "java $JAVA_OPTS -jar target/dependency/jetty-runner.jar --port $PORT target/*.war">>Procfile
 
 
-[mac] ~/work/youvote4eu/youvote4eu $ echo "BUILD_ENV=dev">>.env
+[mac] ~/work/youvote4eu/youvote4eu $ echo "BUILD_ENV=dev">.env
 [mac] ~/work/youvote4eu/youvote4eu $ echo "DEPLOY_ENV=heroku">>.env
+[mac] ~/work/youvote4eu/youvote4eu $ echo "PORT=80">>.env
 
 
 [mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create heroku-postgresql:hobby-dev
