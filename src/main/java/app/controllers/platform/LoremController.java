@@ -205,13 +205,15 @@ public class LoremController extends PlatformController {
 				q.saveIt();
 				Long qId = q.getLongId();
 
-				//create fake votes
-				int yesVotes = (int) Math.round(popularVotes * popularVoteTally);
-				for (int k = 0; k < yesVotes; k++) {
-					Vote.createIt("questionId", qId, "value", 1, "validated", true, "citizen_id", -2L);
-				}
-				for (int k = yesVotes; k < popularVotes; k++) {
-					Vote.createIt("questionId", qId, "value", 0, "validated", true, "citizen_id", -3L);
+				if (popularVotes != null && popularVoteTally != null && popularVotes > 0 && popularVoteTally > 0) {
+					//create fake votes
+					int yesVotes = (int) Math.round(popularVotes * popularVoteTally);
+					for (int k = 0; k < yesVotes; k++) {
+						Vote.createIt("questionId", qId, "value", 1, "validated", true, "citizen_id", -2L);
+					}
+					for (int k = yesVotes; k < popularVotes; k++) {
+						Vote.createIt("questionId", qId, "value", 0, "validated", true, "citizen_id", -3L);
+					}
 				}
 
 				//translations
