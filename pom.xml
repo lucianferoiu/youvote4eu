@@ -15,12 +15,12 @@
 	<!-- profiles for the different environments -->
 	<profiles>
 		<profile>
-			<id>development</id>
+			<id>dev-local</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 				<property>
-					<name>env.BUILD_ENV</name>
-					<value>dev</value>
+					<name>env.DEPLOY_ENV</name>
+					<value>mac</value>
 				</property>
 			</activation>
 			<properties>
@@ -32,34 +32,61 @@
 				<jdbc.test.password></jdbc.test.password>
 				<jetty.scan-interval>1800</jetty.scan-interval>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.javalite</groupId>
+						<artifactId>db-migrator-maven-plugin</artifactId>
+						<version>1.4.11-SNAPSHOT</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.postgresql</groupId>
+								<artifactId>postgresql</artifactId>
+								<version>9.3-1102-jdbc4</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<url>${jdbc.url}</url>
+							<username>${jdbc.user}</username>
+							<password>${jdbc.password}</password>
+							<driver>${jdbc.driver}</driver>
+						</configuration>
+						<executions>
+							<execution>
+								<id>dev_migrations</id>
+								<goals>
+									<goal>migrate</goal>
+								</goals>
+								<phase>validate</phase>
+							</execution>
+							<execution>
+								<id>test_migrations</id>
+								<goals>
+									<goal>migrate</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<url>${jdbc.test.url}</url>
+									<username>${jdbc.test.user}</username>
+									<password>${jdbc.test.password}</password>
+									<driver>${jdbc.driver}</driver>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
-			<id>staging</id>
+			<id>deploy-heroku</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 				<property>
-					<name>env.BUILD_ENV</name>
-					<value>staging</value>
+					<name>env.DEPLOY_ENV</name>
+					<value>heroku</value>
 				</property>
 			</activation>
 			<properties>
-				<jdbc.url>jdbc:postgresql://localhost/youvote4eu_s</jdbc.url>
-				<jdbc.user>lucian</jdbc.user>
-				<jdbc.password></jdbc.password>
-			</properties>
-		</profile>
-		<profile>
-			<id>production</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>env.DATABASE_URL</name> <!-- Heroku sets this -->
-				</property>
-			</activation>
-			<properties>
-				<jdbc.url>${env.DATABASE_URL}</jdbc.url>
-				<jdbc.user></jdbc.user>
-				<jdbc.password></jdbc.password>
 			</properties>
 		</profile>
 	</profiles>
@@ -86,46 +113,6 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.javalite</groupId>
-				<artifactId>db-migrator-maven-plugin</artifactId>
-				<version>1.4.11-SNAPSHOT</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.postgresql</groupId>
-						<artifactId>postgresql</artifactId>
-						<version>9.3-1102-jdbc4</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<url>${jdbc.url}</url>
-					<username>${jdbc.user}</username>
-					<password>${jdbc.password}</password>
-					<driver>${jdbc.driver}</driver>
-				</configuration>
-				<executions>
-					<execution>
-						<id>dev_migrations</id>
-						<goals>
-							<goal>migrate</goal>
-						</goals>
-						<phase>validate</phase>
-					</execution>
-					<execution>
-						<id>test_migrations</id>
-						<goals>
-							<goal>migrate</goal>
-						</goals>
-						<phase>validate</phase>
-						<configuration>
-							<url>${jdbc.test.url}</url>
-							<username>${jdbc.test.user}</username>
-							<password>${jdbc.test.password}</password>
-							<driver>${jdbc.driver}</driver>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
