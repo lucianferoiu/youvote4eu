@@ -209,7 +209,7 @@ public class LoremController extends PlatformController {
 					//create fake votes
 					int yesVotes = (int) Math.round(popularVotes * popularVoteTally);
 					for (int k = 0; k < yesVotes; k++) {
-						Vote.createIt("questionId", qId, "value", 1, "validated", true, "citizen_id", -2L);
+						Vote.createIt("question_id", qId, "value", 1, "validated", true, "citizen_id", -2L);
 					}
 					for (int k = yesVotes; k < popularVotes; k++) {
 						Vote.createIt("questionId", qId, "value", 0, "validated", true, "citizen_id", -3L);
