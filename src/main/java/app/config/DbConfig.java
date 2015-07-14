@@ -46,12 +46,13 @@ public class DbConfig extends AbstractDBConfig {
 			String driver = inferDriverClass(database_url);
 			String user = dbUri.getUserInfo().split(":")[0];
 			String password = dbUri.getUserInfo().split(":")[1];
-			String authPart = user + ":" + password + "@";
-			String url = "jdbc:" + database_url.replace(authPart, "");
+			//String authPart = user + ":" + password + "@"; //
+			//String url = "jdbc:" + database_url.replace(authPart, ""); // <-- this doesn't work because the schema is different in the Herok env than the one required by the driver - postgresql
+			String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
 
 			Properties p = new Properties();
 			p.put("driver", driver);
-			p.put("url", url);
+			p.put("url", dbUrl);
 			p.put("user", user);
 			p.put("password", password);
 			return p;
