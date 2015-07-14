@@ -246,16 +246,18 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</repository>
+		<!-- 
 		<repository>
 			<id>local1</id>
 			<name>Local Machine Repo</name>
 			<url>file:///Users/lucian/var/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<!-- <updatePolicy>always</updatePolicy> -->
+				<updatePolicy>always</updatePolicy>
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
-		</repository>
+		</repository> 
+		-->
 	</repositories>
 	
 	<pluginRepositories>
@@ -279,15 +281,17 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</pluginRepository>
+		<!-- 
 		<pluginRepository>
 			<id>local2</id>
 			<name>Local Machine Repo</name>
 			<url>file:///Users/lucian/var/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
-				<!-- <updatePolicy>always</updatePolicy> -->
+				<updatePolicy>always</updatePolicy>
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
-		</pluginRepository>
+		</pluginRepository> 
+		-->
 	</pluginRepositories>
 </project>
