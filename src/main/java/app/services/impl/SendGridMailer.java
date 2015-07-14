@@ -38,7 +38,10 @@ public class SendGridMailer implements Mailer {
 
 		try {
 			SendGrid.Response response = sendgrid.send(email);
-			if (response != null) { return response.getStatus(); }
+			if (response != null) {
+				log.debug("Sent email to {} - response status={}, message={}", to, response.getStatus(), response.getMessage());
+				return response.getStatus();
+			}
 		}
 		catch (SendGridException e) {
 			log.warn("Cannot send email to {} w/ subject {}: {}", to, subject, e.getMessage());

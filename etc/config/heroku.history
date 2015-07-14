@@ -25,4 +25,7 @@
 [mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create sendgrid:starter
 
 
+[mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create papertrail:choklad
+
+
 

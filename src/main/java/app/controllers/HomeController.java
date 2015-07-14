@@ -244,6 +244,8 @@ public class HomeController extends QuestionsListController {
 
 			respond("").contentType("application/json").status(204);
 		} else {
+			log.debug("No citizen associated with the request from {}::{} - first-time access?", header("Remote_Addr"),
+					header("HTTP_X_FORWARDED_FOR"));
 			respond("cannot identify citizen").contentType("application/json").status(400);
 			return;
 		}
@@ -274,6 +276,7 @@ public class HomeController extends QuestionsListController {
 				}
 				session(Const.AUTH_CITIZEN, citizen);
 			} else {
+				log.warn("Empty auth cookie - first-time access or cookies are disabled?");
 				return null;
 			}
 		}

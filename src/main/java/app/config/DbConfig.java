@@ -20,10 +20,12 @@ public class DbConfig extends AbstractDBConfig {
 	public void init(AppContext context) {
 
 		String herokuDB = System.getenv(HEROKU_DATABASE_URL);
+
 		if (StringUtils.nullOrEmpty(herokuDB)) {//local dev
 			environment("development").jdbc("org.postgresql.Driver", "jdbc:postgresql://localhost/youvote4eu_d", "lucian", "");
 			environment("development").testing().jdbc("org.postgresql.Driver", "jdbc:postgresql://localhost/youvote4eu_t", "lucian", "");
 			environment("production").jndi("jdbc/youvote4eu_p");
+			log.warn("Setting up the DB for local machine - URL={}", "jdbc:postgresql://localhost/youvote4eu_d");
 		} else {
 			Properties jdbcProps = parseHerokuDBUrl(herokuDB);
 			if (jdbcProps != null) {
@@ -33,7 +35,7 @@ public class DbConfig extends AbstractDBConfig {
 						jdbcProps.getProperty("user"), jdbcProps.getProperty("password"));
 				environment("production").jdbc(jdbcProps.getProperty("driver"), jdbcProps.getProperty("url"),
 						jdbcProps.getProperty("user"), jdbcProps.getProperty("password"));
-
+				log.warn("Setting up the DB for Heroku - URL={}", jdbcProps.getProperty("url"));
 			} else {
 				throw new RuntimeException("Cannot configure application DB");
 			}
