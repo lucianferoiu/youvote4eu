@@ -27,8 +27,8 @@
 						</div>
 						
 						<div class="col-xs-12">
-							<p>
-								Before your votes are counted, we need you to validate your identity via email.
+							<p  style="color:#990012;">
+								Before your votes are counted, we need you to validate your <em>anonymous</em> identity via email.
 							</p>
 							<p class="hidden-xs">
 								Your email <strong>will not be stored</strong>, your privacy is well protected - we need your email just as the least-intrusive measure to avoid people voting multiple times... We know you are passionate about these topics, however a fair vote will serve us better, as a community, in the long run.<br/>
@@ -38,7 +38,7 @@
 								Please enter your email address above, choose the EU country that best represents you and click the <em>Send Validation Email</em> button below.
 							</p>
 							<p class="hidden-xs">
-								We will sent you an email containing a validation link - <strong>click it</strong> and we're done. You only need to do this the first time (well, actually every time you visit us from a new computer or use a different browser). We use a randomly-generated number in a cookie to identify you on subsequent visits - absolutely nothing to tie your personal data to the votes you make here.
+								We will sent you an email containing a validation link - <strong>click it</strong> and we're done. You only need to do this the first time (well, technically every time you visit us from a <em>new computer/device</em> or use a different browser). We use a randomly-generated number in a cookie to identify you on subsequent visits - absolutely nothing to tie your personal data to the votes you make here, even if our systems are hacked or seized.
 							</p>
 							<p>
 								To find out more about how we protect your <strong>privacy and anonymity</strong> on our site, please check the <a href="/help#privacy">Help</a> page.

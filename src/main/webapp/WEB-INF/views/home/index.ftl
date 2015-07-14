@@ -4,7 +4,7 @@
 [@content for="footer_script"]<script src='${context_path}/app/layout.js'></script>[/@content]
 [#if isMobileAgent]
 	[#-- [@content for="header_css"]<link href='${context_path}/css/jquery.mobile.min.css' rel="stylesheet">[/@content] --]
-	[@content for="footer_script"]<script src='${context_path}/js/jquery.mobile.min.js'></script>[/@content]
+	[#-- [@content for="footer_script"]<script src='${context_path}/js/jquery.mobile.min.js'></script>[/@content] --]
 [/#if]
 
 [#include "../other/utils.ftl"]
