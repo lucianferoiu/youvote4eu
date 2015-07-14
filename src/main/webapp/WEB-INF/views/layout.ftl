@@ -22,7 +22,8 @@
 	${page_content}
 
 	[#include "footer.ftl"]
-
+	[#include "home/validate.ftl"]
+	
 	<script src='${context_path}/js/jquery.min.js'></script>
 	<script src='${context_path}/js/aw.js'></script>
 	<script src='${context_path}/js/flatstrap.min.js'></script>

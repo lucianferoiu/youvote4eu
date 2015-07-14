@@ -17,8 +17,8 @@
 <div id="qContainerFlow" class="q-cont q-cont-static container-fluid visible-xs-block">
 	[#list questions as q]
 	<div id="q${q.id}" class="q hover" 
-		data-q-id="${q.id}" data-q-votes="${q.votesCount}" [#if q.arch] data-q-archived="yes"[/#if]
-		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
+		data-q-id="${q.id}" data-q-votes="${q.votesCount}" [#if q.voted??] data-q-voted="${q.voted}"[/#if] data-q-can-vote="${q.canVote?c}" data-q-vote-tally="${q.voteTally}"
+		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.arch] data-q-archived="yes" data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc visible-xs-block">
 				<div class="col-xs-3">
@@ -30,6 +30,7 @@
 				</blockquote>
 				<p class="q-desc-p">${q.description}</p>
 			</div>
+			<div class="trailing-space"><br/><br/><br/></div>
 	</div>
 	[/#list]
 </div>
@@ -79,6 +80,7 @@
 							[#if q.archivedOn??]<footer>Archived on ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
 							<footer>Published on ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</footer>
 						</blockquote>
+						<div class="trailing-space"><br/><br/><br/></div>
 				</div>
 				[#assign cnt=cnt+1]
 				[/#list]
@@ -104,22 +106,25 @@
 
 <div class="templates hide">
 	<div class="q-voting-booth q-bg-1">
+		<div class="aftervote-vote-tally">
+			<div class="col-xs-12"></div>
+		</div>
 		<div class="btn-group" role="group">
 			<div class="voting-buttons">
 				<a class="col-xs-3 vote-yes btn btn-default">YES</a>
 				<a class="col-xs-3 vote-no btn btn-default">NO</a>
 			</div>
-			<div class="already-voted hide">
-				<a class="col-xs-6 btn disabled">YES</a>
-			</div>
+			<a class="already-voted disabled btn col-xs-6">
+				You voted <strong>YES</strong>
+			</a>
 			<a class="col-xs-6 vote-details btn btn-default">Details..</a>
 		</div>
 		<div class="vote-validation-pending" style="padding:8px;">
-			<div class="col-xs-12 bg-default">Email validation pending.. <span class="glyphicon glyphicon-info-sign pull-right"></span></div>
+			<div class="col-xs-12 bg-default">Email validation pending.. 
+				<span class="glyphicon glyphicon-info-sign pull-right" role="button" data-toggle="popover" data-trigger="focus" title="Validate your first vote" data-content="Before your first vote is counted, please check your email and click the validation link we sent you."></span><brr/></div>
 		</div>
 	</div>
 </div>
-
 
 [@content for="footer_script"]
 <script type="text/javascript">
@@ -128,7 +133,9 @@
 		reqURI: '${reqURI}',
 		reqHostname: '${reqHostname}',
 		reqQuery: '${reqQuery}',
-		isMobileAgent: ${isMobileAgent?c}
+		isMobileAgent: ${isMobileAgent?c},
+		validatedCitizen: ${validatedCitizen?c},
+		pendingValidation: ${pendingValidation?c}
 	};
 </script>
 [/@content]
