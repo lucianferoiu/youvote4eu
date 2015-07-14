@@ -12,6 +12,7 @@ import java.util.Map;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.RowListenerAdapter;
 import org.javalite.activeweb.Configuration;
+import org.javalite.activeweb.Cookie;
 import org.javalite.activeweb.annotations.GET;
 import org.javalite.activeweb.annotations.POST;
 import org.javalite.activeweb.annotations.PUT;
@@ -243,7 +244,7 @@ public class HomeController extends QuestionsListController {
 
 			respond("").contentType("application/json").status(204);
 		} else {
-			//respond("wrong parameters").contentType("application/json").status(400);
+			respond("cannot identify citizen").contentType("application/json").status(400);
 			return;
 		}
 	}
@@ -251,25 +252,30 @@ public class HomeController extends QuestionsListController {
 	protected Citizen getOrCreateCitizen() {
 		Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 		if (citizen == null) {//first-time voter
-			String token = cookieValue(Const.AUTH_COOKIE_NAME);
-			if (StringUtils.nullOrEmpty(token)) {
-				respond("no authentication token").contentType("application/json").status(403);
-				return null;
-			}
-			Token authToken = Token.findFirst("token=?", token);
-			if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
-				String lang = preferredLangCode();
-				citizen = Citizen.createIt("validated", false, "lang", lang);
-				authToken = Token.createIt("token", token, "validated", false, "citizen_id", citizen.getLongId());
-				session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, null);
+			Cookie c = cookie(Const.AUTH_COOKIE_NAME);
+			if (c != null) {
+				String token = c.getValue();
+				if (StringUtils.nullOrEmpty(token)) {
+					respond("no authentication token").contentType("application/json").status(403);
+					return null;
+				}
+				Token authToken = Token.findFirst("token=?", token);
+				if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
+					String lang = preferredLangCode();
+					citizen = Citizen.createIt("validated", false, "lang", lang);
+					authToken = Token.createIt("token", token, "validated", false, "citizen_id", citizen.getLongId());
+					session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, null);
+				} else {
+					citizen = Citizen.findById(authToken.getLong("citizen_id"));
+				}
+				if (citizen == null) {
+					respond("wrong citizen or token information").contentType("application/json").status(400);
+					return null;
+				}
+				session(Const.AUTH_CITIZEN, citizen);
 			} else {
-				citizen = Citizen.findById(authToken.getLong("citizen_id"));
-			}
-			if (citizen == null) {
-				respond("wrong citizen or token information").contentType("application/json").status(400);
 				return null;
 			}
-			session(Const.AUTH_CITIZEN, citizen);
 		}
 		return citizen;
 	}
@@ -287,6 +293,10 @@ public class HomeController extends QuestionsListController {
 		String lang = preferredLangCode();
 
 		Citizen citizen = getOrCreateCitizen();
+		if (citizen == null) {
+			redirect("/home");
+			return;
+		}
 
 		String url = StringUtils.nvl(url());
 		String uri = StringUtils.nvl(uri());
