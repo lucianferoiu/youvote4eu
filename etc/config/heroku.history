@@ -15,6 +15,13 @@
 [mac] ~/work/youvote4eu/youvote4eu $ echo "PORT=80">>.env
 
 
+[mac] ~/work/youvote4eu/youvote4eu $ heroku plugins:install git://github.com/ddollar/heroku-config.git
+	- [mac] heroku config:pull --overwrite --interactive
+
+[mac] ~/work/youvote4eu/youvote4eu $ heroku config:push
+	- ...and check: [mac] ~/work/youvote4eu/youvote4eu $ heroku config
+
+
 [mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create heroku-postgresql:hobby-dev
 
 
