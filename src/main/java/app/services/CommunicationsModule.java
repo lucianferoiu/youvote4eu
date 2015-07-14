@@ -11,7 +11,13 @@ public class CommunicationsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(Mailer.class).to(GMailMailer.class).asEagerSingleton();
+
+		String deploymentEnv = System.getenv("DEPLOY_ENV");
+		if ("heroku".equalsIgnoreCase(deploymentEnv)) {
+			bind(Mailer.class).to(GMailMailer.class).asEagerSingleton();
+		} else {
+			bind(Mailer.class).to(GMailMailer.class).asEagerSingleton();
+		}
 	}
 
 }
