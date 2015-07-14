@@ -131,7 +131,7 @@
 								$('#validate-citizen').modal();
 								
 							}
-							if (App.!App.validatedCitizen) {
+							if (App.pendingValidation) {
 								$(votingBooth).find('.vote-validation-pending').show();
 							}
 						}
