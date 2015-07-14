@@ -310,7 +310,7 @@ public class HomeController extends QuestionsListController {
 			String uri = StringUtils.nvl(uri());
 			int pos = url.indexOf(uri, protocol().length() + 1);
 			String reqHostname = StringUtils.nvl(pos > 0 ? url.substring(0, pos) : url);
-			String shaEmail = messageDigester.digest(email);
+			String shaEmail = messageDigester.digest(email, true);
 			String valUrl = reqHostname + "/validate-citizen?code=" + URLEncoder.encode(shaEmail, "UTF-8");
 			String subj = "Validate your email so you may vote on YouVoteForEurope";
 			Map<String, Object> vals = new HashMap<String, Object>();

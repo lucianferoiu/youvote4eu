@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.codec.binary.Base32;
 import org.javalite.common.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ public class SecureMessageDigester implements MessageDigester {
 	static final Logger log = LoggerFactory.getLogger(SecureMessageDigester.class);
 
 	@Override
-	public String digest(String message) {
+	public String digest(String message, boolean urlSecure) {
 		if (StringUtils.nullOrEmpty(message)) return null;
 		byte[] messageBytes = null;
 		try {
@@ -31,7 +32,12 @@ public class SecureMessageDigester implements MessageDigester {
 			MessageDigest digester = MessageDigest.getInstance("SHA-512");
 			byte[] digest = digester.digest(messageBytes);
 			if (digest != null) {
-				byte[] base64digest = Base64.getEncoder().encode(digest);
+				byte[] base64digest = null;
+				if (urlSecure) {
+					base64digest = new Base32(true).encode(digest);
+				} else {
+					base64digest = Base64.getEncoder().encode(digest);
+				}
 				return new String(base64digest);
 			}
 		}

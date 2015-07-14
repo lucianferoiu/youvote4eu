@@ -22,7 +22,7 @@ public class MessageDigesterSpec extends JSpecSupport {
 	@Test
 	public void mdSanityCheck() {
 		String msg = "this should be good";
-		String digest = md.digest(msg);
+		String digest = md.digest(msg, false);
 		a(digest).shouldNotBeNull();
 		log.debug("Digest of message \"{}\" is {}", msg, digest);
 	}
@@ -31,14 +31,14 @@ public class MessageDigesterSpec extends JSpecSupport {
 	public void mdConsistency() {
 
 		String msg = "reference message that should be identically digested every time";
-		String digest = md.digest(msg);
+		String digest = md.digest(msg, false);
 		log.debug("Digest of message \"{}\" is {}", msg, digest);
 		for (int i = 0; i < 12345; i++) {
 			/*
 			System.out.print(".");
 			if (i % 200 == 0) System.out.println();
 			*/
-			a(digest).shouldBeEqual(md.digest(msg));
+			a(digest).shouldBeEqual(md.digest(msg, false));
 		}
 
 	}

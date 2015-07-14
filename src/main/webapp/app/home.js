@@ -127,11 +127,11 @@
 							$(votingBooth).find('.already-voted').html(voteInfo).show();
 							$(votingBooth).find('.aftervote-vote-tally').html('<div class="col-xs-12">Yes: '+yesVotes+'% -  No: '+noVotes+'%</div>').show();
 							
-							if (!App.validatedCitizen) {
+							if (!App.validatedCitizen && !App.pendingValidation) {
 								$('#validate-citizen').modal();
 								
 							}
-							if (App.pendingValidation) {
+							if (App.!App.validatedCitizen) {
 								$(votingBooth).find('.vote-validation-pending').show();
 							}
 						}
@@ -161,7 +161,7 @@
 							$(votingBooth).find('.already-voted').html(voteInfo).show();
 							$(votingBooth).find('.aftervote-vote-tally').html('<div class="col-xs-12">Yes: '+yesVotes+'% -  No: '+noVotes+'%</div>').show();
 							
-							if (!App.validatedCitizen) {
+							if (!App.validatedCitizen && !App.pendingValidation) {
 								$('#validate-citizen').modal();
 							}
 							if (App.pendingValidation) {

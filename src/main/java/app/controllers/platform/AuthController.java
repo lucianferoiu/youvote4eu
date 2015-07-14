@@ -66,7 +66,7 @@ public class AuthController extends PlatformController {
 			return;
 		}
 
-		String shaPwd = messageDigester.digest(pwd);
+		String shaPwd = messageDigester.digest(pwd, false);
 		if (!(shaPwd.endsWith(partner.getString("password")))) {
 			log.debug("Partner with email {} has failed to present the proper password (SHA) {}", email, shaPwd);
 			flash("signin_failure", "wrong_params");
@@ -134,8 +134,8 @@ public class AuthController extends PlatformController {
 		String email = param("pp-register-email");
 		String pwd = param("pp-register-password");
 		String agree = param("pp-register-agreement");
-		if (StringUtils.nullOrEmpty(pwd) || StringUtils.nullOrEmpty(email) || (!"on".equalsIgnoreCase(agree))
-				|| pwd.length() < 7 || (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
+		if (StringUtils.nullOrEmpty(pwd) || StringUtils.nullOrEmpty(email) || (!"on".equalsIgnoreCase(agree)) || pwd.length() < 7
+				|| (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
 			flash("registration_failure", "wrong_params");
 			redirect("/platform/auth");
 			return;
@@ -151,7 +151,7 @@ public class AuthController extends PlatformController {
 		}
 
 		//we're good to register the new partner
-		String shaPwd = messageDigester.digest(pwd);
+		String shaPwd = messageDigester.digest(pwd, true);
 		Partner.createIt("email", email, "password", shaPwd, "verified", false, "enabled", true);
 		sendVerificationMail(email, "/other/mail/validation", "is_registration");
 		flash("success_message", "registration_successful");
@@ -165,8 +165,7 @@ public class AuthController extends PlatformController {
 		String pwd = param("pp-set-password");
 		String agree = param("pp-set-agreement");
 		if (StringUtils.nullOrEmpty(pwd) || StringUtils.nullOrEmpty(email) || StringUtils.nullOrEmpty(code)
-				|| (!"on".equalsIgnoreCase(agree)) || pwd.length() < 7
-				|| (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
+				|| (!"on".equalsIgnoreCase(agree)) || pwd.length() < 7 || (!Const.VALID_EMAIL_ADDRESS_REGEX.matcher(email).find())) {
 			flash("pwd_set_failure", "wrong_params");
 			redirect("/platform/auth");
 			return;
@@ -190,7 +189,7 @@ public class AuthController extends PlatformController {
 		}
 
 		//we're good to register the new partner
-		String shaPwd = messageDigester.digest(pwd);
+		String shaPwd = messageDigester.digest(pwd, true);
 		partner.set("password", shaPwd, "verified", true, "enabled", true);
 		partner.save();
 		validation.set("verified", true);
@@ -310,7 +309,7 @@ public class AuthController extends PlatformController {
 			return;
 		}
 
-		String shaPwd = messageDigester.digest(pwd);
+		String shaPwd = messageDigester.digest(pwd, true);
 		alreadyExisting.set("password", shaPwd).set("verified", false).saveIt();
 		sendVerificationMail(email, "/other/mail/reset_password", "is_pwd_renew");
 		flash("success_message", "pwd_reset_successful");
@@ -330,15 +329,13 @@ public class AuthController extends PlatformController {
 
 		LocalDateTime now = LocalDateTime.now();
 		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
-		EmailValidation validation = EmailValidation
-				.create("email", email, "token", validationCode, "validated", false);
+		EmailValidation validation = EmailValidation.create("email", email, "token", validationCode, "validated", false);
 		validation.setTimestamp("valid_until", tomorrow);
 		validation.setBoolean(field, true);//the kind of email verification
 		validation.saveIt();
 
 		mailer.sendMail(email, subj, writer.toString(), true);
-		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}",
-				validation, url);
+		log.debug("Partner registration: created email validation {} and sent the validation email for URL {}", validation, url);
 	}
 
 }
