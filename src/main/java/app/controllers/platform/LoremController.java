@@ -94,28 +94,28 @@ public class LoremController extends PlatformController {
 			HttpResponse<JsonNode> response = null;
 			response = Unirest
 					.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 28) + "&length=7")
-					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
+					.header("X-Mashape-Key", "kfMBHsWeCbmsh7KOSgQ9iFbm7Mizp1naHIqjsnA7lkE5COmTzI").header("Accept", "application/json")
 					.asJson();
 			JSONArray titles = response.getBody().getArray();
 			log.debug("Retrieved {} Lorem titles", titles.length());
 
 			response = Unirest
 					.get("https://montanaflynn-lorem-text-generator.p.mashape.com/paragraph?count=" + (howMany * 28 * 2) + "&length=3")
-					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
+					.header("X-Mashape-Key", "kfMBHsWeCbmsh7KOSgQ9iFbm7Mizp1naHIqjsnA7lkE5COmTzI").header("Accept", "application/json")
 					.asJson();
 			JSONArray descriptions = response.getBody().getArray();
 			log.debug("Retrieved {} Lorem descriptions", descriptions.length());
 
 			response = Unirest
 					.get("https://montanaflynn-lorem-text-generator.p.mashape.com/paragraph?count=" + (howMany * 28 * 5) + "&length=7")
-					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
+					.header("X-Mashape-Key", "kfMBHsWeCbmsh7KOSgQ9iFbm7Mizp1naHIqjsnA7lkE5COmTzI").header("Accept", "application/json")
 					.asJson();
 			JSONArray htmlContents = response.getBody().getArray();
 			log.debug("Retrieved {} Lorem contents", htmlContents.length());
 
 			//comments
 			response = Unirest.get("https://montanaflynn-lorem-text-generator.p.mashape.com/sentence?count=" + (howMany * 7) + "&length=5")
-					.header("X-Mashape-Key", "sDUMNakHLamsh2xKOnuIQWteLdN4p1n4uE6jsnFjX0tUBfIPx9").header("Accept", "application/json")
+					.header("X-Mashape-Key", "kfMBHsWeCbmsh7KOSgQ9iFbm7Mizp1naHIqjsnA7lkE5COmTzI").header("Accept", "application/json")
 					.asJson();
 			JSONArray comments = response.getBody().getArray();
 			log.debug("Retrieved {} Lorem comments", comments.length());
