@@ -6,6 +6,7 @@
 		https://yv4eu.herokuapp.com/ | https://git.heroku.com/yv4eu.git
 		Git remote heroku added
 
+	- on other machines: heroku git:remote -a yv4eu
 
 [mac] ~/work/youvote4eu/youvote4eu $ echo "java $JAVA_OPTS -jar target/dependency/jetty-runner.jar --port $PORT target/*.war">>Procfile
 
