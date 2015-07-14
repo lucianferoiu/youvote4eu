@@ -321,6 +321,7 @@ a:hover, a:focus {
 	position: relative;
 	padding: 1em;
 	width:90%;
+	background-color: white;
 }
 
 a.carousel-control {
@@ -483,7 +484,7 @@ a.carousel-control {
 /*	bottom: 5em;*/
 }
 .q-sz-3 .q-voting-booth a {
-	font-size: 2.8em;
+	font-size: 2.6em;
 	font-weight: 800;
 }
 
@@ -492,12 +493,12 @@ a.carousel-control {
 }
 
 .q-sz-2 .q-voting-booth a {
-	font-size: 2em;
+	font-size: 1.8em;
 	font-weight: 600;
 }
 
 .q-sz-1 .q-voting-booth a {
-	font-size: 1em;
+	font-size: 0.8em;
 	line-height:1em;
 	font-weight: 600;
 }
@@ -530,3 +531,150 @@ a.carousel-control {
 	cursor: pointer;
 }
 
+.already-voted {
+	color: #6D000D;
+	display: none;
+}
+
+.vote-validation-pending {
+	display: none;
+}
+
+.aftervote-vote-tally {
+	display: none;
+	font-size: 2em;
+	font-weight: 600;
+	color: #E5DADC;
+}
+
+.q-sz-1 .aftervote-vote-tally {
+	font-size: 0.9em;
+}
+
+.q-cont-static .aftervote-vote-tally {
+	font-size: 1em;
+}
+
+/*** Question details ***/
+
+.pub-q-cont {
+	padding: 2em;
+}
+
+.pub-q-title {
+	font-weight:900;
+	font-size: 2em;
+	padding: 0px 16px 10px 16px;
+	color: #6D000D
+}
+
+.pub-q-desc {
+	padding: 10px 16px 4px 16px;
+	font-weight:200;
+	font-size: 1.3em;
+	color: #990012
+}
+
+.pub-q-content {
+	padding: 1em;
+}
+
+.pub-q-votes {
+	padding: 1em;
+}
+
+.pub-q-vote-stats {
+	padding: 1em;
+	min-height: 100px
+}
+
+.pub-q-vote-distribution {
+	padding: 1em;
+	min-height: 200px;
+}
+
+.pub-q-sidebar {
+	padding: 2em;
+}
+
+/*** Question archival details ***/
+
+.arch-q-cont {
+	padding: 2em;
+}
+
+.arch-q-title {
+	font-weight:900;
+	font-size: 2em;
+	padding: 0px 16px 10px 16px;
+	color: #6D000D
+}
+
+.arch-q-desc {
+	padding: 10px 16px 4px 16px;
+	font-weight:200;
+	font-size: 1.3em;
+	color: #990012
+}
+
+.arch-q-content {
+	padding: 1em;
+}
+
+.arch-q-votes {
+	padding: 1em;
+}
+
+.arch-q-vote-stats {
+	padding: 1em;
+}
+
+.arch-q-vote-distribution {
+	padding: 1em;
+}
+
+.arch-q-sidebar {
+	padding: 2em;
+}
+
+.arch-q-summary {
+	
+}
+
+.arch-q-vote-citizen {
+	border: 1px solid transparent;
+	border-right-color: #990012;
+	
+}
+
+.arch-q-s-title {
+	font-weight: 900;
+	font-size: 1.1em;
+}
+
+.arch-q-s-desc {
+	font-weight:200;
+}
+
+.arch-q-vote-citizen-concl {
+	font-weight: 900;
+	font-size: 3em;
+	color: #990012
+}
+
+.arch-q-vote-official-concl {
+	font-weight: 900;
+	font-size: 3em;
+	color: #990012
+}
+
+.arch-q-vote-tally {
+	font-weight: 900;
+	font-size: 1.2em;
+}
+
+.arch-q-vote-offcial blockquote {
+	font-weight: 300;
+	font-size: 1em;
+	text-align: left;
+}
