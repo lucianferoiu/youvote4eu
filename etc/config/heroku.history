@@ -17,3 +17,8 @@
 [mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create heroku-postgresql:hobby-dev
 
 
+[mac] ~/work/youvote4eu/youvote4eu $ heroku pg:psql  
+	- add tables etc. by hand..
+
+
+
