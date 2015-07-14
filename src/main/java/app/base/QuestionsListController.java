@@ -113,10 +113,19 @@ public abstract class QuestionsListController extends AnonAuthController {
 					fpq.archivedOn = new Date((arch_date).toInstant().toEpochMilli());
 				}
 				fpq.votesCount = (Long) row.get("votes");
+				if (fpq.votesCount == null) fpq.votesCount = 0L;
 				BigDecimal vTally = (BigDecimal) row.get("vote_tally");
-				if (vTally != null) fpq.voteTally = vTally.doubleValue();
+				if (vTally != null) {
+					fpq.voteTally = vTally.doubleValue();
+				} else {
+					fpq.voteTally = 1d;
+				}
 				BigDecimal offVTally = (BigDecimal) row.get("official_vote_tally");
-				if (offVTally != null) fpq.officialVoteTally = offVTally.doubleValue();
+				if (offVTally != null) {
+					fpq.officialVoteTally = offVTally.doubleValue();
+				} else {
+					fpq.officialVoteTally = 1D;
+				}
 
 				questions.add(fpq);
 				i++;
