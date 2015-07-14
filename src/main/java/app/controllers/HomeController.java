@@ -217,7 +217,8 @@ public class HomeController extends QuestionsListController {
 			Long duplicates = Vote.count("question_id=? AND citizen_id=?", qId, citizen.getLongId());
 			if (duplicates == null || duplicates <= 0) {//extra-cautious to avoid duplicates (i.e. when using two different devices simultaneously, the session questions can be obsolete)
 				Vote vote = Vote.create("question_id", qId, "citizen_id", citizen.getLongId(), //
-						"value", voteValue, "validated", citizen.getBoolean("validated")).setDate("cast_at", new Date());
+						"value", voteValue, "validated", citizen.getBoolean("validated"));
+				vote.setDate("cast_at", new Date()).saveIt();
 				synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
 					HashMap<Long, Integer> alreadyVoted = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 					if (alreadyVoted == null) {
@@ -349,6 +350,7 @@ public class HomeController extends QuestionsListController {
 
 		//all's well
 		Citizen citizen = null;
+		session().clear();
 		String token = cookieValue(Const.AUTH_COOKIE_NAME);
 		if (StringUtils.nullOrEmpty(token)) {
 			respond("no authentication token").status(403);
@@ -382,8 +384,8 @@ public class HomeController extends QuestionsListController {
 			if (authToken != null) {
 				authToken.setBoolean("validated", true).saveIt();
 			}
-			session(Const.AUTH_CITIZEN, citizen);
 		}
+		session(Const.AUTH_CITIZEN, citizen);
 
 		validation.set("validated", true).saveIt();//for future reference
 		redirect("/home");
