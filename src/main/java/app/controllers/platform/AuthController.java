@@ -151,7 +151,7 @@ public class AuthController extends PlatformController {
 		}
 
 		//we're good to register the new partner
-		String shaPwd = messageDigester.digest(pwd, true);
+		String shaPwd = messageDigester.digest(pwd, false);
 		Partner.createIt("email", email, "password", shaPwd, "verified", false, "enabled", true);
 		sendVerificationMail(email, "/other/mail/validation", "is_registration");
 		flash("success_message", "registration_successful");
@@ -180,7 +180,7 @@ public class AuthController extends PlatformController {
 			return;
 		}
 
-		EmailValidation validation = EmailValidation.findValidation(code);
+		EmailValidation validation = EmailValidation.findPartnerValidation(code);
 		if (validation == null || !(email.equalsIgnoreCase(validation.getString("email")))) {
 			log.debug("Validation code not paired with email {}", email);
 			flash("pwd_set_failure", "wrong_params");
@@ -189,7 +189,7 @@ public class AuthController extends PlatformController {
 		}
 
 		//we're good to register the new partner
-		String shaPwd = messageDigester.digest(pwd, true);
+		String shaPwd = messageDigester.digest(pwd, false);
 		partner.set("password", shaPwd, "verified", true, "enabled", true);
 		partner.save();
 		validation.set("verified", true);
@@ -209,7 +209,7 @@ public class AuthController extends PlatformController {
 		}
 
 		code = code.trim();
-		EmailValidation validation = EmailValidation.findValidation(code);
+		EmailValidation validation = EmailValidation.findPartnerValidation(code);
 		if (validation == null) {//no validation or expired
 			log.warn("Email validation error: cannot find one for code {}", code);
 			flash("registration_failure", "validation_error");
@@ -309,7 +309,7 @@ public class AuthController extends PlatformController {
 			return;
 		}
 
-		String shaPwd = messageDigester.digest(pwd, true);
+		String shaPwd = messageDigester.digest(pwd, false);
 		alreadyExisting.set("password", shaPwd).set("verified", false).saveIt();
 		sendVerificationMail(email, "/other/mail/reset_password", "is_pwd_renew");
 		flash("success_message", "pwd_reset_successful");

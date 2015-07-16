@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS partners (
 	id BIGSERIAL PRIMARY KEY,
 	/* - */
 	email VARCHAR(120) NOT NULL,						/* email to be used for communication/notifications - also acts as 'username' and is used for validation of the account */
-	password VARCHAR,									/* the SHA-512 digest of the password, encoded in base 64 - we never store clear text passwords */
+	password VARCHAR(1000),								/* the SHA-512 digest of the password, encoded in base 64 - we never store clear text passwords */
 	name VARCHAR(120),									/* optional name to be used in the interface */
 	auth_token VARCHAR(120),							/* "remember me" autologin authentication token */
 	verified BOOLEAN DEFAULT false,						/* authentication is forbidden until the validation via email */

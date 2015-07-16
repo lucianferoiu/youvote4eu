@@ -321,7 +321,7 @@ public class HomeController extends QuestionsListController {
 
 			LocalDateTime now = LocalDateTime.now();
 			Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
-			EmailValidation validation = EmailValidation.create("email", email, "token", shaEmail, "validated", false, "added_by",
+			EmailValidation validation = EmailValidation.create("email", shaEmail, "token", shaEmail, "validated", false, "added_by",
 					citizen.getLongId());
 			validation.setTimestamp("valid_until", tomorrow);
 			validation.setBoolean("is_citizen", true);//the kind of email verification
@@ -353,8 +353,7 @@ public class HomeController extends QuestionsListController {
 			log.warn("Cannot decode SHA(email) from UTF-8", uee);
 		}
 
-		EmailValidation validation = EmailValidation.findFirst(
-				"token=? and validated=false and is_citizen=true and valid_until>=current_timestamp ", code);
+		EmailValidation validation = EmailValidation.findCitizenValidation(code);
 		if (validation == null) {//no validation or expired
 			log.warn("Email validation error: cannot find one for code {}", code);
 			flash("citizen_identification_failure", "validation_timeout");
@@ -387,6 +386,7 @@ public class HomeController extends QuestionsListController {
 			EmailValidation oldestValidation = pastValidationsOfSameToken.get(0);
 			Long pastCitizenId = oldestValidation.getLong("added_by");
 			Base.exec("UPDATE votes SET citizen_id=?, validated=? WHERE citizen_id=?", pastCitizenId, true, citizen.getLongId());
+			//TODO: recompute all questions' votes and tallies
 			citizen = Citizen.findById(pastCitizenId);
 			session(Const.AUTH_CITIZEN, citizen);
 			citizen.setBoolean("validated", true).saveIt();

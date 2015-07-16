@@ -34,10 +34,6 @@ public class MessageDigesterSpec extends JSpecSupport {
 		String digest = md.digest(msg, false);
 		log.debug("Digest of message \"{}\" is {}", msg, digest);
 		for (int i = 0; i < 12345; i++) {
-			/*
-			System.out.print(".");
-			if (i % 200 == 0) System.out.println();
-			*/
 			a(digest).shouldBeEqual(md.digest(msg, false));
 		}
 
