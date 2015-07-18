@@ -9,12 +9,16 @@ import java.util.Map;
 
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.RowListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.util.StringUtils;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
 public abstract class QuestionsListController extends AnonAuthController {
+
+	public static final Logger log = LoggerFactory.getLogger(QuestionsListController.class);
 
 	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, q.official_vote_tally off_vote_tally,"
 			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description "
@@ -131,6 +135,9 @@ public abstract class QuestionsListController extends AnonAuthController {
 				i++;
 			}
 		});
+
+		log.debug("Retrieved {} {} question (tag={}, searchKeyword={})", //
+				questions.size(), archived ? "archived" : "published", tagId, word);
 
 		return questions;
 	}

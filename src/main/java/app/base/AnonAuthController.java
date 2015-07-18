@@ -1,6 +1,8 @@
 package app.base;
 
 import org.javalite.activeweb.AppController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.models.Citizen;
 import app.models.Lang;
@@ -12,6 +14,8 @@ import app.util.StringUtils;
 import com.google.inject.Inject;
 
 public abstract class AnonAuthController extends AppController {
+
+	public static final Logger log = LoggerFactory.getLogger(AnonAuthController.class);
 
 	@Inject
 	protected TokenGenerator tokenGenerator;
@@ -64,6 +68,7 @@ public abstract class AnonAuthController extends AppController {
 				Citizen citizen = (Citizen) session(Const.AUTH_CITIZEN);
 				if (citizen != null) {
 					citizen.set("lang", langCode).saveIt();
+					log.debug("Setting the preferred language to {} for citizen {}", langCode, citizen.getLongId());
 				}
 			}
 		}
