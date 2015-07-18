@@ -22,13 +22,6 @@
 	///////////////////////////////
 	function init() {
 		
-		//retrieve the quesions
-		// var url = App.reqHostname+App.reqURI+(App.reqURI.length>1?'/':'')+'as/objects'+(App.reqQuery.length>0?'?'+App.reqQuery:'');
-		// $.get(url,null,function (data,stat,xhr) {
-		// 	YV.questions=data;
-		// 	YV.resize();
-		// },'json');
-		
 		$(document).ready(function(){
 			YV.resize();
 			

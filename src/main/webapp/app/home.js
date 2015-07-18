@@ -12,10 +12,6 @@
 		});
 		
 		if (App.isMobileAgent) {
-			// $('.q').bind('touchstart touchend', function(e) {
-			// 	$('.q.tap-in').trigger('mouseleave');
-			// 	$(this).trigger('mouseenter').addClass('tap-in');
-			// });
 			
 			$('.carousel').bind('swipeleft',function () {
 				$('.carousel').carousel('next');
@@ -25,7 +21,7 @@
 			});
 			
 			var carousel_lastX,carousel_lastY,carousel_timer;
-			$('.carousel').bind('touchmove', function(e) {
+			$('.carousel').bind('touchmove', function(e) {//swipe left/right on a carousel
 				clearTimeout(carousel_timer);
 				var currentX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
 				var currentY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
