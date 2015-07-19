@@ -19,6 +19,7 @@ public class HomeController extends PlatformController {
 	public void about() {}
 
 	public void catchall() {
+		log.trace("Redirecting home from {}", uri());
 		redirect("/platform/home");
 	}
 }
