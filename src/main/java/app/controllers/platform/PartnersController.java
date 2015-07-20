@@ -49,6 +49,7 @@ public class PartnersController extends PlatformController {
 			if (!StringUtils.nullOrEmpty(idParam)) {
 				Long partnerId = Long.decode(idParam);
 				Partner partner = Partner.findById(partnerId);
+				log.trace("Editing partner with id={}", partnerId);
 				returnJson(Partner.getMetaModel(), partner, EXCLUDED_FIELDS);
 			}
 		}
@@ -70,9 +71,11 @@ public class PartnersController extends PlatformController {
 			}
 		}
 		catch (IOException e) {
+			log.warn("Cannot save partner.. POST payload corrupted");
 			json_400("Cannot read POST payload");
 		}
 		catch (NumberFormatException nfe) {
+			log.warn("Cannot save partner - malformed id={}", atts.get("id"));
 			json_400("Malformed partner id");
 		}
 
@@ -82,7 +85,8 @@ public class PartnersController extends PlatformController {
 		if (id != null) {//update
 			partner = Partner.findById(id);
 			if (partner == null) {
-				json_404(String.format("No existing partner with id: %d", partner.getLongId()));
+				log.debug("Cannot find a partner with id={}", id);
+				json_404(String.format("No existing partner with id: %d", id));
 			}
 		}
 		atts.remove("first_login");
@@ -97,6 +101,7 @@ public class PartnersController extends PlatformController {
 				json_200(String.format("updated partner with id: %d", partner.getLongId()));
 			}
 		} else {
+			log.warn("Cannot save partner with id={} - db errors: {}", id, partner.errors().toString());
 			json_400("cannot update partner details");
 		}
 
