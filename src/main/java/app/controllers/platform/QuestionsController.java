@@ -68,6 +68,7 @@ public class QuestionsController extends PlatformController {
 		if (authenticatedPartner != null) {
 			questionsList(" proposed_by=" + authenticatedPartner.getLongId(), " created_at desc, support desc ");
 		} else {
+			log.debug("No authenticated Partner on the session");
 			json_403();
 		}
 	}
