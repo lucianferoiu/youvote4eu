@@ -97,11 +97,11 @@
 								</div>
 								<div class="form-group">
 									<button type="button" class="btn btn-primary"
-										ng-show="vm.crtTranslation.lang!=='en' && !vm.crtTranslation.verified"
+										ng-show="vm.crtTranslation.lang!=='en' && !vm.crtTranslation.verified && !vm.crtQuestion.is_archived"
 										ng-click="vm.toggleTranslationLock()"
 										><span class="glyphicon glyphicon-lock"></span> Lock translation (mark as verified)</button>
 									<button type="button" class="btn btn-primary"
-										ng-show="vm.crtTranslation.lang!=='en' && vm.crtTranslation.verified"
+										ng-show="vm.crtTranslation.lang!=='en' && vm.crtTranslation.verified && !vm.crtQuestion.is_archived"
 										ng-click="vm.toggleTranslationLock()"
 										><span class="glyphicon glyphicon-pencil"></span> Unlock translation (enable editing)</button>
 								</div>
