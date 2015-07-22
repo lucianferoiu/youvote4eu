@@ -426,7 +426,8 @@
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
 					<button type="button" class="btn btn-default" ng-click="vm.saveQuestion()" ng-disabled="vm.crtQuestionInalid()">Save Question</button>
 					<button type="button" class="btn btn-default" ng-click="vm.publishQuestion()" ng-show="vm.crtQuestion.id>0 && !(vm.crtQuestion.is_published)" ng-disabled="vm.crtQuestionInalid()">Publish</button>
-					<button type="button" class="btn btn-default" ng-click="vm.archiveQuestion()" ng-show="vm.crtQuestion.is_published">Archive</button>
+					<button type="button" class="btn btn-default" ng-click="vm.archiveQuestion()" 
+						ng-show="vm.crtQuestion.is_published && !(vm.crtQuestion.is_archived)">Archive</button>
 					<button type="button" class="btn btn-default" ng-click="vm.deleteQuestion()" ng-disabled="!(vm.crtQuestion.is_published)">Delete</button>
 				</div>
 			</div>

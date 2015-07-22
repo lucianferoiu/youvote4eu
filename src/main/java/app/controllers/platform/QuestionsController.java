@@ -151,7 +151,6 @@ public class QuestionsController extends PlatformController {
 		//hydrate common attributes 
 		question.fromMap(atts);
 		parseTimestamps(question, atts);
-		//		question.setTimestamp("archived_at", atts.get("archived_at"));
 		if (id == null) {//new question
 			question.set("proposed_by", myId);
 			question.setLong("support", 1L);

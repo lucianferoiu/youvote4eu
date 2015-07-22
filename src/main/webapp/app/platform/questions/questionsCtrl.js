@@ -284,11 +284,11 @@
 				//sanitize dates
 				var m = null;
 				m=$('#archivedAtDP').data("DateTimePicker").date();
-				q.archived_at=m?m.valueOf():null;
+				q.archived_at=m?m.valueOf():q.archived_at;
 				m=$('#closedAtDP').data("DateTimePicker").date();
-				q.closed_at=m?m.valueOf():null;
+				q.closed_at=m?m.valueOf():q.closed_at;
 				m=$('#openAtDP').data("DateTimePicker").date();
-				q.open_at=m?m.valueOf():null;
+				q.open_at=m?m.valueOf():q.open_at;
 				m=$('#parliamentVoteDP').data("DateTimePicker").date();
 				q.parliament_voted_on=m?m.valueOf():null;
 				m=$('#councilVoteDP').data("DateTimePicker").date();
