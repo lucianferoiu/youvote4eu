@@ -66,7 +66,7 @@
 										<li role="presentation"><a role="menuitem" tabindex="-1" href="#" 
 											ng-repeat="l in vm.translationsDropdown"
 											ng-click="vm.switchTranslation(l.code)"
-											>{{l.label}} <span class="glyphicon glyphicon-pencil" ng-show="l.completed"></span></a></li>
+											>{{l.label}} <span class="glyphicon glyphicon-pencil" ng-show="l.hasContent"></span> <span class="glyphicon glyphicon-lock" ng-show="l.verified"></span></a></li>
 								</ul>
 							</li>
 						</ul>
@@ -80,7 +80,7 @@
 									<input type="text" class="form-control" id="questionTitle" 
 										ng-model="vm.crtTranslation.title" 
 										ng-required="vm.crtTranslation.lang==='en'"
-										ng-readonly="vm.crtQuestion.is_archived"
+										ng-readonly="!vm.canEditTranslation()"
 										placeholder="Short title (mandatory)" >
 								</div>
 								<div class="form-group">
@@ -88,12 +88,22 @@
 									<textarea class="form-control" rows="2" id="questionDescription" 
 										ng-model="vm.crtTranslation.description" 
 										ng-required="vm.crtTranslation.lang==='en'"
-										ng-readonly="vm.crtQuestion.is_archived"
+										ng-readonly="!vm.canEditTranslation()"
 										placeholder="Concise formulation of the question (mandatory: at least a few words)" maxlength="280"></textarea>
 								</div>
 								<div class="form-group">
 									<label for="questionContent" class="control-label">Question Content</label>
 									<div class="form-control" id="questionContent" placeholder="Elaboration of the question arguments, supporting references and links"></div>
+								</div>
+								<div class="form-group">
+									<button type="button" class="btn btn-primary"
+										ng-show="vm.crtTranslation.lang!=='en' && !vm.crtTranslation.verified"
+										ng-click="vm.toggleTranslationLock()"
+										><span class="glyphicon glyphicon-lock"></span> Lock translation (mark as verified)</button>
+									<button type="button" class="btn btn-primary"
+										ng-show="vm.crtTranslation.lang!=='en' && vm.crtTranslation.verified"
+										ng-click="vm.toggleTranslationLock()"
+										><span class="glyphicon glyphicon-pencil"></span> Unlock translation (enable editing)</button>
 								</div>
 							</form>
 						</div>

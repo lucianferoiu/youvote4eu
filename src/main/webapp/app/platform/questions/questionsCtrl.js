@@ -37,6 +37,8 @@
 		vm.crtQuestionInalid = crtQuestionInalid;
 		vm.saveQuestion = saveQuestion;
 		vm.switchTranslation = switchTranslation;
+		vm.canEditTranslation = canEditTranslation;
+		vm.toggleTranslationLock = toggleTranslationLock;
 		vm.englishForLangCode = englishForLangCode;
 		vm.publishQuestion = publishQuestion;
 		vm.archiveQuestion = archiveQuestion;
@@ -213,9 +215,10 @@
 					title: question.title,
 					description: question.description,
 					html_content: question.html_content,
+					verified: false
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
-				$('.note-editable').attr('contenteditable',!(vm.crtQuestion.is_archived) );
+				$('.note-editable').attr('contenteditable',vm.canEditTranslation());
 				
 				vm.crtComment = null;
 				
@@ -228,21 +231,25 @@
 								vm.translationsDropdown.unshift({
 									code: 'en',
 									label: 'English',
-									completed: question.title && question.description && question.html_content
+									verified: vm.crtQuestion.is_archived,
+									hasContent: question.title && question.description && question.html_content
 								});
 							} else if (langs.hasOwnProperty(code)) {
 								var isCompleted = false;
+								var isVerified = false;
 								for (var i = question.children.translations.length - 1; i >= 0; i--) {
 									var tr = question.children.translations[i];
 									if (tr.lang===code) {
 										isCompleted = true;
+										isVerified = (tr.verified==true)
 									}
 								}
 							
 								vm.translationsDropdown.unshift({
 									code: code,
 									label: langs[code].label_en,
-									completed: isCompleted
+									verified: isVerified,
+									hasContent: isCompleted
 								});
 							}
 						}
@@ -370,10 +377,11 @@
 				var dd = vm.translationsDropdown[i];
 				if (dd.code===vm.crtTranslation.lang) {
 					if (vm.crtTranslation.title && vm.crtTranslation.title.length>5 && vm.crtTranslation.description && vm.crtTranslation.description.length>10 && vm.crtTranslation.html_content) {
-						dd.completed = true;
+						dd.hasContent = true;
 					} else {
-						dd.completed = false;
+						dd.hasContent = false;
 					}
+					dd.verified = (vm.crtTranslation.verified==true);
 				}
 			}	
 				
@@ -388,6 +396,7 @@
 					var t = q.children.translations[i];
 					if (t.lang===trans.lang && t.field_type===fld) {
 						t.text = trans[fld];
+						t.verified = trans.verified;
 						isNewTrans = false;
 						break;
 					}
@@ -398,6 +407,7 @@
 						parent_type:'question',
 						field_type:fld,
 						lang: trans.lang,
+						verified: trans.verified,
 						text: trans[fld]
 					};
 					q.children.translations.push(newTrans);
@@ -423,6 +433,23 @@
 			return null;
 		}
 		
+		function getTranslationVerified(q,lng) {
+			var isTransVerified = true;
+			if (q!=null&&lng!=null) {
+				if (lng==='en') {
+					return false;
+				} else {
+					for (var i = q.children.translations.length - 1; i >= 0; i--) {
+						var t = q.children.translations[i];
+						if (t.lang===lng ) {
+							isTransVerified = isTransVerified && (t.verified==true);
+						}
+					}
+				}
+			}
+			return isTransVerified;
+		}
+		
 		function switchTranslation(lng) {
 			if (vm.crtQuestion!=null&&vm.crtTranslation.lang!==lng) {
 				//save what we have now in the input fields
@@ -434,8 +461,10 @@
 					title: getTranslation(vm.crtQuestion,lng,'title')||'',
 					description: getTranslation(vm.crtQuestion,lng,'description')||'',
 					html_content: getTranslation(vm.crtQuestion,lng,'html_content')||'',
+					verified: getTranslationVerified(vm.crtQuestion,lng)
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
+				$('.note-editable').attr('contenteditable',vm.canEditTranslation());
 				
 				//update the tabs
 				if (vm.translationsTab!=null) {
@@ -458,6 +487,19 @@
 				}
 				
 			}
+		}
+		
+		function toggleTranslationLock() {
+			vm.crtTranslation.verified = !(vm.crtTranslation.verified);
+			$('.note-editable').attr('contenteditable',vm.canEditTranslation());
+		}
+		
+		function canEditTranslation() {
+			if (vm.crtQuestion) {
+				if (vm.crtQuestion.is_archived) return false;
+				if (vm.crtTranslation.verified==true) return false;
+			}
+			return true;
 		}
 		
 		
