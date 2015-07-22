@@ -215,6 +215,8 @@
 					html_content: question.html_content,
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
+				$('.note-editable').attr('contenteditable',!(vm.crtQuestion.is_archived) );
+				
 				vm.crtComment = null;
 				
 				//update dropdown

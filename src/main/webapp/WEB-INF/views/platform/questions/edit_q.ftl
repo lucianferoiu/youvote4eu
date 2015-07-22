@@ -79,7 +79,8 @@
 									<label for="questionTitle" class="control-label">Title</label>
 									<input type="text" class="form-control" id="questionTitle" 
 										ng-model="vm.crtTranslation.title" 
-										ng-required="vm.crtTranslation.lang==='en'" 
+										ng-required="vm.crtTranslation.lang==='en'"
+										ng-readonly="vm.crtQuestion.is_archived"
 										placeholder="Short title (mandatory)" >
 								</div>
 								<div class="form-group">
@@ -87,6 +88,7 @@
 									<textarea class="form-control" rows="2" id="questionDescription" 
 										ng-model="vm.crtTranslation.description" 
 										ng-required="vm.crtTranslation.lang==='en'"
+										ng-readonly="vm.crtQuestion.is_archived"
 										placeholder="Concise formulation of the question (mandatory: at least a few words)" maxlength="280"></textarea>
 								</div>
 								<div class="form-group">
