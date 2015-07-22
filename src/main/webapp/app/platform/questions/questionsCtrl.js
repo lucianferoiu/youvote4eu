@@ -241,14 +241,14 @@
 									var tr = question.children.translations[i];
 									if (tr.lang===code) {
 										isCompleted = true;
-										isVerified = (tr.verified==true)
+										isVerified = isVerified || (tr.verified==true)
 									}
 								}
 							
 								vm.translationsDropdown.unshift({
 									code: code,
 									label: langs[code].label_en,
-									verified: isVerified,
+									verified: vm.crtQuestion.is_archived || isVerified,
 									hasContent: isCompleted
 								});
 							}
