@@ -18,7 +18,7 @@
 	[#list questions as q]
 	<div id="q${q.id}" class="q hover" 
 		data-q-id="${q.id}" data-q-votes="${q.votesCount}" [#if q.voted??] data-q-voted="${q.voted}"[/#if] data-q-can-vote="${q.canVote?c}" data-q-vote-tally="${q.voteTally}"
-		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.arch] data-q-archived="yes"[/#if] [#if q.archivedOn??] data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
+		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.arch] data-q-archived="yes" data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc visible-xs-block">
 				<div class="col-xs-3">
@@ -135,13 +135,7 @@
 		reqQuery: '${reqQuery}',
 		isMobileAgent: ${isMobileAgent?c},
 		validatedCitizen: ${validatedCitizen?c},
-		pendingValidation: ${pendingValidation?c},
-		questions: {
-			'na': {}
-			[#list questions as q]
-			,${q.id}: {votes:${q.votesCount},[#if q.voted??]voted:${q.voted},[/#if]archived:${q.arch?c},canVote:${q.canVote?c},voteTally:${q.voteTally}}
-			[/#list]
-		}
+		pendingValidation: ${pendingValidation?c}
 	};
 </script>
 [/@content]
