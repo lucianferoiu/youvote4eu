@@ -58,9 +58,7 @@
 		</a>
 	</div>
 </div>
-
 <hr/>
-
 <div class="aq-cont container-fluid q-cont-static">
 	<div class="row">
 		<div class="col-md-9 container-fluid" >

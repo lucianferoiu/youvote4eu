@@ -11,4 +11,8 @@ public class StringUtils {
 		return obj == null ? "" : obj.toString();
 	}
 
+	public static String nvl(Object obj, Object deflt) {
+		return obj == null ? deflt.toString() : obj.toString();
+	}
+
 }
