@@ -11,9 +11,7 @@
 			'3': {pageSize:4},
 			'4': {pageSize:5},
 			'5': {pageSize:6}
-		},
-		questions: App.questions
-		
+		}
 	};
 	root.YV = YV;
 	$(document).ready(function () {

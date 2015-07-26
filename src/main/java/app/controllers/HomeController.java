@@ -2,7 +2,6 @@ package app.controllers;
 
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
@@ -230,8 +229,14 @@ public class HomeController extends QuestionsListController {
 					alreadyVoted.put(qId, voteValue);
 					session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVoted);
 				}
+				respond("").contentType("application/json").status(204);
+			} else {
+				log.warn("Duplicate vote attempted for question {} by citizen {}", qId, citizen.getLongId());
 			}
 
+			/* 
+			 * We shouldn't recompute votes here... this should be a batch job..
+			 *
 			Long currentVoteCount = q.getLong("popular_votes");
 			BigDecimal currentVoteTally = q.getBigDecimal("popular_vote_tally");
 			//TODO: relegate theese as batch operations...
@@ -245,8 +250,8 @@ public class HomeController extends QuestionsListController {
 				q.setLong("popular_votes", currentVoteCount + 1 - duplicates);
 			}
 			q.saveIt();
+			*/
 
-			respond("").contentType("application/json").status(204);
 		} else {
 			log.debug("No citizen associated with the request from {}::{} - first-time access?", header("Remote_Addr"),
 					header("HTTP_X_FORWARDED_FOR"));
