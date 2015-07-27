@@ -64,7 +64,7 @@
 		<div class="voting-booth-controls">
 			<div class="can-vote">
 				<div class="vote-no pull-right"><button class="btn btn-danger">NO</button></div>
-				<div class="vote-yes"><button class="btn btn-block btn-success">YES</button></div>
+				<div class="vote-yes"><button class="btn btn-success">YES</button></div>
 			</div>
 			<div class="already-voted">
 				<div class="vote-tally">YES: <span class="yes-tally">30%</span> / NO: <span class="no-tally">70%</span></div>

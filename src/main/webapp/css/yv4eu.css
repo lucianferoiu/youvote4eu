@@ -474,9 +474,7 @@ a.carousel-control {
 }
 
 .voting-booth-controls {
-	margin-left:4px;
-	margin-right:-4px;
-	padding: 4px;
+	padding: 8px 8px;
 	width:100%;
 	position: absolute;
 	bottom:0;
