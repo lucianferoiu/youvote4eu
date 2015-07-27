@@ -17,9 +17,9 @@
 			<div class="arch-q-desc">
 				<blockquote>
 				<p>${questionDescription}</p>
-				<footer>Published on ${question.open_at?string["dd/MM/yyyy HH:mm"]}</footer>
-				<footer>Closed on ${question.closed_at?string["dd/MM/yyyy HH:mm"]}</footer>
-				<footer>Archived on ${question.archived_at?string["dd/MM/yyyy HH:mm"]}</footer>
+				[#if question.open_at??]<footer>Published on ${question.open_at?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
+				[#if question.closed_at??]<footer>Closed on ${question.closed_at?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
+				[#if question.archived_at??]<footer>Archived on ${question.archived_at?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
 				</blockquote>
 			</div>
 			<div class="arch-q-content">
@@ -32,8 +32,8 @@
 							Votes cast by citizen: ${question.popular_votes}
 						</div>
 						<div class="arch-q-citizen-tally text-center">
-							<span class="label label-success text-left">Yes: ${((question.popular_vote_tally)*100)?string["0.##"]} %</span>&nbsp;
-							<span class="label label-danger text-right">No: ${((1-(question.popular_vote_tally))*100)?string["0.##"]} %</span>
+							<span class="label label-success text-left">Yes: ${((question.popular_vote_tally!0)*100)?string["0.##"]} %</span>&nbsp;
+							<span class="label label-danger text-right">No: ${((1-(question.popular_vote_tally!0))*100)?string["0.##"]} %</span>
 						</div>
 						<hr/>
 						<div class="arch-q-citizen-chart">
@@ -136,7 +136,7 @@
 					<div class="col-xs-offset-1 col-xs-10">
 						<strong>Conclusion:</strong>
 						<br/>
-						<em>${question.archival_conclusion}</em>
+						<em>${question.archival_conclusion!''}</em>
 					</div>
 				</div>
 				<div class="row">

@@ -178,10 +178,11 @@ a:hover, a:focus {
 
 .q-bg-1 { background-color: white; }
 .q-bg-2 { background-color: #bcb8b8; }
-.q-bg-3 { background-color: #e7e7e7; }
-.q-bg-4 { background-color: #E5DADC;}/*C2A8AB*/
-.q-bg-5 { background-color: #AE9A9E; /*8B7B7E*/}
+.q-bg-3 { background-color: #809696; }
+.q-bg-4 { background-color: #AE9A9E; } /*8B7B7E*/
+.q-bg-5 { background-color: #7F9797; } /*C2A8AB*/ /*E5DADC*/
 .q-bg-6 { background-color: #B8A6A9; }
+.q-bg-7 { background-color: #e7e7e7; }
 
 .q:hover, .q.touch { 
 	background-color: #6D000D;
@@ -451,108 +452,52 @@ a.carousel-control {
 }
 
 /* ------- voting booth */
-.q-voting-booth {
-/*	background-color: rgba(0,0,0,0.1);*/
-/*	background-color: rgba(0.427,0,0.51,0);*/
-	background-color:#6D000D;
-	bottom:6px;
-	z-index:1000;
+
+.btn-danger {
+	background-color: #AE9A9E;
+	border-color: #d43f3a;
+	color: #fff;
 }
 
-.q-cont-carousel .q-voting-booth {
-	position:absolute; 
+.btn-success {
+	background-color: #809696;
+	border-color: #d43f3a;
+	color: #fff;
 }
 
-.q-cont-static .q-voting-booth {
-	height:5em; 
-	
+#votingBoothFlyweight {
+	position: absolute;
+	z-index:3000;
 }
 
-.q-voting-booth a {
-	opacity: 1;
-	background-color: #f8f8f8;
-	border-radius: 2px;
-	padding: 2px;
-/*	margin: 2px;*/
+.voting-booth-container {
 }
 
-.q-voting-booth .btn-group {
+.voting-booth-controls {
+	margin-left:4px;
+	margin-right:-4px;
+	padding: 4px;
+	width:100%;
+	position: absolute;
+	bottom:0;
+	background-color: #6D000D;
+	color: white;
+}
+
+.can-vote {
+	display:inline-block;
 	width:100%;
 }
 
-.q-sz-3 .q-voting-booth {
-/*	bottom: 5em;*/
-}
-.q-sz-3 .q-voting-booth a {
-	font-size: 2.6em;
-	font-weight: 800;
-}
-
-.q-sz-2 .q-voting-booth {
-/*	bottom: 4em;*/
-}
-
-.q-sz-2 .q-voting-booth a {
-	font-size: 1.8em;
-	font-weight: 600;
-}
-
-.q-sz-1 .q-voting-booth a {
-	font-size: 0.8em;
-	line-height:1em;
-	font-weight: 600;
-}
-
-.q-sz-1 .q-voting-booth {
-	padding-top:6px;
-	padding-bottom:6px;
-	background-color: rgba(0.427,0,0.51,1);
-}
-
-.q-sz-1 .q-voting-booth .vote-validation-pending {
-	font-size: 0.8em;
-}
-
-.q-voting-booth .vote-yes {
-	color: #990012;
-}
-.q-voting-booth .vote-no {
-	color: #990012;
-}
-.q-voting-booth .vote-details {
-	color: #7c7a7a;
-}
-
-.q-voting-booth .vote-validation-pending {
-	background-color: rgba(0.427,0,0.51,1);
-}
-
-.vote-validation-pending span {
-	cursor: pointer;
-}
-
-.already-voted {
-	color: #6D000D;
-	display: none;
-}
-
-.vote-validation-pending {
-	display: none;
-}
-
-.aftervote-vote-tally {
-	display: none;
+.vote-yes, .vote-no {
 	font-size: 2em;
-	font-weight: 600;
-	color: #E5DADC;
 }
 
-.q-sz-1 .aftervote-vote-tally {
-	font-size: 0.9em;
+.vote-yes button, .vote-no button {
 }
 
-.q-cont-static .aftervote-vote-tally {
-	font-size: 1em;
+
+.question-details {
 }
 
 /*** Question details ***/

@@ -16,9 +16,7 @@
 <!-- questions container: "mobile" rendering -->
 <div id="qContainerFlow" class="q-cont q-cont-static container-fluid visible-xs-block">
 	[#list questions as q]
-	<div id="q${q.id}" class="q hover" 
-		data-q-id="${q.id}" data-q-votes="${q.votesCount}" [#if q.voted??] data-q-voted="${q.voted}"[/#if] data-q-can-vote="${q.canVote?c}" data-q-vote-tally="${q.voteTally}"
-		data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.arch] data-q-archived="yes"[/#if] [#if q.archivedOn??] data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
+	<div id="q${q.id}" class="q hover" data-q-id="${q.id}">
 			<div class="q-title">${q.title}</div>
 			<div class="q-desc visible-xs-block">
 				<div class="col-xs-3">
@@ -30,7 +28,7 @@
 				</blockquote>
 				<p class="q-desc-p">${q.description}</p>
 			</div>
-			<div class="trailing-space"><br/><br/><br/></div>
+			[#-- <div class="trailing-space"><br/><br/><br/></div> --]
 	</div>
 	[/#list]
 </div>
@@ -56,8 +54,35 @@
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 			<span class="sr-only">Next</span>
 		</a>
+		
+		
 	</div>
 </div>
+
+<div id="votingBoothFlyweight" class="voting-booth">
+	<div class="voting-booth-container">
+		<div class="voting-booth-controls">
+			<div class="can-vote">
+				<div class="vote-no pull-right"><button class="btn btn-danger">NO</button></div>
+				<div class="vote-yes"><button class="btn btn-block btn-success">YES</button></div>
+			</div>
+			<div class="already-voted">
+				<div class="vote-tally">YES: <span class="yes-tally">30%</span> / NO: <span class="no-tally">70%</span></div>
+				<div id="citizen-voted-yes">You voted: <span class="citizen-vote-value">YES</span></div>
+				<div id="citizen-voted-no">You voted: <span class="citizen-vote-value">NO</span></div>
+				<div id="citizen-vote-pending">Check your email to validate your vote</div>
+			</div>
+			<div class="question-details">
+				<button type="button" class="btn btn-default btn-block">Details...</button>
+			</div>
+			<div class="voting-email-pending">
+				<span class="glyphicon glyphicon-info-sign"></span> Email validation pending..
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <hr/>
 <div class="aq-cont container-fluid q-cont-static">
 	<div class="row">
@@ -66,9 +91,7 @@
 			<div class="row">
 				[#assign cnt=rand(1,10)]
 				[#list last3ArchivedQuestions as q]
-				<div id="q${q.id}" class="q aq col-md-4 q-bg-${(cnt%3)+2}" 
-					data-q-id="${q.id}" data-q-votes="${q.votesCount}" [#if q.arch] data-q-archived="yes"[/#if]
-					data-q-pub-date='${q.publishedOn?string["dd/MM/yyyy HH:mm"]}' [#if q.archivedOn??]data-q-arch-date='${q.archivedOn?string["dd/MM/yyyy HH:mm"]}'[/#if]>
+				<div id="aq${q.id}" class="q aq col-md-4 q-bg-${(cnt%3)+2}" data-q-id="${q.id}">
 						<div class="q-title">${q.title}</div>
 						<div class="aq-votes-tally">
 							<div class="q-votes"><span>${q.votesCount}</span> votes</div>
@@ -124,7 +147,6 @@
 	</div>
 </div>
 
-[@content for="footer_script"]
 <script type="text/javascript">
 	var App = {
 		reqURL: '${reqURL}',
@@ -142,4 +164,3 @@
 		}
 	};
 </script>
-[/@content]
