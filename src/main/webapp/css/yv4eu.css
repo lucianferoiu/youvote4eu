@@ -56,6 +56,24 @@
 	border-radius: 6px 0 6px 6px;
 }
 
+/* Spinner */
+
+.glyphicon-refresh-animate {
+	animation: spin .7s infinite linear;
+	-webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+	from { -webkit-transform: rotate(0deg);}
+	to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+	from { transform: scale(1) rotate(0deg);}
+	to { transform: scale(1) rotate(360deg);}
+}
+
+
 /*** Color palette ***/
 .rotten-cherry { color: #990012 }
 .rotten-cherry-dark { color: #6D000D }
@@ -184,7 +202,7 @@ a:hover, a:focus {
 .q-bg-6 { background-color: #B8A6A9; }
 .q-bg-7 { background-color: #e7e7e7; }
 
-.q:hover, .q.touch { 
+.q:hover, .q.touch, .q-hover { 
 	background-color: #6D000D;
 	color: white;
 }
@@ -209,7 +227,7 @@ a:hover, a:focus {
 	color: #990012;
 }
 
-.q:hover .q-tally, .q.touch .q-tally {
+.q:hover .q-tally, .q.touch .q-tally, .q-hover .q-tally {
 	color: white;
 }
 
@@ -277,7 +295,7 @@ a:hover, a:focus {
 	margin-right: 8px;
 }
 
-.q-cont-static .q:hover .q-votes span, .q-cont-static .q.touch .q-votes span {
+.q-cont-static .q:hover .q-votes span, .q-cont-static .q.touch .q-votes span, .q-cont-static .q.q-hover .q-votes span {
 	color: white;
 }
 
@@ -447,21 +465,26 @@ a.carousel-control {
 }
 
 
-.q-cont-carousel .q:hover .q-votes span, .q-cont-carousel .q.touch .q-votes span {
+.q-cont-carousel .q:hover .q-votes span, .q-cont-carousel .q.touch .q-votes span, .q-cont-carousel .q.q-hover .q-votes span {
 	color: white;
 }
 
 /* ------- voting booth */
 
+.voting-booth .btn {
+	border-radius: 1px;
+	 padding: 3px 6px;
+}
+
 .btn-danger {
 	background-color: #AE9A9E;
-	border-color: #d43f3a;
+	border-color: #8E7A7E;
 	color: #fff;
 }
 
 .btn-success {
 	background-color: #809696;
-	border-color: #d43f3a;
+	border-color: #607676;
 	color: #fff;
 }
 
@@ -471,10 +494,14 @@ a.carousel-control {
 }
 
 .voting-booth-container {
+	
 }
 
 .voting-booth-controls {
-	padding: 8px 8px;
+	opacity: 1;
+	border-top: 3px solid white;
+	margin-top: 3px;
+	padding: 4px 8px;
 	width:100%;
 	position: absolute;
 	bottom:0;
@@ -483,20 +510,131 @@ a.carousel-control {
 }
 
 .can-vote {
-	display:inline-block;
+/*	display:inline-block;*/
+	
+	color: #6D000D;
+}
+
+.can-vote .btn-group {
+/*	padding: 2px 6px;*/
 	width:100%;
 }
 
+.can-vote button {
+	width:50%;
+	color: #6D000D;
+}
+
+.can-vote button:hover {
+	color: #990012;
+}
+
+.q-sz-1 .can-vote .btn {
+	font-weight:900;
+	font-size: 1.2em;
+}
+.q-sz-2 .can-vote .btn  {
+	font-weight:900;
+	font-size: 1.8em;
+}
+.q-sz-3 .can-vote .btn  {
+	font-weight:900;
+	font-size: 2.8em;
+}
+
 .vote-yes, .vote-no {
+	width: 50%;
+}
+
+.q-sz-1 .voting-info-text {
+	font-weight:300;
+	font-size: 0.8em;
+}
+.q-sz-2 .voting-info-text {
+	font-weight:300;
+	font-size: 1.2em;
+}
+.q-sz-3 .voting-info-text {
+	font-weight:300;
+	font-size: 1.4em;
+}
+
+.vote-tally {
+	color: #e7e7e7;
+}
+
+.q-sz-1 .vote-tally {
+	font-weight:300;
+	font-size: 0.9em;
+}
+.q-sz-2 .vote-tally {
+	font-weight:300;
+	font-size: 1.6em;
+}
+.q-sz-3 .vote-tally {
+	font-weight:300;
 	font-size: 2em;
 }
 
-.vote-yes button, .vote-no button {
+.citizen-voted-yes, .citizen-voted-yes {
+	
 }
 
+.citizen-voted {
+	font-weight:300;
+	font-size: 1.4em;
+}
+
+.q-sz-1 .citizen-voted {
+	font-weight:300;
+	font-size: 0.9em;
+}
+.q-sz-2 .citizen-voted {
+	font-weight:300;
+	font-size: 1.6em;
+}
+.q-sz-3 .citizen-voted {
+	font-weight:300;
+	font-size: 2em;
+}
+
+
+.voting-in-progress {
+	color: #e7e7e7;
+}
+
+.q-sz-1 .voting-in-progress {
+	font-weight:200;
+	font-size: 1.2em;
+}
+.q-sz-2 .voting-in-progress {
+	font-weight:300;
+	font-size: 1.8em;
+}
+.q-sz-3 .voting-in-progress {
+	font-weight:300;
+	font-size: 2.8em;
+}
 
 .question-details {
 }
+
+.question-details button {
+}
+
+.q-sz-1 .question-details button {
+	font-weight:300;
+	font-size: 1.1em;
+}
+.q-sz-2 .question-details button {
+	font-weight:400;
+	font-size: 1.3em;
+}
+.q-sz-3 .question-details button {
+	font-weight:400;
+	font-size: 1.9em;
+}
+
 
 /*** Question details ***/
 
@@ -508,7 +646,7 @@ a.carousel-control {
 	font-weight:900;
 	font-size: 2em;
 	padding: 0px 16px 10px 16px;
-	color: #6D000D
+	color: #6D000D;
 }
 
 .pub-q-desc {

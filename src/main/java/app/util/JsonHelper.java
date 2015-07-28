@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
 import org.javalite.activejdbc.LazyList;
@@ -33,6 +35,27 @@ public class JsonHelper {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static String toJson(Object o) {
+		ObjectMapper mapper = new ObjectMapper();
+		String json = "";
+		try {
+			json = mapper.writeValueAsString(o);
+		}
+		catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 	@Deprecated

@@ -18,10 +18,8 @@
 						<div class="form-group">
 							<label for="citizen-country" class="col-xs-4">Your Country</label> 
 							<div class="col-xs-8">
-								<select class="form-control">
-									<option value="ro">Romania</option>
-									<option value="de">Deutschland</option>
-									<option value="fr">France</option>
+								<select class="form-control" name="citizen-country">
+									[#list euCountries as c] <option value="${c.code}" class="flag flag-${c.code}" [#if (c.code==guessedCountry)] selected="selected" [/#if]>${c.label}</option>[/#list]
 								</select>
 							</div>
 						</div>

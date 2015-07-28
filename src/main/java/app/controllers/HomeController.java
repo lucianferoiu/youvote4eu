@@ -2,6 +2,7 @@ package app.controllers;
 
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import app.base.Const;
 import app.base.QuestionsListController;
 import app.models.Citizen;
+import app.models.Country;
 import app.models.EmailValidation;
 import app.models.Lang;
 import app.models.Question;
@@ -34,6 +36,7 @@ import app.models.Vote;
 import app.services.QuestionsLayouter;
 import app.util.JsonHelper;
 import app.util.StringUtils;
+import app.util.dto.QuestionFPStats;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
@@ -208,9 +211,11 @@ public class HomeController extends QuestionsListController {
 			return;
 		}
 
+		Base.openTransaction();
 		Question q = Question.findById(qId);
 		if (q == null) {
 			respond("question not found").contentType("application/json").status(404);
+			Base.rollbackTransaction();
 			return;
 		}
 
@@ -229,28 +234,32 @@ public class HomeController extends QuestionsListController {
 					alreadyVoted.put(qId, voteValue);
 					session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, alreadyVoted);
 				}
-				respond("").contentType("application/json").status(204);
 			} else {
 				log.warn("Duplicate vote attempted for question {} by citizen {}", qId, citizen.getLongId());
 			}
 
-			/* 
-			 * We shouldn't recompute votes here... this should be a batch job..
-			 *
 			Long currentVoteCount = q.getLong("popular_votes");
 			BigDecimal currentVoteTally = q.getBigDecimal("popular_vote_tally");
 			//TODO: relegate theese as batch operations...
 			Long yesVotes = Vote.count("question_id=? AND value=1 AND validated=true", q.getLongId());
 			Long noVotes = Vote.count("question_id=? AND value=0 AND validated=true", q.getLongId());
 			//
-			if (yesVotes > 0 || noVotes > 0) {//no point in 
-				q.setLong("popular_votes", yesVotes + noVotes);
-				q.setBigDecimal("popular_vote_tally", new BigDecimal(yesVotes / (yesVotes + noVotes)));
+			Long popularVotes = 0L;
+			BigDecimal popularVoteTally = BigDecimal.ZERO;
+			if (yesVotes > 0 || noVotes > 0) {
+				popularVotes = yesVotes + noVotes;
+				popularVoteTally = new BigDecimal(yesVotes / (yesVotes + noVotes));
 			} else {
-				q.setLong("popular_votes", currentVoteCount + 1 - duplicates);
+				popularVotes = currentVoteCount + 1 - duplicates;
 			}
+			q.setLong("popular_votes", popularVotes);
+			q.setBigDecimal("popular_vote_tally", popularVoteTally);
 			q.saveIt();
-			*/
+
+			QuestionFPStats qStats = new QuestionFPStats(qId, popularVotes, popularVoteTally.doubleValue());
+
+			Base.commitTransaction();
+			respond(JsonHelper.toJson(qStats)).contentType("application/json").status(200);
 
 		} else {
 			log.debug("No citizen associated with the request from {}::{} - first-time access?", header("Remote_Addr"),
@@ -332,6 +341,10 @@ public class HomeController extends QuestionsListController {
 			validation.setBoolean("is_citizen", true);//the kind of email verification
 			validation.saveIt();
 
+			if (!StringUtils.nullOrEmpty(countryCode)) {
+				citizen.set("country", countryCode).saveIt();
+			}
+
 			mailer.sendMail(email, subj, writer.toString(), true);
 			log.debug("Citizen identification: created email validation {} and sent the validation email for URL {}", validation, url);
 		}
@@ -374,6 +387,9 @@ public class HomeController extends QuestionsListController {
 			respond("no authentication token").status(403);
 			return;
 		}
+
+		Base.openTransaction();
+
 		Token authToken = Token.findFirst("token=?", token);
 		if (authToken == null) {//no token in the db - we're going to associate it with a new citizen
 			citizen = Citizen.findById(validation.getLong("added_by"));
@@ -408,6 +424,15 @@ public class HomeController extends QuestionsListController {
 		session(Const.AUTH_CITIZEN, citizen);
 
 		validation.set("validated", true).saveIt();//for future reference
+		//update questions stats (votes/tally) for every question on which the newly-validated citizen voted..
+		Base.exec("UPDATE questions q SET popular_votes=(SELECT count(*) FROM votes v WHERE v.question_id=q.id and v.validated=true) "
+				+ " WHERE q.id in (SELECT distinct question_id FROM votes WHERE citizen_id=?)", citizen.getLongId());
+		Base.exec("UPDATE questions q " + "SET popular_vote_tally=(SELECT count(*) FROM votes v "
+				+ " WHERE v.question_id=q.id and v.validated=true and v.value=1)/q.popular_votes "
+				+ " WHERE q.id in (SELECT distinct question_id FROM votes WHERE citizen_id=?)", citizen.getLongId());
+
+		Base.commitTransaction();
+
 		view("validatedCitizen", true);
 		redirect("/home");
 
@@ -420,6 +445,9 @@ public class HomeController extends QuestionsListController {
 		view("langs", langs);
 		List<CountedTag> tags = tagsByPubQuestionsCount();
 		view("tags", tags);
+		List<Country> euCountries = Country.findAll().orderBy("code");
+		view("euCountries", euCountries);
+		view("guessedCountry", "ro");
 		Lang sessionLang = (Lang) session(Const.CURRENT_LANGUAGE);
 		view("preferredLang", sessionLang);
 
