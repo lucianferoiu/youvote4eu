@@ -193,7 +193,13 @@ public class HomeController extends QuestionsListController {
 
 	public void help() {}
 
+	public void privacy() {}
+
+	public void code() {}
+
 	public void about() {}
+
+	public void contact() {}
 
 	public void catchall() {
 		redirect("/home");

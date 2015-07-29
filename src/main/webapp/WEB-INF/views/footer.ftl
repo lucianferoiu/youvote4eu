@@ -4,9 +4,10 @@
 		<ul class="nav navbar-nav">
 			<li><a href="${context_path}/home">&copy; Direct Democracy Frontier - 2015</a></li>
 			<li><a href="${context_path}/home/about">About</a></li>
-			<li><a href="${context_path}/home/help">About</a></li>
+			<li><a href="${context_path}/home/help">Help</a></li>
+			<li><a href="${context_path}/home/privacy">Privacy</a></li>
 			<li><a href="${context_path}/home/code">Code</a></li>
-			<li><a href="${context_path}/home/contact">Contact</a></li>
+			<li><a href="${context_path}/home/contact">Contact Us</a></li>
 			</div>
 		</ul>
 	</div>
