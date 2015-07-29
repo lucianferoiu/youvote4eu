@@ -9,19 +9,19 @@
 				<div class="panel-body">
 					<form class="form-horizontal" action="/send-validation-mail" method="post" data-toggle="validator" role="form">
 						<div class="form-group">
-							<label for="citizen-email" class="col-xs-4">Your Email address</label> 
-							<div class="col-xs-8 input-group">
-								<span class="input-group-addon">@</span>
-								<input id="citizen-email" name="citizen-email" type="email" class="form-control" required>
+							<label for="citizen-email" class="col-xs-4">Your Email address</label>
+							<div class="col-xs-8">
+								<div class="input-group">
+									<span class="input-group-addon">@</span>
+									<input id="citizen-email" name="citizen-email" type="email" class="form-control" required>
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="citizen-country" class="col-xs-4">Your Country</label> 
-							<div class="col-xs-8">
-								<select class="form-control" name="citizen-country">
-									[#list euCountries as c] <option value="${c.code}" class="flag flag-${c.code}" [#if (c.code==guessedCountry)] selected="selected" [/#if]>${c.label}</option>[/#list]
-								</select>
-							</div>
+							<select class="col-xs-8 selectpicker show-tick" name="citizen-country" data-size="7" data-live-search="true" data-show-subtext="true">
+								[#list euCountries as c] <option value="${c.code}" data-content="<img src='/img/blank.gif' class='flag flag-${c.code}'/>&nbsp;<span class='text-muted'>[${c.code?upper_case}]</span>&nbsp;&nbsp;${c.label} " [#if (c.code==guessedCountry)] selected="selected" [/#if] data-subtext="${c.code?upper_case}">${c.label}</option>[/#list]
+							</select>
 						</div>
 						
 						<div class="col-xs-12">

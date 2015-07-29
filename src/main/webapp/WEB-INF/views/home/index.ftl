@@ -6,6 +6,10 @@
 	[#-- [@content for="header_css"]<link href='${context_path}/css/jquery.mobile.min.css' rel="stylesheet">[/@content] --]
 	[#-- [@content for="footer_script"]<script src='${context_path}/js/jquery.mobile.min.js'></script>[/@content] --]
 [/#if]
+[@content for="header_css"]<link href='${context_path}/css/flags.css' rel="stylesheet">[/@content]
+[@content for="header_css"]<link href='${context_path}/css/bootstrap-select.min.css' rel="stylesheet">[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/bootstrap-select.min.js'></script>[/@content]
+
 
 [#include "../other/utils.ftl"]
 

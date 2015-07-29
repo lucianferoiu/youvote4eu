@@ -9,15 +9,35 @@
 		
 		$('.q').on('mouseenter', function (e) {
 			// console.log('entering question ',$(this).data('q-id'));
-			showVotingBooth(this,e);
+			if (App.isMobileAgent==false) {
+				showVotingBooth(this,e);
+			}
 		});
 		$('.q').on('mouseleave', function (e) {
 			// console.log('leaving question ',$(this).data('q-id'));
-			// hideVotingBooth(this,e);
-			var qId = $(this).data('q-id');
-			if (App.activeQuestion==null||App.activeQuestion!=qId) {
-				$('#votingBoothFlyweight').hide();
-				$(this).removeClass('q-hover');
+			if (App.isMobileAgent==false) {
+				var qId = $(this).data('q-id');
+				if (App.activeQuestion==null||App.activeQuestion!=qId) {
+					$('#votingBoothFlyweight').hide();
+					$(this).removeClass('q-hover');
+				}
+			}
+		});
+		
+		$('.q').on('click', function (e) {
+			if (App.isMobileAgent==true) {//we don't have a 'sane' mouse enter/leave...
+				$(('.q[data-q-id="'+App.activeQuestion+'"]')).removeClass('q-hover');
+				var qId = $(this).data('q-id');
+				if (App.activeQuestion==qId) {//toggle click on same question -> hide
+					$('#votingBoothFlyweight').hide();
+					App.activeQuestion=null;
+				} else if(App.activeQuestion!=null) {
+					$('#votingBoothFlyweight').hide();//hide the voting booth on the other question
+					App.activeQuestion=null;
+					showVotingBooth(this,e);
+				} else if(App.activeQuestion==null) {//
+					showVotingBooth(this,e);
+				}
 			}
 		});
 
@@ -25,11 +45,13 @@
 			// console.log('entering voting booth');
 		});
 		$('#votingBoothFlyweight').on('mouseleave', function (e) {
-			// console.log('leaving voting booth');
-			if (App.carouselTransitioning==true) return;
-			$('#votingBoothFlyweight').hide();
-			$(('.q[data-q-id="'+App.activeQuestion+'"]')).removeClass('q-hover');
-			App.activeQuestion=null;
+			if (App.isMobileAgent==false) {
+				// console.log('leaving voting booth');
+				if (App.carouselTransitioning==true) return;
+				$('#votingBoothFlyweight').hide();
+				$(('.q[data-q-id="'+App.activeQuestion+'"]')).removeClass('q-hover');
+				App.activeQuestion=null;
+			}
 		});
 		
 		$('#votingBoothFlyweight .question-details button').click(function () {
@@ -49,6 +71,8 @@
 		});
 		
 		$('#qCarousel').on('slide.bs.carousel', function () {
+			App.activeQuestion=null;
+			$('#votingBoothFlyweight').hide();
 			App.carouselTransitioning=true;
 		});
 
@@ -113,7 +137,7 @@
 			});
 		}
 			
-		$('body').popover({selector: '.vote-validation-pending span',trigger:'hover',container:'body', placement:'auto'});
+		//$('body').popover({selector: '.vote-validation-pending span',trigger:'hover',container:'body', placement:'auto'});
 		
 		init();
 		
@@ -196,23 +220,23 @@
 	}
 	
 	function voteQuestion(qId,voteValue) {
-		console.log('Voting '+voteValue+' on question '+qId);
+		// console.log('Voting '+voteValue+' on question '+qId);
 		$('#votingSpinner').show();
 		$('#votingBoothFlyweight .can-vote').hide();
 		$('#votingBoothFlyweight .can-vote button').attr('disabled','disabled');
+		if (!App.validatedCitizen) {
+			if (App.pendingValidation==true) {
+				$('#validate-citizen-reminder').modal();
+			} else {
+				$('#votingBoothFlyweight').hide();
+				$('#validate-citizen').modal();
+			}
+		}
 		var url = App.reqHostname+'/vote/'+qId+'/'+voteValue;
 		$.ajax({
 			url:url,
 			type:'PUT',
 			success: function (data,stat,xhr) {
-				if (!App.validatedCitizen) {
-					if (App.pendingValidation==true) {
-						$('#validate-citizen-reminder').modal();
-					} else {
-						$('#votingBoothFlyweight').hide();
-						$('#validate-citizen').modal();
-					}
-				}
 				App.questions[qId].canVote=false;
 				App.questions[qId].voted=voteValue;
 				App.questions[qId].votes = data.votes;

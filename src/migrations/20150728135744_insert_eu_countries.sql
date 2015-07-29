@@ -7,7 +7,7 @@ INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 4,true,'Danmar
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 5,true,'Deutschland','de','de');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 6,true,'Eesti','ee','et');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 7,true,'Éire/Ireland','ie','en');
-INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 8,true,'Ελλάδα','el','el');
+INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 8,true,'Ελλάδα','gr','el');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES( 9,true,'España','es','es');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES(10,true,'France','fr','fr');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES(11,true,'Hrvatska','hr','hr');
