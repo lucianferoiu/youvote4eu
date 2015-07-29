@@ -5,7 +5,7 @@
 		</p>
 		<div class="content">
 			<p>
-				Hello and thank you for coming back to <b>YouVoteForEurope</b>!
+				Hello and thank you for coming back to <i>YouVoteForEurope</i>!
 			</p>
 			<p>
 				You asked us to reset your password and you provided a new one. But to finalize the process, you need to confirm to us the reset.
@@ -21,15 +21,16 @@
 				<br/>
 				To <strong>confirm</strong> the reset, <a href="${url}">please click here</a>.
 				If you're unable to see the link or cannot open the link in your browser, copy this<br/>
-				${url}<br/>
+				<tt>${url}</tt><br/>
 				in the address bar of a browser.
 			</p>
 			<p>
 				Make sure to do so in the next 24h, since afterwards the code will be deleted and the password resetting process halted.
 			</p>
 			<p>
+				<br/>
 				Thank you,<br/>
-				The YouVoteForEu team.
+				The <i>YouVoteForEurope</i> team.
 			</p>
 		</div>
 	</body>

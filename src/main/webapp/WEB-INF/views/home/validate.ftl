@@ -4,12 +4,13 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="panel-title">Validate vote</h4>
 				<hr/>
 				<div class="panel-body">
 					<form class="form-horizontal" action="/send-validation-mail" method="post" data-toggle="validator" role="form">
 						<div class="form-group">
-							<label for="citizen-email" class="col-xs-4">Your Email address</label>
+							<label for="citizen-email" class="col-xs-4">Your Email</label>
 							<div class="col-xs-8">
 								<div class="input-group">
 									<span class="input-group-addon">@</span>
@@ -24,7 +25,7 @@
 							</select>
 						</div>
 						
-						<div class="col-xs-12">
+						<div class="col-xs-12" style='overflow-y:scroll;'>
 							<p  style="color:#990012;">
 								Before your votes are counted, we need you to validate your <em>anonymous</em> identity via email.
 							</p>
@@ -33,7 +34,7 @@
 								Just as well, the information about the country is used exclusively for statistics of the votes...
 							</p>
 							<p>
-								Please enter your email address above, choose the EU country that best represents you and click the <em>Send Validation Email</em> button below.
+								Please enter your email address above, choose the EU country that best represents you and click the <em>Send <span class="hidden-xs">Validation</span> Email</em> button below.
 							</p>
 							<p class="hidden-xs">
 								We will sent you an email containing a validation link - <strong>click it</strong> and we're done. You only need to do this the first time (well, technically every time you visit us from a <em>new computer/device</em> or use a different browser). We use a randomly-generated number in a cookie to identify you on subsequent visits - absolutely nothing to tie your personal data to the votes you make here, even if our systems are hacked or seized.
@@ -45,7 +46,7 @@
 						</div>
 						<hr/>
 						<div class="form-group row">
-							<button id="citizen-validation-submit" type="submit" class="col-xs-offset-1 col-xs-6 btn btn-danger">Send Validation Email</button>
+							<button id="citizen-validation-submit" type="submit" class="col-xs-offset-1 col-xs-6 btn btn-danger">Send <span class="hidden-xs">Validation</span> Email</button>
 							<button id="citizen-validation-cancel" type="button" class="col-xs-offset-1 col-xs-3 btn btn-default" data-dismiss="modal">Close</button>
 						</div>
 					</form>
@@ -77,7 +78,7 @@
       </div>
       <div class="modal-body">
         <p class="text-danger">Before any of your votes are counted, you need to validate your identity via email.</p>
-		<p>We really need you to do this so we can limit enthusiastic citizen voting multiple times..</p>
+		<p>We really need you to do this so we can limit enthusiastic citizens to vote multiple times..</p>
 		<p>We sent you an email at the address you previously indicated. Please check it and click the provided link in there.. You may need to look in the spam folders if it's not in your inbox.
 		<p class="text-muted"><br/>As mentioned before, safeguarding your privacy is our priority and your identity is protected: we already forgot your email address for precisely that reason.</p>
       </div>

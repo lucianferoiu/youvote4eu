@@ -76,7 +76,7 @@
 				<div class="vote-tally text-center">YES: <span class="yes-tally">30%</span> / NO: <span class="no-tally">70%</span></div>
 				<div id="citizen-voted-yes" class="citizen-voted text-center">You voted: <span class="citizen-vote-value">YES</span></div>
 				<div id="citizen-voted-no" class="citizen-voted text-center">You voted: <span class="citizen-vote-value">NO</span></div>
-				<div id="citizen-vote-pending" class="text-center voting-info-text">Check your email to validate your vote</div>
+				<div id="citizen-vote-pending" class="text-center voting-info-text">Your vote will be counted after you validate your email</div>
 			</div>
 			<div id="votingClosed" class="citizen-voted text-center">Voting closed</div>
 			<div class="question-details">

@@ -172,7 +172,6 @@
 					$('#votingBoothFlyweight .yes-tally').text(yesVotes);
 					$('#votingBoothFlyweight .no-tally').text(noVotes);
 					if (qInfo.voted!=undefined) {
-						$('#citizen-vote-pending').hide();
 						if (qInfo.voted==1) {
 							$('#citizen-voted-yes').show();
 							$('#citizen-voted-no').hide();
@@ -183,7 +182,6 @@
 					} else {
 						$('#citizen-voted-yes').hide();
 						$('#citizen-voted-no').hide();
-						$('#citizen-vote-pending').show();
 					}
 					$('#votingBoothFlyweight .can-vote').hide();
 					$('#votingBoothFlyweight .already-voted').show();
@@ -196,7 +194,7 @@
 			$('#votingBoothFlyweight').css(qpos).css('width',qw).css('height',qh).show();
 			if (isArchivedQuestion) {
 				$('#votingClosed').show();
-				$('#citizen-vote-pending').hide();
+				// $('#citizen-vote-pending').hide();
 				$('#votingBoothFlyweight .already-voted').hide();
 				$('#votingBoothFlyweight .can-vote').hide();
 			}
@@ -225,10 +223,11 @@
 		$('#votingBoothFlyweight .can-vote').hide();
 		$('#votingBoothFlyweight .can-vote button').attr('disabled','disabled');
 		if (!App.validatedCitizen) {
+			$('#citizen-vote-pending').show();
+			$('#votingBoothFlyweight').hide();
 			if (App.pendingValidation==true) {
 				$('#validate-citizen-reminder').modal();
 			} else {
-				$('#votingBoothFlyweight').hide();
 				$('#validate-citizen').modal();
 			}
 		}
@@ -247,7 +246,6 @@
 					var noVotes = data.voteTally>=0? (new Number((1-data.voteTally) * 100).toPrecision(3))+'%' : '-';
 					$('#votingBoothFlyweight .yes-tally').text(yesVotes);
 					$('#votingBoothFlyweight .no-tally').text(noVotes);
-					$('#citizen-vote-pending').hide();
 					if (voteValue==1) {
 						$('#citizen-voted-yes').show();
 						$('#citizen-voted-no').hide();
@@ -271,10 +269,12 @@
 	}
 	
 	function init() {
+		$('#citizen-vote-pending').hide();
 		if (App.validatedCitizen==true) {
 			$('#votingBoothFlyweight .voting-email-pending').hide();
 		} else {
 			if (App.pendingValidation==true) {
+				$('#citizen-vote-pending').show();
 				$('#votingBoothFlyweight .voting-email-pending').show();
 			} else {
 				$('#votingBoothFlyweight .voting-email-pending').hide();

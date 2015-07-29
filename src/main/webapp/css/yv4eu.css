@@ -597,6 +597,14 @@ a.carousel-control {
 	font-size: 2em;
 }
 
+#citizen-vote-pending {
+	font-size: 0.8em;
+	line-height:1em;
+}
+.q-sz-2 #citizen-vote-pending, .q-sz-3 #citizen-vote-pending {
+	font-size: 1.2em;
+	line-height:1.4em;
+}
 
 .voting-in-progress {
 	color: #e7e7e7;
