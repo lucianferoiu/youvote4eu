@@ -3,6 +3,7 @@ package app.controllers;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
@@ -126,9 +127,14 @@ public class HomeController extends QuestionsListController {
 			}
 
 		}
-		view("validatedCitizen", citizen != null && citizen.getBoolean("validated"));
-		Long pendingValidations = EmailValidation.count("added_by=? AND validated=false AND is_citizen=true", citizenId);
-		view("pendingValidation", pendingValidations > 0);
+		boolean validatedCitizen = citizen != null && citizen.getBoolean("validated");
+		view("validatedCitizen", validatedCitizen);
+		if (!validatedCitizen) {
+			Long pendingValidations = EmailValidation.count("added_by=? AND validated=false AND is_citizen=true", citizenId);
+			view("pendingValidation", pendingValidations > 0);
+		} else {
+			view("pendingValidation", false);
+		}
 
 		if (asJson) {
 			String json = JsonHelper.toListJson(questions);
@@ -225,7 +231,7 @@ public class HomeController extends QuestionsListController {
 			if (duplicates == null || duplicates <= 0) {//extra-cautious to avoid duplicates (i.e. when using two different devices simultaneously, the session questions can be obsolete)
 				Vote vote = Vote.create("question_id", qId, "citizen_id", citizen.getLongId(), //
 						"value", voteValue, "validated", citizen.getBoolean("validated"));
-				vote.setDate("cast_at", new Date()).saveIt();
+				vote.setTimestamp("cast_at", new Date()).saveIt();
 				synchronized (Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN) {
 					HashMap<Long, Integer> alreadyVoted = (HashMap<Long, Integer>) session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN);
 					if (alreadyVoted == null) {
@@ -248,7 +254,7 @@ public class HomeController extends QuestionsListController {
 			BigDecimal popularVoteTally = BigDecimal.ZERO;
 			if (yesVotes > 0 || noVotes > 0) {
 				popularVotes = yesVotes + noVotes;
-				popularVoteTally = new BigDecimal(yesVotes / (yesVotes + noVotes));
+				popularVoteTally = new BigDecimal(yesVotes).divide(new BigDecimal(yesVotes + noVotes), 3, RoundingMode.HALF_UP);
 			} else {
 				popularVotes = currentVoteCount + 1 - duplicates;
 			}
@@ -401,12 +407,15 @@ public class HomeController extends QuestionsListController {
 		}
 		session(Const.QUESTIONS_ALREADY_VOTED_BY_CITIZEN, null);
 
+		Long cId = citizen.getLongId();
 		List<EmailValidation> pastValidationsOfSameToken = EmailValidation.find("token=? and validated=true and is_citizen=true", code)
 				.orderBy("updated_at ASC");
 		if (!pastValidationsOfSameToken.isEmpty()) {//citizen re-logging from other machine... transfer all new votes to the old one
 			EmailValidation oldestValidation = pastValidationsOfSameToken.get(0);
 			Long pastCitizenId = oldestValidation.getLong("added_by");
-			Base.exec("UPDATE votes SET citizen_id=?, validated=? WHERE citizen_id=?", pastCitizenId, true, citizen.getLongId());
+			Base.exec("UPDATE votes v SET citizen_id=?, validated=true WHERE v.citizen_id=? AND NOT EXISTS "
+					+ " (SELECT id FROM votes WHERE citizen_id=? AND question_id=v.question_id AND validated=true) ", //
+					pastCitizenId, cId, pastCitizenId);//transfer votes - but leave the duplicates alone...
 			//TODO: recompute all questions' votes and tallies
 			citizen = Citizen.findById(pastCitizenId);
 			session(Const.AUTH_CITIZEN, citizen);
@@ -447,7 +456,7 @@ public class HomeController extends QuestionsListController {
 		view("tags", tags);
 		List<Country> euCountries = Country.findAll().orderBy("code");
 		view("euCountries", euCountries);
-		view("guessedCountry", "ro");
+		view("guessedCountry", "ro");//TODO: implement a service to guess the country based on the incoming IP (not bullet-proof but 80% accurate)
 		Lang sessionLang = (Lang) session(Const.CURRENT_LANGUAGE);
 		view("preferredLang", sessionLang);
 

@@ -65,3 +65,28 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="validate-citizen-reminder">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Validate your email</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-danger">Before any of your votes are counted, you need to validate your identity via email.</p>
+		<p>We really need you to do this so we can limit enthusiastic citizen voting multiple times..</p>
+		<p>We sent you an email at the address you previously indicated. Please check it and click the provided link in there.. You may need to look in the spam folders if it's not in your inbox.
+		<p class="text-muted"><br/>As mentioned before, safeguarding your privacy is our priority and your identity is protected: we already forgot your email address for precisely that reason.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Alright, I'll check my email..</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+

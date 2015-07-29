@@ -26,6 +26,7 @@
 		});
 		$('#votingBoothFlyweight').on('mouseleave', function (e) {
 			// console.log('leaving voting booth');
+			if (App.carouselTransitioning==true) return;
 			$('#votingBoothFlyweight').hide();
 			$(('.q[data-q-id="'+App.activeQuestion+'"]')).removeClass('q-hover');
 			App.activeQuestion=null;
@@ -45,6 +46,16 @@
 		$('#votingBoothFlyweight .can-vote .vote-no').click(function () {
 			var qId = $(this).data('q-id');
 			voteQuestion(qId,0);
+		});
+		
+		$('#qCarousel').on('slide.bs.carousel', function () {
+			App.carouselTransitioning=true;
+		});
+
+		$('#qCarousel').on('slid.bs.carousel', function () {
+			setTimeout(function () {
+				App.carouselTransitioning=false;
+			},300);
 		});
 		
 		
@@ -109,6 +120,9 @@
 	});
 	
 	function showVotingBooth(me,e) {
+		
+		if (App.carouselTransitioning==true) return;
+		
 		var qId = $(me).addClass('q-hover').data('q-id');
 		
 		if (App.activeQuestion!=qId) {
@@ -192,7 +206,12 @@
 			type:'PUT',
 			success: function (data,stat,xhr) {
 				if (!App.validatedCitizen) {
-					$('#validate-citizen').modal();
+					if (App.pendingValidation==true) {
+						$('#validate-citizen-reminder').modal();
+					} else {
+						$('#votingBoothFlyweight').hide();
+						$('#validate-citizen').modal();
+					}
 				}
 				App.questions[qId].canVote=false;
 				App.questions[qId].voted=voteValue;
@@ -212,6 +231,7 @@
 						$('#citizen-voted-yes').hide();
 						$('#citizen-voted-no').show();
 					}
+					$('#votingBoothFlyweight .already-voted').show();
 				}
 				
 				$('#votingBoothFlyweight .can-vote button').removeAttr('disabled');
@@ -224,22 +244,17 @@
 				$('#votingSpinner').hide();
 			}
 		});
-		if (App.pendingValidation==true) {
-			$('#votingBoothFlyweight .voting-email-pending').show();
-		} else {
-			$('#votingBoothFlyweight .voting-email-pending').hide();
-		}
 	}
 	
 	function init() {
 		if (App.validatedCitizen==true) {
+			$('#votingBoothFlyweight .voting-email-pending').hide();
+		} else {
 			if (App.pendingValidation==true) {
 				$('#votingBoothFlyweight .voting-email-pending').show();
 			} else {
 				$('#votingBoothFlyweight .voting-email-pending').hide();
 			}
-		} else {
-			$('#votingBoothFlyweight .voting-email-pending').hide();
 		}
 		$('#votingSpinner').hide();
 		$('#votingClosed').hide();

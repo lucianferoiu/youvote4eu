@@ -79,7 +79,7 @@
 				<button type="button" class="btn btn-default btn-block">Details &hellip;</button>
 			</div>
 			<div class="voting-email-pending text-center voting-info-text">
-				<span class="glyphicon glyphicon-info-sign"></span> Email validation pending &hellip;
+				Email validation pending &hellip;
 			</div>
 		</div>
 	</div>
