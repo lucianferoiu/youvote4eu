@@ -173,6 +173,10 @@ public class HomeController extends QuestionsListController {
 		}
 		view("question", question);
 
+		Vote myVote = Vote.findFirst("question_id=? and citizen_id=?", qId, citizenId);
+		view("canVote", new Boolean(myVote == null));
+		view("voted", myVote != null ? myVote.getInteger("value") : -1);
+
 		List<Tag> questionTags = question.getAll(Tag.class);
 		view("questionTags", questionTags);
 
@@ -203,6 +207,25 @@ public class HomeController extends QuestionsListController {
 
 	public void catchall() {
 		redirect("/home");
+	}
+
+	@POST
+	public void castVote() {
+		String email = param("citizen-email");
+		String countryCode = param("citizen-country");
+		String qId = param("qId");
+		String voteValueParam = param("voteValue");
+		if (!StringUtils.nullOrEmpty(email) && !StringUtils.nullOrEmpty(countryCode)) {
+			sendValidationEmail();
+		}
+		if (!StringUtils.nullOrEmpty(qId) && !StringUtils.nullOrEmpty(voteValueParam)) {
+			vote();
+		}
+		if (!StringUtils.nullOrEmpty(qId)) {
+			redirect("/question/" + qId);
+		} else {
+			redirect("/home");
+		}
 	}
 
 	@PUT

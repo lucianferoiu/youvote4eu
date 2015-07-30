@@ -2,6 +2,11 @@
 [@content for="title"]You Vote For Europe[/@content]
 [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highmaps.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/eu.js'></script>[/@content]
+[@content for="header_css"]<link href='${context_path}/css/flags.css' rel="stylesheet">[/@content]
+[@content for="header_css"]<link href='${context_path}/css/bootstrap-select.min.css' rel="stylesheet">[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/bootstrap-select.min.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/app/archived.js'></script>[/@content]
 
 <div class="nav-buffer">
@@ -26,6 +31,26 @@
 				${questionHtmlContent}
 			</div>
 			<div class="arch-q-votes container-fluid">
+				<div class="row">
+					<div class="arch-q-vote-citizen col-sm-6">
+						<div class="arch-q-vote-citizen-concl text-center">
+							[#if question.popular_vote_tally?? ]
+								[#if (question.popular_vote_tally>=0.5) ] YES [#else] NO  [/#if]
+							[#else]
+								<span class="muted">?</span>
+							[/#if]
+						</div>
+					</div>
+					<div class="arch-q-vote-official col-sm-6">
+						<div class="arch-q-vote-official-concl text-center">
+							[#if question.official_vote_tally?? ]
+								[#if (question.official_vote_tally>=0.5) ] YES [#else] NO [/#if]
+							[#else]
+								<span class="muted">?</span>
+							[/#if]
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="arch-q-vote-citizen col-sm-6">
 						<div class="arch-q-citizen-votes text-center">
@@ -111,26 +136,7 @@
 						</div>
 					</div>
 				</div>
-					<div class="row">
-						<div class="arch-q-vote-citizen col-sm-6">
-							<div class="arch-q-vote-citizen-concl text-center">
-								[#if question.popular_vote_tally?? ]
-									[#if (question.popular_vote_tally>=0.5) ] YES [#else] NO  [/#if]
-								[#else]
-									<span class="muted">?</span>
-								[/#if]
-							</div>
-						</div>
-						<div class="arch-q-vote-official col-sm-6">
-							<div class="arch-q-vote-official-concl text-center">
-								[#if question.official_vote_tally?? ]
-									[#if (question.official_vote_tally>=0.5) ] YES [#else] NO [/#if]
-								[#else]
-									<span class="muted">?</span>
-								[/#if]
-							</div>
-						</div>
-					</div>
+					
 				<hr/>
 				<div class="row">
 					<div class="col-xs-offset-1 col-xs-10">

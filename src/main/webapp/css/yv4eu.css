@@ -109,15 +109,39 @@ a:hover, a:focus {
 
 
 .btn-danger {
-	background-color: #AE9A9E;
-	border-color: #8E7A7E;
-	color: #fff;
+	background-color: #B39091;
+	border-color: #A27A7B;
+	color: black;
 }
 
 .btn-success {
-	background-color: #809696;
-	border-color: #607676;
-	color: #fff;
+	background-color: #96B1B1;
+	border-color: #7AA2A2;
+	color: black;
+}
+
+.btn-danger:hover {
+	background-color: #A27A7B;
+	border-color: #A27A7B;
+	color: white;
+}
+
+.btn-success:hover {
+	background-color: #7AA2A2;
+	border-color: #7AA2A2;
+	color: white;
+}
+
+.label-danger {
+	background-color: #DAC0C1;
+	border-color: #A27A7B;
+	color: black;
+}
+
+.label-success {
+	background-color: #B3C4C4;
+	border-color: #7AA2A2;
+	color: black;
 }
 
 
@@ -195,6 +219,7 @@ a:hover, a:focus {
 	font-size: 2.4em;
 	line-height: 2.4em;
 	color: #990012;
+	text-shadow: 2px 1px 1px rgba(109,0,13,0.25);
 }
 
 .slogan-sml {
@@ -731,6 +756,14 @@ a.carousel-control {
 
 .pub-q-sidebar {
 	padding: 2em;
+}
+
+#votesDistributionEU {
+	min-height: 700px; 
+	min-width: 300px; 
+	max-width: 992px; 
+	margin: 0 auto;
+	border: 1px solid #6D000D;
 }
 
 /*** Question archival details ***/
