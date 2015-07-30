@@ -104,14 +104,14 @@
 	}
 	
 	function layoutAsSimpleFlow(winW) {
-		var allQuestions = $('#qContainerFlow .q').detach().removeClass('col-xs-6').addClass('row').css('height','100%');
+		var allQuestions = $('#qContainerFlow .q').detach().removeClass('col-xs-6 q-hover').addClass('row').css('height','100%');
 		$('#qContainerFlow').empty().append(allQuestions);
 		colorQuestionsBg('#qContainerFlow');
 		
 	}
 	
 	function layoutAsDoubleFlow(winW) {
-		var allQuestions = $('#qContainerFlow .q').removeClass('row').detach();
+		var allQuestions = $('#qContainerFlow .q').removeClass('row q-hover').detach();
 		var qCont = $('#qContainerFlow');		qCont.empty();
 		var questionsCount = allQuestions.length;
 		var i=0;
@@ -196,14 +196,14 @@
 			[[0,0,2],[1,2,2]],[[1,0,2],[0,2,2]],[[0,1,2]],[[1,1,2]],[[0,0,2],[0,2,2]],[[1,0,2],[1,2,2]],[[0,1,3]]
 		],
 		'4': [
-			[[0,0,3],[1,3,2]],[[0,0,3],[0,3,2],[2,3,2]],[[0,0,3],[2,3,2]],[[1,0,3],[0,3,2]],[[1,1,3]],[[0,0,2],[1,2,3]],
+			[[0,0,3],[1,3,2]],[[0,0,3],[0,3,2],[2,3,2]],[[0,0,3],[2,3,2]],[[1,0,3],[0,3,2]],[[1,1,3]],[[1,2,3],[0,0,2]],
 			[[0,0,2],[2,0,2],[1,2,2]],[[0,0,2],[2,0,2],[1,3,2]],[[0,0,2],[2,0,2],[2,2,2],[0,3,2]],[[0,0,2],[2,0,2],[0,2,2],[2,3,2]],[[0,0,2],[2,1,2],[0,2,2]],[[0,0,2],[1,2,2]],
 			[[2,1,2],[0,2,2],[2,3,2]],[[2,0,2],[2,2,2],[0,3,2]],[[0,1,2],[2,2,2],[0,3,2]],[[0,1,2],[2,1,2],[2,3,2]],[[2,0,2],[0,2,2],[2,2,2]],[[0,1,2],[2,0,2],[0,3,2],[2,3,2]]
 		],
 		'5': [
-			[[0,0,3],[3,1,2],[0,3,2],[2,3,3]],[[0,0,3],[3,1,2],[1,3,3]],[[1,0,3],[0,3,3],[3,3,2]],[[1,0,3],[0,3,2],[2,4,2]],[[0,0,2],[2,0,3],[0,3,3],[3,4,2]],
-			[[0,0,2],[2,0,3],[0,2,2],[3,3,2]],[[1,0,2],[3,0,2],[2,2,3],[0,3,2]],[[1,0,2],[0,2,2],[2,2,3],[0,4,2]],[[0,0,2],[2,0,2],[0,3,2],[2,3,3]],[[0,0,2],[2,1,2],[0,4,2],[2,3,3]],
-			[[0,0,3],[3,0,2],[0,3,2],[2,3,2]],[[0,0,3],[3,1,2],[0,3,2],[3,4,2]],[[0,1,3],[3,0,2],[3,3,2],[1,4,2]],[[1,0,2],[3,1,2],[0,2,3],[3,4,2]],[[1,0,2],[0,2,3],[3,1,2],[3,3,2]]
+			[[0,0,3],[2,3,3],[3,1,2],[0,3,2]],[[0,0,3],[1,3,3],[3,1,2]],[[1,0,3],[0,3,3],[3,3,2]],[[1,0,3],[0,3,2],[2,4,2]],[[2,0,3],[0,3,3],[0,0,2],[3,4,2]],
+			[[2,0,3],[0,0,2],[0,2,2],[3,3,2]],[[2,2,3],[1,0,2],[3,0,2],[0,3,2]],[[2,2,3],[1,0,2],[0,2,2],[0,4,2]],[[2,3,3],[0,0,2],[2,0,2],[0,3,2]],[[2,3,3],[0,0,2],[2,1,2],[0,4,2]],
+			[[0,0,3],[3,0,2],[0,3,2],[2,3,2]],[[0,0,3],[3,1,2],[0,3,2],[3,4,2]],[[0,1,3],[3,0,2],[3,3,2],[1,4,2]],[[0,2,3],[1,0,2],[3,1,2],[3,4,2]],[[0,2,3],[1,0,2],[3,1,2],[3,3,2]]
 		]
 	}
 	
@@ -241,7 +241,8 @@
 			for(var l=0;l<pageSize;l++) {
 				var bit = bitmap[k][l];
 				if (bit!==1) {
-					if ( Math.random() < ( (1/gridSize) + (0.3*(pageSize-l)/pageSize)) ) {//%chances
+					// if ( Math.random() < ( (1/gridSize) + (0.3*(pageSize-l)/pageSize)) ) {//%chances
+					if ( Math.random() < ( (2/gridSize) ) ) {//%chances
 						ret.push([k,l,1]);
 						count++;oneSizeCount++;
 					}
@@ -259,12 +260,29 @@
 	//	----- UI veneer -----
 
 	function colorQuestionsBg(container) {
-		var gs = YV.gridSize=='1'||YV.gridSize=='2'?parseInt(YV.gridSize)+1:1;
-		$((container+' .q')).each(function (idx) {
-			var randCol = (idx%gs)==0?randomInt(1,6):0;
-			var colorClass = 'q-bg-'+(randCol+1);
-			$(this).removeClass('q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6 q-bg-7').addClass(colorClass);
-		});
+		if (YV.gridSize=='1') {
+			$((container+' .q')).each(function (idx) {
+				var randCol = (idx%2)==0?randomInt(2,7):0;
+				var colorClass = 'q-bg-'+randCol;
+				$(this).removeClass('q-bg-0 q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6 q-bg-7').addClass(colorClass);
+			});
+		} else if (YV.gridSize=='2') {
+			$((container+' .q')).each(function (idx) {
+				var randCol = (idx%3)==0?randomInt(1,7):0;
+				var colorClass = 'q-bg-'+randCol;
+				$(this).removeClass('q-bg-0 q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6 q-bg-7').addClass(colorClass);
+			});
+		} else {
+			randomMul(13);
+			$((container+' .q')).each(function (idx) {
+				// var rm = randomAdd(7);
+				var rm = randomTri(7);
+				var randCol = 1+Math.floor(rm);
+				var colorClass = 'q-bg-'+randCol;
+				$(this).removeClass('q-bg-0 q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6 q-bg-7').addClass(colorClass);
+			});
+		}
+		
 	}
 	
 	
@@ -284,5 +302,25 @@
 	function randomInt(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
+	
+	function randomMul(times) {
+		var ret = Math.random();
+		for(var i=1;i<times;i++) ret = ret * Math.random();
+		return ret;
+	}
+	
+	function randomAdd(times) {
+		var ret = Math.random();
+		for(var i=1;i<times;i++) ret = ret + Math.random();
+		return ret;
+	}
+	
+	function randomTri(times) {
+		var ret = Math.random();
+		var val = ret*times;
+		for(var i=times-1;i>=0;i--) if (val>i) return i;
+		return 0;
+	}
+	
 
 }());

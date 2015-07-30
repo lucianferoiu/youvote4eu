@@ -84,6 +84,17 @@
 .dark-brown-gray2 { color: #363133; }
 .dark-brown-gray { color: #4B4243; }
 
+.skin-superlight { color: #F0DDDD; }
+.skin-lighter { color: #DAC0C1; }
+.skin-light { color: #C6A7A8; }
+.skin-dark { color: #B39091; }
+.skin-darker { color: #A27A7B; }
+
+
+.teal-light {color: #B3C4C4;}
+.teal-dark {color: #96B1B1;}
+.teal-darker {color: #7AA2A2;}
+
 
 /*** Theme ***/
 
@@ -95,6 +106,20 @@ a:hover, a:focus {
 	color: #6D000D;
 	text-decoration: underline;
 }
+
+
+.btn-danger {
+	background-color: #AE9A9E;
+	border-color: #8E7A7E;
+	color: #fff;
+}
+
+.btn-success {
+	background-color: #809696;
+	border-color: #607676;
+	color: #fff;
+}
+
 
 /*** Branding ***/
 
@@ -191,19 +216,21 @@ a:hover, a:focus {
 } 
 
 .q {
-	
+	box-shadow: 4px 4px 5px rgba(20,5,8,0.2);
 }
 
-.q-bg-1 { background-color: white; }
-.q-bg-2 { background-color: #bcb8b8; }
-.q-bg-3 { background-color: #809696; }
-.q-bg-4 { background-color: #AE9A9E; } /*8B7B7E*/
-.q-bg-5 { background-color: #7F9797; } /*C2A8AB*/ /*E5DADC*/
-.q-bg-6 { background-color: #B8A6A9; }
-.q-bg-7 { background-color: #e7e7e7; }
+.q-bg-0 { background-color: white;   border: 1px solid #f9f8f8; }
+.q-bg-1 { background-color: #e7e7e7; border: 1px solid #e1e1e1; }
+.q-bg-2 { background-color: #C9BFC0; border: 1px solid #C3B9BA; } /* bcb8b8 */
+.q-bg-3 { background-color: #DAC0C1; border: 1px solid #D8BABB; } /* 809696 */
+.q-bg-4 { background-color: #C6C4C5; border: 1px solid #C1BEBF; } /* 8B7B7E AE9A9E */
+.q-bg-5 { background-color: #B3C4C4; border: 1px solid #ABBEBE; } /* C2A8AB E5DADC 7F9797 */
+.q-bg-6 { background-color: #B39091; border: 1px solid #AB8A8B; } /* B8A6A9 */
+.q-bg-7 { background-color: #96B1B1; border: 1px solid #91A9A9; }
 
 .q:hover, .q.touch, .q-hover { 
 	background-color: #6D000D;
+	text-shadow: 1px 1px 0px rgba(109,0,13,0.7);
 	color: white;
 }
 
@@ -382,6 +409,7 @@ a.carousel-control {
 
 .q-sz-1 .q-title {
 	font-size: 13px;
+	text-shadow: 1px 1px 1px rgba(10,0,0,0.2);
 }
 .q-sz-1 .q-desc p {
 	font-size: 12px;
@@ -403,6 +431,7 @@ a.carousel-control {
 	color: #6D000D;
 	margin-right: 4px;
 	margin-bottom: 8px;
+	text-shadow: 1px 1px 1px rgba(109,0,13,0.3);
 }
 
 
@@ -412,6 +441,7 @@ a.carousel-control {
 
 .q-sz-2 .q-title {
 	font-size: 18px;
+	text-shadow: 1px 2px 1px rgba(0,0,0,0.2);
 }
 .q-sz-2 .q-desc p {
 	font-size: 16px;
@@ -429,6 +459,7 @@ a.carousel-control {
 	font-size: 1.6em;
 	color: #6D000D;
 	margin-right: 8px;
+	text-shadow: 1px 2px 1px rgba(109,0,13,0.3);
 }
 
 .q-sz-2 .q-desc-p {
@@ -441,6 +472,7 @@ a.carousel-control {
 
 .q-sz-3 .q-title {
 	font-size: 24px;
+	text-shadow: 2px 2px 1px rgba(0,0,0,0.2);
 }
 .q-sz-3 .q-desc p {
 	font-size: 19px;
@@ -458,6 +490,7 @@ a.carousel-control {
 	font-size: 2.8em;
 	color: #6D000D;
 	margin-right: 10px;
+	text-shadow: 2px 2px 1px rgba(109,0,13,0.3);
 }
 
 .q-sz-3 .q-desc-p {
@@ -467,30 +500,26 @@ a.carousel-control {
 
 .q-cont-carousel .q:hover .q-votes span, .q-cont-carousel .q.touch .q-votes span, .q-cont-carousel .q.q-hover .q-votes span {
 	color: white;
+	text-shadow: 2px 2px 1px rgba(109,0,13,0.8);
 }
 
 /* ------- voting booth */
 
+.carousel .q:hover .q-desc {
+	display: none;
+}
+
 .voting-booth .btn {
-	border-radius: 1px;
-	 padding: 3px 6px;
+	border-radius: 0px;
+	padding: 4px 6px;
 }
 
-.btn-danger {
-	background-color: #AE9A9E;
-	border-color: #8E7A7E;
-	color: #fff;
-}
-
-.btn-success {
-	background-color: #809696;
-	border-color: #607676;
-	color: #fff;
-}
 
 #votingBoothFlyweight {
 	position: absolute;
 	z-index:3000;
+	border: none;
+	box-shadow: 8px 6px 8px 3px rgba(27,0,4,0.25);
 }
 
 .voting-booth-container {
@@ -507,26 +536,35 @@ a.carousel-control {
 	bottom:0;
 	background-color: #6D000D;
 	color: white;
+	text-shadow: 2px 1px 1px rgba(109,0,13,0.8);
+/*	box-shadow: 0px -90px 10px 0px rgba(255,255,255,.1);*/
 }
 
+
+
 .can-vote {
-/*	display:inline-block;*/
-	
 	color: #6D000D;
 }
 
 .can-vote .btn-group {
-/*	padding: 2px 6px;*/
 	width:100%;
 }
 
 .can-vote button {
 	width:50%;
-	color: #6D000D;
+	background-color: #6D000D;
+	color: white;
+	border: none;
+/*	background-image: linear-gradient(to bottom, #DAC0C1, #C2C0C1);*/
+	background-image: radial-gradient(#A80818 0,#6D000D 63%);
+	text-shadow: 2px 1px 1px rgba(109,0,13,0.8);
+	
 }
 
 .can-vote button:hover {
 	color: #990012;
+	background-image: radial-gradient(white 0, #F0DDDD 93%);
+	text-shadow: 2px 1px 1px rgba(26,10,14,0.2);
 }
 
 .q-sz-1 .can-vote .btn {
@@ -573,6 +611,10 @@ a.carousel-control {
 .q-sz-3 .vote-tally {
 	font-weight:300;
 	font-size: 2em;
+}
+
+.already-voted {
+	text-shadow: 3px 2px 1px rgba(109,0,13,0.4);
 }
 
 .citizen-voted-yes, .citizen-voted-yes {
@@ -627,20 +669,26 @@ a.carousel-control {
 }
 
 .question-details button {
+	background-color: #6D000D;
+	text-shadow: 1px 1px 1px rgba(26,10,14,0.2);
+	color: white;
+	border: none;
 }
 
 .q-sz-1 .question-details button {
-	font-weight:300;
+	font-weight:600;
 	font-size: 1.1em;
 }
 .q-sz-2 .question-details button {
-	font-weight:400;
+	font-weight:800;
 	font-size: 1.3em;
 }
 .q-sz-3 .question-details button {
-	font-weight:400;
+	font-weight:900;
 	font-size: 1.9em;
 }
+
+/**/
 
 
 /*** Question details ***/

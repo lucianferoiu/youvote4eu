@@ -25,7 +25,7 @@
 							</select>
 						</div>
 						
-						<div class="col-xs-12" style='overflow-y:scroll;'>
+						<div class="col-xs-12">
 							<p  style="color:#990012;">
 								Before your votes are counted, we need you to validate your <em>anonymous</em> identity via email.
 							</p>

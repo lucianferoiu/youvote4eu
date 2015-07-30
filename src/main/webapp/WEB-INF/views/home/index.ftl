@@ -65,7 +65,7 @@
 <div id="votingBoothFlyweight" class="voting-booth">
 	<div class="voting-booth-container">
 		<div class="voting-booth-controls">
-			<div id="votingSpinner" class="voting-in-progress text-center"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Voting &hellip;</div>
+			<div id="votingSpinner" class="voting-in-progress text-center"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Voting &hellip;&hellip;</div>
 			<div class="can-vote text-center">
 				<div class="btn-group">
 					<button class="btn btn-default vote-yes">YES</button>
@@ -80,10 +80,10 @@
 			</div>
 			<div id="votingClosed" class="citizen-voted text-center">Voting closed</div>
 			<div class="question-details">
-				<button type="button" class="btn btn-default btn-block">Details &hellip;</button>
+				<button type="button" class="btn btn-default btn-block">More Details&hellip;</button>
 			</div>
 			<div class="voting-email-pending text-center voting-info-text">
-				Email validation pending &hellip;
+				Email validation pending&hellip;
 			</div>
 		</div>
 	</div>
@@ -96,9 +96,9 @@
 		<div class="col-md-9 container-fluid" >
 			<div class="section-title row">Recently archived questions..</div>
 			<div class="row">
-				[#assign cnt=rand(1,10)]
+				[#assign cnt=rand(1,7)]
 				[#list last3ArchivedQuestions as q]
-				<div id="aq${q.id}" class="q aq col-md-4 q-bg-${(cnt%3)+2}" data-q-id="${q.id}">
+				<div id="aq${q.id}" class="q aq col-md-4 q-bg-${(cnt)}" data-q-id="${q.id}">
 						<div class="q-title">${q.title}</div>
 						<div class="aq-votes-tally">
 							<div class="q-votes"><span>${q.votesCount}</span> votes</div>
