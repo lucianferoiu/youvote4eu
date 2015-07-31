@@ -826,7 +826,7 @@ a.carousel-control {
 }
 
 .arch-q-summary {
-	
+	cursor: pointer;
 }
 
 .arch-q-vote-citizen {
@@ -865,4 +865,25 @@ a.carousel-control {
 	font-weight: 300;
 	font-size: 1em;
 	text-align: left;
+}
+
+.arch-q-more-a-questions {
+	overflow-y:scroll; 
+	max-height:1400px;
+}
+
+#votesTallyMap {
+	min-height: 500px; 
+	min-width: 300px; 
+	max-width: 992px; 
+	margin: 0 auto;
+	border: 1px solid #6D000D;
+}
+
+#votesDistributionMap {
+	min-height: 500px; 
+	min-width: 300px; 
+	max-width: 992px; 
+	margin: 0 auto;
+	border: 1px solid #6D000D;
 }

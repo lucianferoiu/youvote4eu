@@ -51,11 +51,13 @@ public class StatsController extends QuestionsListController {
 			qId = Long.decode(qIdParam);
 		}
 
+		final BigDecimal hundred = new BigDecimal(100);
 		final List<HCDataPoint<Double>> stats = new ArrayList<HCDataPoint<Double>>();
 		Base.find(QUESTION_TALLY_BY_COUNTRY, qId).with(new RowListenerAdapter() {
 			@Override
 			public void onNext(Map<String, Object> row) {
-				stats.add(new HCDataPoint<Double>((String) row.get("ccode"), ((BigDecimal) row.get("tally")).doubleValue()));
+				stats.add(new HCDataPoint<Double>((String) row.get("ccode"), //
+						((BigDecimal) row.get("tally")).multiply(hundred).doubleValue()));
 			}
 		});
 

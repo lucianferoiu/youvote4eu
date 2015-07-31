@@ -32,6 +32,7 @@ public class RouteConfig extends AbstractRouteConfig {
 		route("/validate-citizen").to(app.controllers.HomeController.class).action("validateCitizen").get();
 		//stats
 		route("/q/votes/by/country/{id}").to(app.controllers.StatsController.class).action("votesByCountry").get();
+		route("/aq/votes/by/country/{id}").to(app.controllers.StatsController.class).action("votesByCountry").get();
 		route("/aq/tally/by/country/{id}").to(app.controllers.StatsController.class).action("tallyByCountry").get();
 	}
 }

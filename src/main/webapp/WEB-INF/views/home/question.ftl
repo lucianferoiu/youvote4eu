@@ -1,7 +1,8 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 [@content for="title"]You Vote For Europe[/@content]
-[@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content]
-[@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content]
+[#-- [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content] --]
+[#-- [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content] --]
+[@content for="footer_script"]<script src='${context_path}/js/jquery.mousewheel.min.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/highmaps.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/eu.js'></script>[/@content]
 [@content for="header_css"]<link href='${context_path}/css/flags.css' rel="stylesheet">[/@content]
@@ -33,11 +34,8 @@
 				${questionHtmlContent}
 			</div>
 			<div class="pub-q-votes container-fluid">
-				${question.popular_votes} votes and counting..
-				<br/>
-				<div id="votesDistributionEU" class="pub-q-vote-distribution">
-				
-				</div>
+				<p class="lead">${question.popular_votes} votes and counting..</p>
+				<div id="votesDistributionEU" class="pub-q-vote-distribution"></div>
 			</div>
 		</div>
 		<div class="pub-q-sidebar col-md-4">
@@ -109,6 +107,16 @@
 				</div>
 			</div>
 			<div class="panel panel-default">
+				<div class="panel-heading">Latest voters on this question</div>
+				<div class="panel-body">
+					<ul class="list-group">
+						[#list latestVotes as v]
+						<li class="list-group-item [#if v.validated==false]text-muted[/#if]"><img src='/img/blank.gif' class='flag flag-${v.countryCode!"eu"}'/>&nbsp; Citizen [#if v.countryName??]from ${v.countryName}[/#if] voted [#if v.votedOn??]on ${v.votedOn?string["MMMM d, HH:mm '('zzz')'"]}[/#if] [#if v.validated==false]<em>( * validation pending)</em>[/#if]</li>
+						[/#list]
+					</ul>
+				</div>
+			</div>
+			<div class="panel panel-default">
 				<div class="panel-heading">Can I do more?</div>
 				<div class="panel-body">
 					<ul>
@@ -125,16 +133,6 @@
 						<li> Drop us a line <a href='mailto:${question.correspondence_email!""}'>here</a> and tell us what you think</li>
 					[/#if]
 						<li>Write to the Members of European Parliament from your country to tell them of your position</li>
-					</ul>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">Latest voters on this question</div>
-				<div class="panel-body">
-					<ul class="list-group">
-						[#list latestVotes as v]
-						<li class="list-group-item [#if v.validated==false]text-muted[/#if]"><img src='/img/blank.gif' class='flag flag-${v.countryCode!"eu"}'/>&nbsp; Citizen [#if v.countryName??]from ${v.countryName}[/#if] voted on ${v.votedOn?string["MMMM d, HH:mm '('zzz')'"]} [#if v.validated==false]<em>( * validation pending)</em>[/#if]</li>
-						[/#list]
 					</ul>
 				</div>
 			</div>

@@ -9,6 +9,10 @@
 		$(window).resize(function() {
 			onResize();
 		});
+		
+		$('#votesDistributionEU').bind('mousewheel', function(e) {
+			e.preventDefault();
+		});
 
 		init();
 	});
@@ -58,9 +62,3 @@
 	}
 
 }());
-
-
-$(function() {
-
-
-});

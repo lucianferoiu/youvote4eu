@@ -1,8 +1,11 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 [@content for="title"]You Vote For Europe[/@content]
-[@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content]
-[@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content]
-[@content for="footer_script"]<script src='${context_path}/js/highmaps.js'></script>[/@content]
+[#-- [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content] --]
+[#-- [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content] --]
+[@content for="footer_script"]<script src='${context_path}/js/jquery.mousewheel.min.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.data.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.map.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/eu.js'></script>[/@content]
 [@content for="header_css"]<link href='${context_path}/css/flags.css' rel="stylesheet">[/@content]
 [@content for="header_css"]<link href='${context_path}/css/bootstrap-select.min.css' rel="stylesheet">[/@content]
@@ -33,6 +36,7 @@
 			<div class="arch-q-votes container-fluid">
 				<div class="row">
 					<div class="arch-q-vote-citizen col-sm-6">
+						<p class="text-center">Citizens position:</p>
 						<div class="arch-q-vote-citizen-concl text-center">
 							[#if question.popular_vote_tally?? ]
 								[#if (question.popular_vote_tally>=0.5) ] YES [#else] NO  [/#if]
@@ -42,6 +46,7 @@
 						</div>
 					</div>
 					<div class="arch-q-vote-official col-sm-6">
+						<p class="text-center">Institutional position:</p>
 						<div class="arch-q-vote-official-concl text-center">
 							[#if question.official_vote_tally?? ]
 								[#if (question.official_vote_tally>=0.5) ] YES [#else] NO [/#if]
@@ -62,12 +67,9 @@
 						</div>
 						<hr/>
 						<div class="arch-q-citizen-chart">
-							[chart]
+							<div id="tallyPieChart"></div>
 						</div>
 						<hr/>
-						<div class="arch-q-citizen-dist">
-							[small Europe map]
-						</div>
 					</div>
 					<div class="arch-q-vote-offcial col-sm-6">
 						<div class="container-fluid">
@@ -111,7 +113,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-xs-offset-3 col-xs-6 arch-q-vote-offcial-commission text-center">
+								<div class="col-xs-offset-2 col-xs-8 arch-q-vote-offcial-commission text-center">
 									<strong>European Commission decision</strong>
 									<br/>
 									<br/>
@@ -136,7 +138,14 @@
 						</div>
 					</div>
 				</div>
-					
+				<hr/>
+				<div class="arch-q-citizen-dist row">
+					<div id="votesTallyMap" class="col-xs-12"></div>
+				</div>
+				<hr/>
+				<div class="arch-q-citizen-dist row">
+					<div id="votesDistributionMap" class="col-xs-12"></div>
+				</div>
 				<hr/>
 				<div class="row">
 					<div class="col-xs-offset-1 col-xs-10">
@@ -148,23 +157,21 @@
 				<div class="row">
 					<div class="col-xs-offset-1 col-xs-10">
 						<hr/>
-						Not happy with your representatives' decision?
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-offset-1 col-xs-5">
-						Tell <a href="#">them</a>!
-					</div>
-					<div class="col-xs-5">
-						Join <a href="#">movement/campaign</a>.
+						<p>Not happy with your representatives' decision?</p>
+						<ul>
+							<li>Tell <a href="mailto:contact@europarl.europa.eu">them</a>!</li>
+							<li>Join <a href="#">movement/campaign</a></li>
+						</ul>
+						
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="arch-q-sidebar col-sm-4">
-			<div class="panel panel-default"  style="overflow-y:scroll">
+			<div class="panel panel-default" >
 				<div class="panel-heading">More archived subjects..</div>
 				<div class="panel-body">
+					<div class="arch-q-more-a-questions">
 					[#list moreArchivedQuestions as q]
 					<div class="arch-q-summary" data-q-id="${q.id}" data-q-archived="yes">
 							<div class="arch-q-s-title">${q.title}</div>
@@ -207,10 +214,13 @@
 					</div>
 					<hr/>
 					[/#list]
+					</div>
 				</div>
 			</div>
 		</div>
-		
+	</div>
+	<div class="row">
+		<br/><br/><br/>
 	</div>
 </div>
 
@@ -225,6 +235,9 @@
 		isMobileAgent: ${isMobileAgent?c},
 		validatedCitizen: ${validatedCitizen?c},
 		pendingValidation: ${pendingValidation?c}
+		//
+		,qId: ${question.id}
+		,voteTally: ${question.popular_vote_tally!0}
 	};
 </script>
 [/@content]
