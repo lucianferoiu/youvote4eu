@@ -177,6 +177,8 @@ public class HomeController extends QuestionsListController {
 		view("canVote", new Boolean(myVote == null));
 		view("voted", myVote != null ? myVote.getInteger("value") : -1);
 
+		view("latestVotes", questionLatestVotes(qId));
+
 		List<Tag> questionTags = question.getAll(Tag.class);
 		view("questionTags", questionTags);
 

@@ -48,12 +48,14 @@
 						<form class="form container-fluid" action="/cast/vote" method="post" data-toggle="validator" role="form">
 							<input type="hidden" name="qId" value=${question.id} />
 						[#if validatedCitizen]
-							<br/>
+							Cast your vote:<br/>
 						[#else]
 							[#if pendingValidation]
 								<p>Email validation pending&hellip;</p>
 								<p>Check your email and click the validation link we sent you, so your vote may be counted.</p>
 							[#else]
+								<p>Pseudo-anonymous identification is required before voting. Please fill in your email address, the country that you best identify with and ... cast your vote!</p>
+								<p class="text-muted">Please consult the <a href="/home/privacy">Privacy</a> page to understand why we need your email address and how we protect your details..</p>
 								<div class="form-group">
 									<label for="citizen-email" class="">Your Email</label>
 									<div class="">
@@ -75,8 +77,8 @@
 						[/#if]
 						<div class="row">
 							<div class="btn-group can-vote col-xs-12" role="group">
-								<button class="btn btn-success vote-yes col-xs-6" type="submit" name="voteValue" value="1">YES</button>
-								<button class="btn btn-danger vote-no col-xs" type="submit" name="voteValue" value="0">NO</button>
+								<button class="btn btn-default btn-lg col-xs-6" type="submit" name="voteValue" value="1">YES</button>
+								<button class="btn btn-default btn-lg col-xs-6" type="submit" name="voteValue" value="0">NO</button>
 							</div>
 						</div>
 						
@@ -87,12 +89,6 @@
 							<p>Check your email and click the validation link we sent you, so your vote may be counted.</p>
 						[/#if]
 						<div class="q-already-voted">
-							<div class="q-vote-tally text-center">
-								<p>Vote tally so far:<br/></p>
-								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span> 
-								/ 
-								NO: <span class="no-tally">${((1-(question.popular_vote_tally!0))*100)?string["0.##"]}</span>
-							</div>
 							[#if voted??]
 								[#if voted==1]
 								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value">YES</span></div>
@@ -101,6 +97,12 @@
 								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value">NO</span></div>
 								[/#if]
 							[/#if]
+							<div class="text-center">Vote tally so far:<br/></div>
+							<div class="q-vote-tally text-center">
+								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span> 
+								/ 
+								NO: <span class="no-tally">${((1-(question.popular_vote_tally!0))*100)?string["0.##"]}</span>
+							</div>
 						</div>
 						
 					[/#if]
@@ -109,11 +111,31 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Can I do more?</div>
 				<div class="panel-body">
+					<ul>
+					[#if question.campaign_name??]
+						<li> Join the <a href='${question.campaign_link!"#"}'>${question.campaign_name}</a> campaign</li>
+					[/#if]
+					[#if question.facebook_page??]
+						<li> Visit the campaign <a href='${question.facebook_page!"#"}'>Facebook page</a></li>
+					[/#if]
+					[#if question.twitter_hashtag??]
+						<li> Follow us on <a href="twitter.com/youvoteforeu">twitter</a> or tweet to make the #${question.twitter_hashtag} hashtag trend</li>
+					[/#if]
+					[#if question.correspondence_email??]
+						<li> Drop us a line <a href='mailto:${question.correspondence_email!""}'>here</a> and tell us what you think</li>
+					[/#if]
+						<li>Write to the Members of European Parliament from your country to tell them of your position</li>
+					</ul>
 				</div>
 			</div>
 			<div class="panel panel-default">
-				<div class="panel-heading">Statistics</div>
+				<div class="panel-heading">Latest voters on this question</div>
 				<div class="panel-body">
+					<ul class="list-group">
+						[#list latestVotes as v]
+						<li class="list-group-item [#if v.validated==false]text-muted[/#if]"><img src='/img/blank.gif' class='flag flag-${v.countryCode!"eu"}'/>&nbsp; Citizen [#if v.countryName??]from ${v.countryName}[/#if] voted on ${v.votedOn?string["MMMM d, HH:mm '('zzz')'"]} [#if v.validated==false]<em>( * validation pending)</em>[/#if]</li>
+						[/#list]
+					</ul>
 				</div>
 			</div>
 		</div>

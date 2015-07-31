@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.util.StringUtils;
+import app.util.dto.VotingEngagementDTO;
 import app.util.dto.model.CountedTag;
 import app.util.dto.model.FrontpageQuestion;
 
@@ -39,6 +40,12 @@ public abstract class QuestionsListController extends AnonAuthController {
 	protected static final String TAGS_OF_PUB_QUESTIONS_QUERY = "SELECT t.id id, count(t.id) cnt, t.text txt FROM tags t JOIN questions_tags qt ON (t.id=qt.tag_id) "
 			+ " WHERE qt.question_id IN (SELECT id FROM questions WHERE is_deleted=false AND is_published=true AND is_archived=false) "
 			+ " GROUP BY t.id ORDER BY count(t.id) DESC ";
+	/////////
+	protected static final String QUESTION_LATEST_VOTES = "SELECT v.cast_at voted_on, v.value voted, v.validated validated, c.label cname, c.code ccode "
+			+ "FROM votes v "
+			+ "LEFT JOIN citizens z ON z.id=v.citizen_id "
+			+ "LEFT JOIN countries c ON z.country=c.code "
+			+ "WHERE v.question_id=? ORDER BY v.cast_at DESC LIMIT 10 ";
 
 	protected List<FrontpageQuestion> findQuestions(final String lang, final boolean archived, final boolean byNewness, final String word,
 			final Long tagId) {
@@ -157,4 +164,22 @@ public abstract class QuestionsListController extends AnonAuthController {
 		});
 		return tags;
 	}
+
+	protected List<VotingEngagementDTO> questionLatestVotes(Long qId) {
+		final List<VotingEngagementDTO> stats = new ArrayList<VotingEngagementDTO>();
+		Base.find(QUESTION_LATEST_VOTES, qId).with(new RowListenerAdapter() {
+			@Override
+			public void onNext(Map<String, Object> row) {
+				VotingEngagementDTO ve = new VotingEngagementDTO();
+				ve.countryCode = (String) row.get("ccode");
+				ve.countryName = (String) row.get("cname");
+				ve.votedOn = (Date) row.get("voted_on");
+				ve.voteValue = (Integer) row.get("voted");
+				ve.validated = (Boolean) row.get("validated");
+				stats.add(ve);
+			}
+		});
+		return stats;
+	}
+
 }

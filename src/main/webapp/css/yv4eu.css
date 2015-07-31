@@ -766,6 +766,25 @@ a.carousel-control {
 	border: 1px solid #6D000D;
 }
 
+.q-already-voted {
+	font-weight:900;
+	font-size: 1.2em;
+	padding: 8px;
+	color: #6D000D;
+}
+
+.q-vote-tally {
+	font-weight:500;
+	font-size: 1.4em;
+	color: #6D000D;
+}
+
+.citizen-vote-value {
+	font-weight:900;
+	font-size: 1.4em;
+	color: #990012;
+}
+
 /*** Question archival details ***/
 
 .arch-q-cont {
