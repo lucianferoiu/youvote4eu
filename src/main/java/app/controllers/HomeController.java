@@ -197,15 +197,30 @@ public class HomeController extends QuestionsListController {
 		view("moreArchivedQuestions", moreArchivedQuestions);
 	}
 
-	public void help() {}
+	public void help() {
+		prepareHeaderValues();
+		view("activeFilter", "");
+	}
 
-	public void privacy() {}
+	public void privacy() {
+		prepareHeaderValues();
+		view("activeFilter", "");
+	}
 
-	public void code() {}
+	public void code() {
+		prepareHeaderValues();
+		view("activeFilter", "");
+	}
 
-	public void about() {}
+	public void about() {
+		prepareHeaderValues();
+		view("activeFilter", "");
+	}
 
-	public void contact() {}
+	public void contact() {
+		prepareHeaderValues();
+		view("activeFilter", "");
+	}
 
 	public void catchall() {
 		redirect("/home");
