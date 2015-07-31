@@ -7,6 +7,8 @@
 		Git remote heroku added
 
 	- on other machines: heroku git:remote -a yv4eu
+	
+	- note: add '--remote staging' etc for commands involving other environments  (or occasionally --app $APP_NAME) 
 
 [mac] ~/work/youvote4eu/youvote4eu $ echo "java $JAVA_OPTS -jar target/dependency/jetty-runner.jar --port $PORT target/*.war">>Procfile
 
@@ -28,6 +30,10 @@
 
 [mac] ~/work/youvote4eu/youvote4eu $ heroku pg:psql  
 	- add tables etc. by hand..
+	- or add them from the migrations scripts:
+	[mac] $ cd src/migrations
+	[mac] $ find *.sql -exec sh -c 'cat "$1" | heroku pg:psql --remote staging --app youvoteforeu' -- {} \;
+	
 
 
 [mac] ~/work/youvote4eu/youvote4eu $ heroku addons:create sendgrid:starter
