@@ -1,4 +1,5 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
+[#-- [#setting time_zone="CET"] --]
 [@content for="title"]You Vote For Europe[/@content]
 [#-- [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content] --]
 [#-- [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content] --]

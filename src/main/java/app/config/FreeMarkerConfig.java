@@ -1,5 +1,7 @@
 package app.config;
 
+import java.util.TimeZone;
+
 public class FreeMarkerConfig extends org.javalite.activeweb.freemarker.AbstractFreeMarkerConfig {
 	@Override
 	public void init() {
@@ -10,5 +12,6 @@ public class FreeMarkerConfig extends org.javalite.activeweb.freemarker.Abstract
 		getConfiguration().setNumberFormat("0.##");
 		getConfiguration().setDefaultEncoding("UTF-8");
 		getConfiguration().setOutputEncoding("UTF-8");
+		getConfiguration().setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
 }
