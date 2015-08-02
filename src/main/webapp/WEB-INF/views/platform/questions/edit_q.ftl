@@ -27,6 +27,13 @@
 						<span class="text-primary" ng-show="vm.crtQuestion.id>0">[{{vm.crtQuestion.id|pad:3:'0'}}]</span> 
 						<span class="text-primary" ng-show="!(vm.crtQuestion.id>0)"><em>[new]</em></span> {{vm.crtQuestion.title}}
 					</h3>
+					<span><strong>Workflow State:</strong></span>
+					<span ng-class="{'text-primary':!vm.crtQuestion.is_published}">Proposed</span> 
+					<span class="glyphicon glyphicon-chevron-right"></span>
+					<span ng-class="{'text-primary':vm.crtQuestion.is_published && !vm.crtQuestion.is_archived, 'text-muted': !vm.crtQuestion.is_published}">Published</span> 
+					<span class="glyphicon glyphicon-chevron-right"></span>
+					<span ng-class="{'text-primary':vm.crtQuestion.is_archived,'text-muted':!vm.crtQuestion.is_archived}">Archived</span> 
+					
 				</div>
 				<div class="modal-body">
 					<!-- question detail sections -->
@@ -37,10 +44,10 @@
 						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='pub'}" style="padding-left:10px;">
 							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='pub'">Publication Data</a>
 						</li>
-						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='arch'}" style="padding-left:10px;">
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='arch', 'disabled': !vm.crtQuestion.is_published}" style="padding-left:10px;">
 							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='arch'">Archival Data</a>
 						</li>
-						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='stats'}" style="padding-left:10px;">
+						<li role="presentation" ng-class="{'active': vm.crtQActivePanel==='stats', 'disabled': !vm.crtQuestion.is_published }" style="padding-left:10px;">
 							<a href="#" class="q-pill" ng-click="vm.crtQActivePanel='stats'">Voting & Statistics</a>
 						</li>
 					</ul>
