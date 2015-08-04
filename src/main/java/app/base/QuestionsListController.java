@@ -28,6 +28,7 @@ public abstract class QuestionsListController extends AnonAuthController {
 			+ " LEFT OUTER JOIN translations td ON (td.parent_id=q.id AND td.field_type='description' AND td.lang=?) "
 			+ " WHERE q.is_deleted=false ";
 	protected static final String WHERE_PUBLISHED = " AND q.is_published=true AND q.is_archived=false ";
+	protected static final String WHERE_PUBLISHED_LAST30DAYS = " AND q.is_published=true AND q.is_archived=false AND q.open_at>now()-INTERVAL '30 days' ";
 	protected static final String WHERE_ARCHIVED = " AND q.is_published=true AND q.is_archived=true ";
 	protected static final String WHERE_TAG = " AND q.id IN (SELECT question_id FROM questions_tags WHERE tag_id=?) ";
 	protected static final String WHERE_SEARCH_BY_WORD = " AND (lower(COALESCE(tt.text,q.title)) LIKE '%:word%' OR lower(COALESCE(tt.text,q.description)) LIKE '%:word%' ) ";
@@ -64,7 +65,11 @@ public abstract class QuestionsListController extends AnonAuthController {
 		if (archived) {
 			query += WHERE_ARCHIVED;
 		} else {
-			query += WHERE_PUBLISHED;
+			if (byNewness) {
+				query += WHERE_PUBLISHED_LAST30DAYS;
+			} else {
+				query += WHERE_PUBLISHED;
+			}
 		}
 
 		if (tagId != null) {
