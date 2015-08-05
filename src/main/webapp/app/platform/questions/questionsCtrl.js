@@ -39,6 +39,7 @@
 		vm.switchTranslation = switchTranslation;
 		vm.canEditTranslation = canEditTranslation;
 		vm.toggleTranslationLock = toggleTranslationLock;
+		vm.closeTranslationsTab = closeTranslationsTab;
 		vm.englishForLangCode = englishForLangCode;
 		vm.publishQuestion = publishQuestion;
 		vm.archiveQuestion = archiveQuestion;
@@ -486,6 +487,22 @@
 					}
 				}
 
+			}
+		}
+
+		function closeTranslationsTab(lng) {
+			if (vm.translationsTab!=null) {
+				var pos = -1;
+				for (var i = vm.translationsTab.length - 1; i >= 0; i--) {
+					var tab = vm.translationsTab[i];
+					if (tab.lang===lng) {
+						pos = i;
+						break;
+					}
+				}
+				if(pos>=0) {
+					vm.translationsTab.splice(pos,1);
+				}
 			}
 		}
 
