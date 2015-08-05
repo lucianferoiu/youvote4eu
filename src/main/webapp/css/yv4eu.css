@@ -785,6 +785,18 @@ a.carousel-control {
 	color: #990012;
 }
 
+.q-can-vote button {
+	font-weight:900;
+	font-size: 1.4em;
+	color: #990012;
+}
+
+.q-can-vote button:hover {
+	background-color: #6D000D;
+	color: white;
+}
+
+
 /*** Question archival details ***/
 
 .arch-q-cont {

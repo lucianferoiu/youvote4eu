@@ -29,7 +29,7 @@
 				</blockquote>
 			</div>
 			<div class="pub-q-info">
-				
+
 			</div>
 			<div class="pub-q-content">
 				${questionHtmlContent}
@@ -75,12 +75,12 @@
 							[/#if]
 						[/#if]
 						<div class="row">
-							<div class="btn-group can-vote col-xs-12" role="group">
+							<div class="btn-group q-can-vote col-xs-12" role="group">
 								<button class="btn btn-default btn-lg col-xs-6" type="submit" name="voteValue" value="1">YES</button>
 								<button class="btn btn-default btn-lg col-xs-6" type="submit" name="voteValue" value="0">NO</button>
 							</div>
 						</div>
-						
+
 						</form>
 					[#else]
 						[#if pendingValidation]
@@ -98,12 +98,12 @@
 							[/#if]
 							<div class="text-center">Vote tally so far:<br/></div>
 							<div class="q-vote-tally text-center">
-								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span> 
-								/ 
+								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span>
+								/
 								NO: <span class="no-tally">${((1-(question.popular_vote_tally!0))*100)?string["0.##"]}</span>
 							</div>
 						</div>
-						
+
 					[/#if]
 				</div>
 			</div>
@@ -139,7 +139,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<br/><br/><br/>
 	</div>
