@@ -1,9 +1,9 @@
 (function() {
 	angular.module('app.questions')
 		.controller('QuestionsCtrl',['questionsDS','refDS',QuestionsCtrl]);
-		
+
 	function QuestionsCtrl(questionsDS,refDS) {
-		
+
 		//setup view model
 		var vm = this;
 		vm.crtQActivePanel = null;
@@ -25,7 +25,7 @@
 		vm.translationsTab = [];
 		vm.translationsDropdown = [];
 		vm.crtComment = null;
-		
+
 		//vm API
 		vm.switchPanel = switchPanel;
 		vm.loadPage = loadPage;
@@ -48,14 +48,14 @@
 		vm.addComment = addComment;
 		vm.deleteComment = deleteComment;
 		vm.togglePubAgenda = togglePubAgenda;
-		
+
 		//init
 		refDS.preload(true);
 		switchPanel('pubQ');
 		loadPage(1);
 		initTags();
 		//----------------------------------------------//
-		
+
 		function loadPage(page) {
 			var panel = vm[vm.activePanel];
 			if (panel) {
@@ -68,14 +68,14 @@
 					if (panel.searchWord && panel.searchWord.length>1) {
 						params.search = panel.searchWord;
 					}
-					
+
 					questionsDS.getQuestions(page,vm.activePanel,params,function (data) {
 						panel.totalRecords = data.total;
 						panel.totalPages = Math.max(1,Math.ceil(panel.totalRecords/questionsDS.PAGE_SIZE));
 						panel.pagesRange = refDS.range(panel.totalPages);
 						panel.results = data.results;
 						panel.crtPage=page;
-						
+
 						if (panel.canVoteOnQuestions) {//proposed questions... ask what the partner can upvote
 							var qIDs = [];
 							for (var i = panel.results.length - 1; i >= 0; i--) {
@@ -84,23 +84,23 @@
 							}
 							questionsDS.getUpvotableQuestions(qIDs, function (data) {
 								 panel.canVoteOnQuestions = panel.canVoteOnQuestions.concat(data);
-								
+
 							},function (message) {
 								console.log('Cannot retrieve upvotabe questions : '+message);
 							})
 						}
-						
+
 					},function (message) {
 						console.log('Cannot load page '+page+' of '+vm.activePanel+'questions: '+message);
 					});
 				}
 			}
 		}
-		
+
 		function searchByWord() {
 			loadPage();
 		}
-		
+
 		function clearSearch() {
 			var panel = vm[vm.activePanel];
 			if (panel) {
@@ -108,14 +108,14 @@
 				loadPage();
 			}
 		}
-		
+
 		function canUpvote(qID) {
 			if (qID && vm.propQ.canVoteOnQuestions) {
 				return vm.propQ.canVoteOnQuestions.indexOf(qID)>=0;
 			}
 			return false;
 		}
-		
+
 		function upvote(questionID) {
 			if (questionID && vm.propQ.canVoteOnQuestions) {
 				var qIdx = vm.propQ.canVoteOnQuestions.indexOf(questionID);
@@ -132,9 +132,9 @@
 				});
 			}
 		}
-		
+
 		//----------------------------------------------//
-		
+
 		function addQuestion() {
 			vm.crtQuestion = {
 				children: {
@@ -148,18 +148,18 @@
 			$('#officialVoteResults').slider('setValue',0);
 			$('#parliamentVoteResults').slider('setValue',0);
 			$('#councilVoteResults').slider('setValue',0);
-			
+
 			$('#archivedAtDP').data("DateTimePicker").clear();
 			$('#openAtDP').data("DateTimePicker").clear();
 			$('#closedAtDP').data("DateTimePicker").clear();
 			$('#parliamentVoteDP').data("DateTimePicker").clear();
 			$('#councilVoteDP').data("DateTimePicker").clear();
 			$('#commissionDecisionDP').data("DateTimePicker").clear();
-			
+
 			$('#tagsSelector').val([]).trigger("change");
-			
+
 			togglePubAgenda();
-			
+
 			refDS.languages(false,function (langs) {
 				vm.translationsDropdown = [];
 				for (var code in langs) {
@@ -175,10 +175,10 @@
 			$('#questionContent').code('');
 			vm.crtQActivePanel = 'main';
 		}
-		
+
 		function editQuestion(questionId) {
 			questionsDS.getQuestionById(questionId,function (question) {
-				
+
 				//set the date pickers
 				if (question.archived_at) {$('#archivedAtDP').data("DateTimePicker").date(new Date(question.archived_at))} else {$('#archivedAtDP').data("DateTimePicker").clear()};
 				if (question.open_at) {$('#openAtDP').data("DateTimePicker").date(new Date(question.open_at))} else {$('#openAtDP').data("DateTimePicker").clear()};
@@ -192,13 +192,13 @@
 				if (vm.crtQuestion.children.translations==null) vm.crtQuestion.children.translations=[];
 				if (vm.crtQuestion.children.tags==null) vm.crtQuestion.children.tags=[];
 				if (vm.crtQuestion.children.comments==null) vm.crtQuestion.children.comments=[];
-				
+
 				var selectedTags = [];
 				for (var i = vm.crtQuestion.children.tags.length - 1; i >= 0; i--) {
 					selectedTags.push(vm.crtQuestion.children.tags[i].id);
 				}
 				$('#tagsSelector').val(selectedTags).trigger("change");
-				
+
 				vm.crtQuestion.children.comments.sort(function (a,b) {
 					return b.id-a.id;
 				});
@@ -208,7 +208,7 @@
 				updateSlider('officialVote','official_vote_tally');
 				updateSlider('parliamentVote','parliament_vote_tally');
 				updateSlider('councilVote','council_vote_tally');
-				
+
 				//load default translation
 				vm.crtTranslation = {
 					lang:'en',
@@ -219,9 +219,9 @@
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
 				$('.note-editable').attr('contenteditable',vm.canEditTranslation());
-				
+
 				vm.crtComment = null;
-				
+
 				//update dropdown
 				if (question.children && question.children.translations) {
 					refDS.languages(false,function (langs) {
@@ -244,7 +244,7 @@
 										isVerified = isVerified || (tr.verified==true)
 									}
 								}
-							
+
 								vm.translationsDropdown.unshift({
 									code: code,
 									label: langs[code].label_en,
@@ -260,9 +260,9 @@
 			}, function (err) {
 				console.log('Cannot load question with id='+questionId+' :'+err);
 			});
-			
+
 		}
-		
+
 		function cancelEdit() {
 			vm.crtComment = null;
 			vm.crtQActivePanel = null;
@@ -281,7 +281,7 @@
 			togglePubAgenda();
 			vm.crtQuestion = null;
 		}
-		
+
 		function saveQuestion() {
 			if (vm.crtQuestion) {
 				var q = vm.crtQuestion;
@@ -302,7 +302,7 @@
 				q.council_voted_on=m?m.valueOf():null;
 				m=$('#commissionDecisionDP').data("DateTimePicker").date();
 				q.commission_decided_on=m?m.valueOf():null;
-				
+
 				//update tags
 				var selectedTags = $('#tagsSelector').select2('data');
 				q.children.tags=[];
@@ -316,24 +316,24 @@
 						});
 					}
 				}
-				
+
 				if (q.is_public_agenda) {
 					q.official_vote_tally = saveSlider('officialVote');
 					q.parliament_vote_tally = saveSlider('parliamentVote');
 					q.council_vote_tally = saveSlider('councilVote');
 				}
-				
+
 				questionsDS.saveQuestion(q,onQuestionSaved,onQuestionCannotSave);
 			}
 		}
-		
+
 		function onQuestionSaved() {
 			vm.loadPage();
 			resetCrtQuestion();
 			vm.crtQActivePanel = null;
 			vm.crtComment = null;
 		}
-		
+
 		function resetCrtQuestion() {
 			vm.crtQuestion = null;
 			vm.crtTranslation = {lang:'en'};
@@ -342,24 +342,24 @@
 			vm.crtComment = null;
 			$('#officialVoteResults').slider('setValue',0);
 		}
-		
+
 		function onQuestionCannotSave(msg) {
 			// cancelEdit();
 			console.log('cannot save question: '+msg);
 		}
-		
+
 		function crtQuestionInalid() {
 			if (!vm.crtQuestion) return true;
 			if (vm.crtTranslation.lang==='en') {
-				if ( (!vm.crtTranslation.title) || (vm.crtTranslation.title.length<5) || 
+				if ( (!vm.crtTranslation.title) || (vm.crtTranslation.title.length<5) ||
 					(!vm.crtTranslation.description) || (vm.crtTranslation.description.length<20)) return true;
 			} else {
-				if ( (!vm.crtQuestion.title) || (vm.crtQuestion.title.length<5) || 
+				if ( (!vm.crtQuestion.title) || (vm.crtQuestion.title.length<5) ||
 					(!vm.crtQuestion.description) || (vm.crtQuestion.description.length<20)) return true;
 			}
 			return false;
 		}
-		
+
 		function saveCrtTranslation(q) {
 			vm.crtTranslation.html_content = $('#questionContent').code();
 			if (vm.crtTranslation.lang==='en') {
@@ -371,7 +371,7 @@
 				setTranslation(q,vm.crtTranslation,'description');
 				setTranslation(q,vm.crtTranslation,'html_content');
 			}
-			
+
 			//update the dropdown
 			for (var i = vm.translationsDropdown.length - 1; i >= 0; i--) {
 				var dd = vm.translationsDropdown[i];
@@ -383,14 +383,14 @@
 					}
 					dd.verified = (vm.crtTranslation.verified==true);
 				}
-			}	
-				
-			
+			}
+
+
 		}
-		
+
 		function setTranslation(q,trans,fld) {
 			if (q!=null&&trans!=null) {
-				
+
 				var isNewTrans = true;
 				for (var i = q.children.translations.length - 1; i >= 0; i--) {
 					var t = q.children.translations[i];
@@ -412,10 +412,10 @@
 					};
 					q.children.translations.push(newTrans);
 				}
-				
+
 			}
 		}
-		
+
 		function getTranslation(q,lng,fld) {
 			var isNewTrans = true;
 			if (q!=null&&lng!=null) {
@@ -432,7 +432,7 @@
 			}
 			return null;
 		}
-		
+
 		function getTranslationVerified(q,lng) {
 			var isTransVerified = true;
 			if (q!=null&&lng!=null) {
@@ -449,12 +449,12 @@
 			}
 			return isTransVerified;
 		}
-		
+
 		function switchTranslation(lng) {
 			if (vm.crtQuestion!=null&&vm.crtTranslation.lang!==lng) {
 				//save what we have now in the input fields
 				saveCrtTranslation(vm.crtQuestion);
-				
+
 				//load the values from the temp. storage
 				vm.crtTranslation = {
 					lang: lng,
@@ -465,7 +465,7 @@
 				};
 				$('#questionContent').code(vm.crtTranslation.html_content);
 				$('.note-editable').attr('contenteditable',vm.canEditTranslation());
-				
+
 				//update the tabs
 				if (vm.translationsTab!=null) {
 					var tabExists = false;
@@ -485,15 +485,15 @@
 						});
 					}
 				}
-				
+
 			}
 		}
-		
+
 		function toggleTranslationLock() {
 			vm.crtTranslation.verified = !(vm.crtTranslation.verified);
 			$('.note-editable').attr('contenteditable',vm.canEditTranslation());
 		}
-		
+
 		function canEditTranslation() {
 			if (vm.crtQuestion) {
 				if (vm.crtQuestion.is_archived) return false;
@@ -501,8 +501,8 @@
 			}
 			return true;
 		}
-		
-		
+
+
 		function publishQuestion() {
 			if (vm.crtQuestion) {
 				vm.crtQuestion.is_published=true;
@@ -512,7 +512,7 @@
 				saveQuestion();
 			}
 		}
-		
+
 		function archiveQuestion() {
 			if (vm.crtQuestion) {
 				vm.crtQuestion.is_archived=true;
@@ -520,7 +520,7 @@
 				saveQuestion();
 			}
 		}
-		
+
 		function deleteQuestion() {
 			if (vm.crtQuestion) {
 				vm.crtQuestion.is_deleted=true;
@@ -537,7 +537,7 @@
 				loadPage(panel.crtPage);
 			}
 		}
-		
+
 		function englishForLangCode(code) {
 			var langs = refDS.languages();
 			if (langs!=null) {
@@ -548,7 +548,7 @@
 			}
 			return code;
 		}
-		
+
 		function initTags() {
 			refDS.tags(false,function (data) {
 				if (data) {
@@ -568,7 +568,7 @@
 				}
 			});
 		}
-		
+
 		function addComment(commType) {
 			vm.crtComment = {
 				id:null,//new comment
@@ -578,11 +578,11 @@
 			vm.crtQuestion.children.comments.unshift(vm.crtComment);
 			$('#commentText').delay(500).focus();
 		}
-		
+
 		function deleteComment(idx) {
 			vm.crtQuestion.children.comments.splice(idx,1);
 		}
-		
+
 		function togglePubAgenda() {
 			if (vm.crtQuestion.is_public_agenda) {
 				$('#officialVoteResults').slider('enable');
@@ -596,9 +596,9 @@
 		}
 
 		//----------------------------------------------//
-		
+
 		function updateSlider(sel,fld) {
-			var tally = vm.crtQuestion[fld]>0?Math.ceil(vm.crtQuestion[fld] * 100):0;
+			var tally = vm.crtQuestion[fld]>0?Math.floor(vm.crtQuestion[fld] * 100):0;
 			$(('#'+sel+'Results')).slider('setValue',tally);
 			if (tally>0) {
 				$(('#'+sel+'Label')).text(' Yes/No: ' + tally+'/'+ (100-tally)+' %');
@@ -606,7 +606,7 @@
 				$(('#'+sel+'Label')).text('No voting registered');
 			}
 		}
-		
+
 		function saveSlider(sel) {
 			var tally = $(('#'+sel+'Results')).slider('getValue');
 			if (tally>0) {
