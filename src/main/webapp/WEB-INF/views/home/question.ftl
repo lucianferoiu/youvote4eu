@@ -4,7 +4,9 @@
 [#-- [@content for="header_css"]<link href='${context_path}/css/jquery-ui.min.css' rel="stylesheet">[/@content] --]
 [#-- [@content for="footer_script"]<script src='${context_path}/js/jquery-ui.min.js'></script>[/@content] --]
 [@content for="footer_script"]<script src='${context_path}/js/jquery.mousewheel.min.js'></script>[/@content]
-[@content for="footer_script"]<script src='${context_path}/js/highmaps.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.data.js'></script>[/@content]
+[@content for="footer_script"]<script src='${context_path}/js/highcharts.map.js'></script>[/@content]
 [@content for="footer_script"]<script src='${context_path}/js/eu.js'></script>[/@content]
 [@content for="header_css"]<link href='${context_path}/css/flags.css' rel="stylesheet">[/@content]
 [@content for="header_css"]<link href='${context_path}/css/bootstrap-select.min.css' rel="stylesheet">[/@content]
@@ -97,11 +99,18 @@
 								[/#if]
 							[/#if]
 							<div class="text-center">Vote tally so far:<br/></div>
-							<div class="q-vote-tally text-center">
+							[#-- <div class="q-vote-tally text-center">
 								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span>
 								/
 								NO: <span class="no-tally">${((1-(question.popular_vote_tally!0))*100)?string["0.##"]}</span>
+							</div> --]
+							<div class="arch-q-citizen-tally text-center">
+								<span class="label label-success text-left">Yes: ${((question.popular_vote_tally!0)*100)?string["0.##"]} %</span>&nbsp;
+								<span class="label label-danger text-right">No: ${((1-(question.popular_vote_tally!0))*100)?string["0.##"]} %</span>
 							</div>
+
+							<div id="tallyPieChart"></div>
+
 						</div>
 
 					[/#if]
@@ -158,6 +167,7 @@
 		pendingValidation: ${pendingValidation?c}
 		//
 		,qId: ${question.id}
+		,voteTally: ${question.popular_vote_tally!0}
 	};
 </script>
 [/@content]
