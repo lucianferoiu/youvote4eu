@@ -80,15 +80,15 @@
 									<br/>
 									[#if question.parliament_vote_tally??]
 										[#if (question.parliament_vote_tally>=0.5) ]
-											<span class="text-center arch-q-vote-tally">Yes (${((question.parliament_vote_tally)*100)?string["0.##"]}%)</span>
+											<span class="label label-success text-left">Yes (${((question.parliament_vote_tally)*100)?string["0.##"]}%)</span>
 										[#else]
-											<span class="text-center arch-q-vote-tally">No (${((1-(question.parliament_vote_tally))*100)?string["0.##"]}%)</span>
+											<span class="label label-danger text-right">No (${((1-(question.parliament_vote_tally))*100)?string["0.##"]}%)</span>
 										[/#if]
 									[/#if]
 									<br/>
-									<blockquote>[#if question.parliament_vote_link??]Access the decision details 
+									<blockquote>[#if question.parliament_vote_link??]Access the decision details
 										<a href="${question.parliament_vote_link}" target="_new">here</a>[/#if]
-									[#if question.parliament_voted_on?? ]<footer>Decision taken on 
+									[#if question.parliament_voted_on?? ]<footer>Decision taken on
 										${question.parliament_voted_on?string["dd/MM/yyyy"]}</footer>[/#if]
 									</blockquote>
 								</div>
@@ -98,16 +98,16 @@
 									<br/>
 									[#if question.council_vote_tally??]
 										[#if (question.council_vote_tally>=0.5) ]
-											<span class="text-center arch-q-vote-tally">Yes (${((question.council_vote_tally)*100)?string["0.##"]}%)</span>
+											<span class="label label-success text-left">Yes (${((question.council_vote_tally)*100)?string["0.##"]}%)</span>
 										[#else]
-											<span class="text-center arch-q-vote-tally">No (${((1-(question.council_vote_tally))*100)?string["0.##"]}%)</span>
+											<span class="label label-danger text-right">No (${((1-(question.council_vote_tally))*100)?string["0.##"]}%)</span>
 										[/#if]
 									[/#if]
 									<br/>
-									<blockquote>[#if question.council_vote_link??]Access the decision details 
+									<blockquote>[#if question.council_vote_link??]Access the decision details
 										<a href="${question.council_vote_link}" target="_new">here</a>[/#if]
 									<br/>
-									[#if question.council_voted_on?? ]<footer>Decision taken on 
+									[#if question.council_voted_on?? ]<footer>Decision taken on
 										${question.council_voted_on?string["dd/MM/yyyy"]}</footer>[/#if]
 									</blockquote>
 								</div>
@@ -119,18 +119,18 @@
 									<br/>
 									[#if question.commission_decision??]
 										[#if (question.commission_decision) ]
-											<span class="text-center arch-q-vote-tally">Yes</span>
+											<span class="label label-success text-left"> Yes </span>
 										[#else]
-											<span class="text-center arch-q-vote-tally">No</span>
+											<span class="label label-danger text-right"> No </span>
 										[/#if]
 									[#else]
 										<span class="text-center arch-q-vote-tally">[#if question.commission_decided_on?? ]Undecided/Posponed[/#if]</span>
 									[/#if]
 									<br/>
-									<blockquote>[#if question.commission_decision_link??]Access the decision details 
+									<blockquote>[#if question.commission_decision_link??]Access the decision details
 										<a href="${question.commission_decision_link}" target="_new">here</a>[/#if]
 									<br/>
-									[#if question.commission_decided_on?? ]<footer>Decision taken on 
+									[#if question.commission_decided_on?? ]<footer>Decision taken on
 										${question.commission_decided_on?string["dd/MM/yyyy"]}</footer>[/#if]
 									</blockquote>
 								</div>
@@ -162,7 +162,7 @@
 							<li>Tell <a href="mailto:contact@europarl.europa.eu">them</a>!</li>
 							<li>Join <a href="#">movement/campaign</a></li>
 						</ul>
-						
+
 					</div>
 				</div>
 			</div>

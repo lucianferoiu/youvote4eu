@@ -859,7 +859,7 @@ a.carousel-control {
 .arch-q-vote-tally {
 	font-weight: 900;
 	font-size: 1.2em;
-	text-shadow: 2px 1px 1px rgba(109,0,13,0.8);
+	/*text-shadow: 2px 1px 1px rgba(109,0,13,0.8);*/
 }
 
 .arch-q-vote-offcial blockquote {
