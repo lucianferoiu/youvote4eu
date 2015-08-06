@@ -88,7 +88,7 @@
 									<input type="text" class="form-control" id="questionTitle"
 										ng-model="vm.crtTranslation.title"
 										ng-required="vm.crtTranslation.lang==='en'"
-										ng-readonly="!vm.canEditTranslation()"
+										ng-readonly="vm.crtQuestion.is_published"
 										placeholder="Short title (mandatory)" >
 								</div>
 								<div class="form-group">
