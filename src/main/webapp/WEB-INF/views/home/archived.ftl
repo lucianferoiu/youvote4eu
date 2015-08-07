@@ -159,7 +159,7 @@
 						<hr/>
 						<p>Not happy with your representatives' decision?</p>
 						<ul>
-							<li>Tell <a href="mailto:contact@europarl.europa.eu">them</a>!</li>
+							<li>Write to the <a href="http://www.europarl.europa.eu/meps/${preferredLang.code}/map.html" target="_new">members of EP</a> !</li>
 							<li>Join <a href="#">movement/campaign</a></li>
 						</ul>
 

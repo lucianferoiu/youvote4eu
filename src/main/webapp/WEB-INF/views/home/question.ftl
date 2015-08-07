@@ -142,7 +142,7 @@
 					[#if question.correspondence_email??]
 						<li> Drop us a line <a href='mailto:${question.correspondence_email!""}'>here</a> and tell us what you think</li>
 					[/#if]
-						<li>Write to the Members of European Parliament from your country to tell them of your position</li>
+						<li>Write to the <a href="http://www.europarl.europa.eu/meps/${preferredLang.code}/map.html" target="_new">Members of European Parliament from your country</a> and tell them of your position</li>
 					</ul>
 				</div>
 			</div>

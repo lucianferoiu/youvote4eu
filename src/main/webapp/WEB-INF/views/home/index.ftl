@@ -45,7 +45,7 @@
 
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner" role="listbox">
-			
+
 		</div>
 
 		<!-- Controls -->
@@ -57,8 +57,8 @@
 			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 			<span class="sr-only">Next</span>
 		</a>
-		
-		
+
+
 	</div>
 </div>
 
@@ -120,7 +120,7 @@
 					<br/>
 					<ul style="border-left:1px solid #e7e7e7; margin-left:1em;">
 						<li><a href="/platform">Register</a> or <a href="/platform">Login</a> as <em>YouVote</em> Partner and propose questions, help with the translations of texts and support other proposed questions into publication</li>
-						<li>Write your MEPs and tell them your position on the discussed issues</li>
+						<li>Write <a href="http://www.europarl.europa.eu/meps/${preferredLang.code}/map.html" target="_new">your MEPs</a> and tell them your position on the discussed issues</li>
 						<li>Join Campains and Movements of like-minded citizen</li>
 					</ul>
 			</div>
