@@ -56,6 +56,12 @@
 	border-radius: 6px 0 6px 6px;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 320px;
+    overflow-x: hidden;
+}
+
 /* Spinner */
 
 .glyphicon-refresh-animate {

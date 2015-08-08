@@ -32,14 +32,14 @@
 							<li class="hidden-sm [#if activeFilter=='archived'] active[/#if]"><a href="/list/archived">Archived</a></li>
 							<!-- collapsed menu filters for rather small resolutions -->
 							<li class="dropdown visible-sm-block ">
-								<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" 
+								<a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
 									aria-expanded="false">Filters <span class="caret"></span></a>
 								<ul class="dropdown-menu multi-level">
 									<li class="[#if activeFilter=='popular'] disabled[/#if]"><a href="/list/popular">Popular</a></li>
 									<li class="[#if activeFilter=='newest'] disabled[/#if]"><a href="/list/newest">Newest</a></li>
 									<li class="[#if activeFilter=='archived'] disabled[/#if]"><a href="/list/archived">Archived</a></li>
 									<li class="dropdown-submenu ">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 											aria-expanded="false">Filter by tag: </span></a>
 										<ul class="dropdown-menu">
 											[#list tags as tg]
@@ -51,7 +51,7 @@
 							</li>
 							<!-- /menu filters -->
 							<li class="dropdown hidden-sm [#if activeFilter=='tag']active[/#if]">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 									aria-expanded="false">Filter by tag <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									[#list tags as tg]
@@ -63,15 +63,15 @@
 								<div class="form-group">
 									<div class="input-group">
 										<input type="text" class="form-control" id="searchKeyword" name="searchKeyword" placeholder="search by keyword" role="search"
-											 value="${searchKeyword!}"><span class="input-group-btn"><button class="btn btn-default" type="submit"><span 
+											 value="${searchKeyword!}"><span class="input-group-btn"><button class="btn btn-default" type="submit"><span
 												 class="glyphicon glyphicon-search"></button></span>
 									</div>
 								</div>
 							</form>
 							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 									aria-expanded="false"><span class="">[#if preferredLang??]${preferredLang.native}[#else]English[/#if]</span> <span class="caret"></span></a>
-								<ul class="dropdown-menu">
+								<ul class="dropdown-menu scrollable-menu">
 									[#list langs as lg]
 										<li [#if preferredLang??][#if preferredLang.code==lg.code]class="disabled"[/#if][/#if]><a href="/lang/${lg.code}">${lg.native}</a></li>
 									[/#list]
@@ -83,5 +83,5 @@
 			</div>
 		</div>
 	</div>
-	
+
 </div>
