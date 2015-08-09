@@ -505,7 +505,7 @@
 			});
 			zlider.on("slide", function(slideEvt) {
 				var txt = 'No voting registered';
-				if (slideEvt.value>0) {
+				if (slideEvt.value>=0) {
 					txt = ' Yes/No: ' + slideEvt.value+'/'+ (100-slideEvt.value)+' %';
 				} else {
 				}
