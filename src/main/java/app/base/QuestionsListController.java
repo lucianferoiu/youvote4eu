@@ -101,6 +101,8 @@ public abstract class QuestionsListController extends AnonAuthController {
 			query += offset;
 		}
 
+		final boolean translationsRequired = !"en".equalsIgnoreCase(lang);
+
 		Base.find(query, params.toArray()).with(new RowListenerAdapter() {
 
 			int i = 0;
@@ -119,6 +121,7 @@ public abstract class QuestionsListController extends AnonAuthController {
 				String t_description = (String) row.get("t_description");
 				fpq.title = StringUtils.nullOrEmpty(t_title) ? en_title : t_title;
 				fpq.description = StringUtils.nullOrEmpty(t_description) ? en_description : t_description;
+				fpq.translated = (!translationsRequired && (StringUtils.nullOrEmpty(t_title) || StringUtils.nullOrEmpty(t_description)));
 
 				Timestamp pub_date = (Timestamp) row.get("pub_date");
 				if (pub_date != null) {
@@ -128,6 +131,7 @@ public abstract class QuestionsListController extends AnonAuthController {
 				if (arch_date != null) {
 					fpq.archivedOn = new Date((arch_date).toInstant().toEpochMilli());
 				}
+
 				fpq.votesCount = (Long) row.get("votes");
 				if (fpq.votesCount == null) fpq.votesCount = 0L;
 				BigDecimal vTally = (BigDecimal) row.get("vote_tally");
