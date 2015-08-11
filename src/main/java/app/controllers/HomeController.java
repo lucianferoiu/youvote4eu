@@ -117,16 +117,25 @@ public class HomeController extends QuestionsListController {
 			}
 		}
 
+		Boolean showAskTranslators = false;
 		for (FrontpageQuestion fpq : questions) {
 			Integer voteValue = alreadyVotedQuestions.get(fpq.id);
+			if (!fpq.translated) showAskTranslators = true;//if at least one question is not translated... 
 			if (voteValue != null) {
 				fpq.canVote = false;
 				fpq.voted = voteValue;
 			} else {
 				fpq.canVote = !(fpq.isArch);
 			}
-
 		}
+		Cookie msg1 = cookie("YV4EUMSG1");
+		if (msg1 == null) {
+			msg1 = new Cookie("YV4EUMSG1", "ask-citizens-help-translations", true);
+			msg1.setMaxAge(60 * 60 * 24);//one day
+			sendCookie(msg1);
+			view("showAskTranslators", showAskTranslators);
+		}
+
 		boolean validatedCitizen = citizen != null && citizen.getBoolean("validated");
 		view("validatedCitizen", validatedCitizen);
 		if (!validatedCitizen) {
