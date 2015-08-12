@@ -149,7 +149,7 @@ public class HomeController extends QuestionsListController {
 		if (msg01 == null) {
 			msg01 = new Cookie("YV4EUMSG01", "ask-citizens-help-translations", true);
 			msg01.setMaxAge(60 * 60 * 24);//one day
-			//			sendCookie(msg01);
+			sendCookie(msg01);
 			view("showAskTranslators", showAskTranslators);
 		}
 
