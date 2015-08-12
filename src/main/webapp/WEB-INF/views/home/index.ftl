@@ -79,6 +79,7 @@
 				<div id="citizen-vote-pending" class="text-center voting-info-text">Your vote will be counted after you validate your email</div>
 			</div>
 			<div id="votingClosed" class="citizen-voted text-center">Voting closed</div>
+			<div id="cannotVoteArchived" class="citizen-voted text-center">Archived question</div>
 			<div class="question-details">
 				<button type="button" class="btn btn-default btn-block">More Details&hellip;</button>
 			</div>

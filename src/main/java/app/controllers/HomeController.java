@@ -117,6 +117,7 @@ public class HomeController extends QuestionsListController {
 			}
 		}
 
+		Date now = new Date();
 		Boolean showAskTranslators = false;
 		for (FrontpageQuestion fpq : questions) {
 			Integer voteValue = alreadyVotedQuestions.get(fpq.id);
@@ -126,6 +127,9 @@ public class HomeController extends QuestionsListController {
 				fpq.voted = voteValue;
 			} else {
 				fpq.canVote = !(fpq.isArch);
+			}
+			if (!fpq.isArch && fpq.closedOn != null && fpq.closedOn.before(now)) {
+				fpq.canVote = false;
 			}
 		}
 

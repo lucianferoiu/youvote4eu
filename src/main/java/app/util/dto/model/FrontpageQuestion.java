@@ -9,6 +9,7 @@ public class FrontpageQuestion {
 	public String description;
 	public Long votesCount;
 	public Date publishedOn;
+	public Date closedOn;
 	public Date archivedOn;
 	public boolean isNew;
 	public boolean isArch;
@@ -130,6 +131,14 @@ public class FrontpageQuestion {
 
 	public void setTranslated(Boolean translated) {
 		this.translated = translated;
+	}
+
+	public Date getClosedOn() {
+		return closedOn;
+	}
+
+	public void setClosedOn(Date closedOn) {
+		this.closedOn = closedOn;
 	}
 
 }

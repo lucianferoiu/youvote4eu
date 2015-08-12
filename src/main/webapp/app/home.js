@@ -2,11 +2,11 @@
 	var root = this;
 
 	$(document).ready(function(){
-		
+
 		$('.logo').click(function () {
 			window.location='/';
 		});
-		
+
 		$('.q').on('mouseenter', function (e) {
 			// console.log('entering question ',$(this).data('q-id'));
 			if (App.isMobileAgent==false) {
@@ -23,7 +23,7 @@
 				}
 			}
 		});
-		
+
 		$('.q').on('click', function (e) {
 			if (App.isMobileAgent==true) {//we don't have a 'sane' mouse enter/leave...
 				$(('.q[data-q-id="'+App.activeQuestion+'"]')).removeClass('q-hover');
@@ -53,23 +53,23 @@
 				App.activeQuestion=null;
 			}
 		});
-		
+
 		$('#votingBoothFlyweight .question-details button').click(function () {
 			var qId = $(this).data('q-id');
 			var isArchived = $(this).data('q-archived')||false;
 			questionDetails(qId,isArchived);
 		});
-		
+
 		$('#votingBoothFlyweight .can-vote .vote-yes').click(function () {
 			var qId = $(this).data('q-id');
 			voteQuestion(qId,1);
 		});
-		
+
 		$('#votingBoothFlyweight .can-vote .vote-no').click(function () {
 			var qId = $(this).data('q-id');
 			voteQuestion(qId,0);
 		});
-		
+
 		$('#qCarousel').on('slide.bs.carousel', function () {
 			App.activeQuestion=null;
 			$('#votingBoothFlyweight').hide();
@@ -81,8 +81,8 @@
 				App.carouselTransitioning=false;
 			},300);
 		});
-		
-		
+
+
 		if (App.isMobileAgent) {//no mouse, fingers only...
 			$('.carousel').bind('swipeleft',function () {
 				$('.carousel').carousel('next');
@@ -90,7 +90,7 @@
 			$('.carousel').bind('swiperight',function () {
 				$('.carousel').carousel('prev');
 			});
-			
+
 			var carousel_lastX,carousel_lastY,carousel_timer;
 			$('.carousel').bind('touchmove', function(e) {//swipe left/right on a carousel
 				clearTimeout(carousel_timer);
@@ -128,7 +128,7 @@
 					}
 				}
 			});
-		
+
 			$('.aq').click(function () {
 				var qId = $(this).data('q-id');
 				if (qId) {
@@ -136,19 +136,19 @@
 				}
 			});
 		}
-			
+
 		//$('body').popover({selector: '.vote-validation-pending span',trigger:'hover',container:'body', placement:'auto'});
-		
+
 		init();
-		
+
 	});
-	
+
 	function showVotingBooth(me,e) {
-		
+
 		if (App.carouselTransitioning==true) return;
-		
+
 		var qId = $(me).addClass('q-hover').data('q-id');
-		
+
 		if (App.activeQuestion!=qId) {
 			App.activeQuestion=qId;
 			var square = $(me).data('q-square');
@@ -183,6 +183,7 @@
 						$('#citizen-voted-yes').hide();
 						$('#citizen-voted-no').hide();
 					}
+					$('#votingClosed').show();
 					$('#votingBoothFlyweight .can-vote').hide();
 					$('#votingBoothFlyweight .already-voted').show();
 				}
@@ -193,10 +194,13 @@
 			}
 			$('#votingBoothFlyweight').css(qpos).css('width',qw).css('height',qh).show();
 			if (isArchivedQuestion) {
-				$('#votingClosed').show();
+				$('#votingClosed').hide();
+				$('#cannotVoteArchived').show();
 				// $('#citizen-vote-pending').hide();
 				$('#votingBoothFlyweight .already-voted').hide();
 				$('#votingBoothFlyweight .can-vote').hide();
+			} else {
+				$('#cannotVoteArchived').hide();
 			}
 		}
 	}
@@ -208,7 +212,7 @@
 			$(me).removeClass('q-hover');
 		}
 	}
-	
+
 	function questionDetails(qId,archived) {
 		if (archived) {
 			window.location=App.reqHostname+'/archived/'+qId;
@@ -216,7 +220,7 @@
 			window.location=App.reqHostname+'/question/'+qId;
 		}
 	}
-	
+
 	function voteQuestion(qId,voteValue) {
 		// console.log('Voting '+voteValue+' on question '+qId);
 		$('#votingSpinner').show();
@@ -255,10 +259,10 @@
 					}
 					$('#votingBoothFlyweight .already-voted').show();
 				}
-				
+
 				$('#votingBoothFlyweight .can-vote button').removeAttr('disabled');
 				$('#votingSpinner').hide();
-				
+
 			},
 			error: function (xhr,stat,err) {
 				$('#votingBoothFlyweight .can-vote button').removeAttr('disabled');
@@ -267,7 +271,7 @@
 			}
 		});
 	}
-	
+
 	function init() {
 		$('#citizen-vote-pending').hide();
 		if (App.validatedCitizen==true) {
@@ -282,7 +286,7 @@
 		}
 		$('#votingSpinner').hide();
 		$('#votingClosed').hide();
-		
+
 	}
 
 

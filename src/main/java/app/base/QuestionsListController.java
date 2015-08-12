@@ -21,7 +21,7 @@ public abstract class QuestionsListController extends AnonAuthController {
 
 	public static final Logger log = LoggerFactory.getLogger(QuestionsListController.class);
 
-	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, q.official_vote_tally off_vote_tally,"
+	protected static final String FRONTPAGE_QUESTIONS_QUERY = " SELECT q.id as qid, q.popular_votes as votes, q.open_at as pub_date, q.closed_at as close_date, q.archived_at as arch_date, q.popular_vote_tally vote_tally, q.official_vote_tally off_vote_tally,"
 			+ " q.title as en_title, tt.text as t_title, q.description as en_description, td.text as t_description "
 			+ " FROM questions q "
 			+ " LEFT OUTER JOIN translations tt ON (tt.parent_id=q.id AND tt.field_type='title' AND tt.lang=?) "
@@ -126,6 +126,10 @@ public abstract class QuestionsListController extends AnonAuthController {
 				Timestamp pub_date = (Timestamp) row.get("pub_date");
 				if (pub_date != null) {
 					fpq.publishedOn = new Date((pub_date).toInstant().toEpochMilli());
+				}
+				Timestamp close_date = (Timestamp) row.get("close_date");
+				if (close_date != null) {
+					fpq.closedOn = new Date((close_date).toInstant().toEpochMilli());
 				}
 				Timestamp arch_date = (Timestamp) row.get("arch_date");
 				if (arch_date != null) {
