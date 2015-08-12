@@ -98,6 +98,11 @@
 								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value">NO</span></div>
 								[/#if]
 							[/#if]
+							[#if closedVoting??]
+							[#if closedVoting==true]
+							<div class="text-center">Vote on this question closed on ${question.closed_at?string["dd/MM/yyyy HH:mm"]}</div>
+							[/#if]
+							[/#if]
 							<div class="text-center">Vote tally so far:<br/></div>
 							[#-- <div class="q-vote-tally text-center">
 								YES: <span class="yes-tally">${((question.popular_vote_tally!0)*100)?string["0.##"]}</span>

@@ -193,8 +193,12 @@ public class HomeController extends QuestionsListController {
 		}
 		view("question", question);
 
+		Date closedDate = question.getDate("closed_at");
+		Date now = new Date();
+		boolean closedForVoting = closedDate != null && closedDate.before(now);
+		view("closedVoting", new Boolean(closedForVoting));
 		Vote myVote = Vote.findFirst("question_id=? and citizen_id=?", qId, citizenId);
-		view("canVote", new Boolean(myVote == null));
+		view("canVote", new Boolean(myVote == null && !closedForVoting));
 		view("voted", myVote != null ? myVote.getInteger("value") : -1);
 
 		view("latestVotes", questionLatestVotes(qId));

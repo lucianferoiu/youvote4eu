@@ -165,13 +165,14 @@
 					$('#votingBoothFlyweight .vote-no').data('q-id',qId);
 					$('#votingBoothFlyweight .already-voted').hide();
 					$('#votingBoothFlyweight .can-vote').show();
-				} else {//already voted
+				} else {//already voted or voting closed
 					var voteTally = qInfo.voteTally?qInfo.voteTally:0;
 					var yesVotes = voteTally>=0? (new Number(voteTally * 100).toPrecision(3))+'%' : '-';
 					var noVotes = voteTally>=0? (new Number((1-voteTally) * 100).toPrecision(3))+'%' : '-';
 					$('#votingBoothFlyweight .yes-tally').text(yesVotes);
 					$('#votingBoothFlyweight .no-tally').text(noVotes);
 					if (qInfo.voted!=undefined) {
+						$('#votingClosed').hide();
 						if (qInfo.voted==1) {
 							$('#citizen-voted-yes').show();
 							$('#citizen-voted-no').hide();
@@ -182,8 +183,8 @@
 					} else {
 						$('#citizen-voted-yes').hide();
 						$('#citizen-voted-no').hide();
+						$('#votingClosed').show();
 					}
-					$('#votingClosed').show();
 					$('#votingBoothFlyweight .can-vote').hide();
 					$('#votingBoothFlyweight .already-voted').show();
 				}
