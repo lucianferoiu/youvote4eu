@@ -17,21 +17,27 @@
 	$(document).ready(function () {
 		YV.init();
 	});
-	
+
 	///////////////////////////////
 	function init() {
-		
+
 		$(document).ready(function(){
 			YV.resize();
-			
+
 			//handlers
 			$(window).resize(function () { YV.resize(); });
 			// $(window).scroll(function () { onScroll(); });
+
+		$('.flashes div').on('closed.bs.alert', function () {//closed alerts would leave empty space under the navbar
+			var navBarH = $('.navbar').height();
+			$('.nav-buffer').css('height',''+(navBarH+20)+'px');
+		});
+
 		});
 	};
-	
+
 	//	----- resizing -----
-	
+
 	function resize() {
 		var ww = $(window).width();
 		var wh = $(window).height();
@@ -42,10 +48,10 @@
 		if (YV.gridSize==='3'||YV.gridSize==='4'||YV.gridSize==='5') {
 			resizeCells(YV.gridSize,ww,wh);
 		} else {
-			
+
 		}
 	};
-	
+
 	function resizeCells(gridSize,winW,winH) {
 		var gridInfo = YV.grids[gridSize];
 		var qGridWidth = Math.min(Math.floor( (winW-30) * 0.90),1600);
@@ -56,20 +62,20 @@
 		$('#qCarousel').css('height',qGridHeight+60);
 		$('#qCarousel .carousel-inner').css('height',qGridHeight+60);
 		$('#qCarousel .q-page').css('width',qGridWidth-10).css('height',qGridHeight);
-		
+
 		var questions = $('#qCarousel .carousel-inner .q').each(function (idx,q) {
 			var square = $(q).data('q-square');
 			var x=square[0]*qCellWidth;var y=square[1]*qCellHeight;var sz=square[2];
 			var w = sz*qCellWidth;var h = sz*qCellHeight;
 			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px').css('height',''+(h-15)+'px').css('width',''+(w-15)+'px').show();
 		});
-		
+
 		$('.aq').height((qGridWidth-20)/4);
-		
+
 	}
-	
+
 	//	----- layouting -----
-	
+
 	function relayout(winW,winH) {
 		var appropriateLayout = '1';
 		if (winW<=480) {
@@ -83,14 +89,14 @@
 		} else {
 			appropriateLayout = '5';
 		}
-		
+
 		if (YV.gridSize!==appropriateLayout) {
 			YV.gridSize=appropriateLayout;
 			layout(YV.gridSize,winW,winH);
 		}
-		
+
 	}
-	
+
 	function layout(gridSize,winW,winH) {
 		if (gridSize==='1') {
 			layoutAsSimpleFlow(winW);
@@ -100,16 +106,16 @@
 			$('#qCarousel').hide();
 			layoutAsGridCarousel(gridSize,winW,winH);
 			$('#qCarousel').show();
-		} 
+		}
 	}
-	
+
 	function layoutAsSimpleFlow(winW) {
 		var allQuestions = $('#qContainerFlow .q').detach().removeClass('col-xs-6 q-hover').addClass('row').css('height','100%');
 		$('#qContainerFlow').empty().append(allQuestions);
 		colorQuestionsBg('#qContainerFlow');
-		
+
 	}
-	
+
 	function layoutAsDoubleFlow(winW) {
 		var allQuestions = $('#qContainerFlow .q').removeClass('row q-hover').detach();
 		var qCont = $('#qContainerFlow');		qCont.empty();
@@ -139,11 +145,11 @@
 				var maxHeight = Math.max($(q1).height(),$(q2).height())+10;
 				$(q1).css('height',maxHeight);$(q2).css('height',maxHeight);
 			});
-			
+
 			colorQuestionsBg('#qContainerFlow');
 		},150);
 	}
-	
+
 	function layoutAsGridCarousel(gridSize,winW,winH) {
 		var gridInfo = YV.grids[gridSize];
 		$('#qCarousel').carousel('pause');
@@ -154,7 +160,7 @@
 			$('#qCarousel .carousel-inner .item').remove();
 			$(carouselIndicators).empty();
 			// var qTempl = $('#qContainerFlow .q').first().clone(true,true);
-			
+
 			var idx=0;
 			var pagesCount=0;
 			var questionsInPageCount=0;
@@ -180,9 +186,9 @@
 			}
 			$('#qCarousel .q .q-desc').removeClass('visible-xs-block');
 			$('#qCarousel .carousel-inner .item').first().addClass('active');
-			
+
 			colorQuestionsBg('#qCarousel');
-			
+
 		} else {//wait for the request to come through...
 			YV.gridSize=null;
 		}
@@ -190,7 +196,7 @@
 			$('#qCarousel').carousel('cycle');
 		},200);
 	}
-	
+
 	var layoutTemplates = {
 		'3': [
 			[[0,0,2],[1,2,2]],[[1,0,2],[0,2,2]],[[0,1,2]],[[1,1,2]],[[0,0,2],[0,2,2]],[[1,0,2],[1,2,2]],[[0,1,3]]
@@ -206,19 +212,19 @@
 			[[0,0,3],[3,0,2],[0,3,2],[2,3,2]],[[0,0,3],[3,1,2],[0,3,2],[3,4,2]],[[0,1,3],[3,0,2],[3,3,2],[1,4,2]],[[0,2,3],[1,0,2],[3,1,2],[3,4,2]],[[0,2,3],[1,0,2],[3,1,2],[3,3,2]]
 		]
 	}
-	
+
 	function randomTemplate(gridSize,pageSize) {
 		var gridTemplates=layoutTemplates[gridSize];
 		var idx = randomInt(0,gridTemplates.length-1);//random template
 		var template = gridTemplates[idx];
 		var ret = [];
 		var count=0;
-		
+
 		var bitmap = [];
 		for (var k=0;k<gridSize;k++) {
 			bitmap[k] = [];
 		}
-		
+
 		var sqaresCount = template.length;
 		for(var j=0;j<sqaresCount;j++) {
 			var square = template[j];
@@ -234,7 +240,7 @@
 				}
 			}
 		}
-	
+
 		//add 1-size random squares for the additional questions
 		var oneSizeCount=0;
 		for (var k=0;k<gridSize;k++) {
@@ -249,14 +255,14 @@
 				}
 			}
 		}
-		
+
 		return {
 			capacity: count,
 			smallSquares:oneSizeCount,
 			squares: ret
 		};
 	}
-	
+
 	//	----- UI veneer -----
 
 	function colorQuestionsBg(container) {
@@ -282,19 +288,19 @@
 				$(this).removeClass('q-bg-0 q-bg-1 q-bg-2 q-bg-3 q-bg-4 q-bg-5 q-bg-6 q-bg-7').addClass(colorClass);
 			});
 		}
-		
+
 	}
-	
-	
+
+
 	//	----- event handlers -----
-	
-	
+
+
 	//	----- utils -----
 
 	function randomInRange(min, max) {
 		return Math.random() * (max - min) + min;
 	}
-	
+
 	function randomBool() {
 		return Math.random() >= 0.50;
 	}
@@ -302,25 +308,25 @@
 	function randomInt(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-	
+
 	function randomMul(times) {
 		var ret = Math.random();
 		for(var i=1;i<times;i++) ret = ret * Math.random();
 		return ret;
 	}
-	
+
 	function randomAdd(times) {
 		var ret = Math.random();
 		for(var i=1;i<times;i++) ret = ret + Math.random();
 		return ret;
 	}
-	
+
 	function randomTri(times) {
 		var ret = Math.random();
 		var val = ret*times;
 		for(var i=times-1;i>=0;i--) if (val>i) return i;
 		return 0;
 	}
-	
+
 
 }());

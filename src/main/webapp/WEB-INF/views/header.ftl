@@ -84,4 +84,40 @@
 		</div>
 	</div>
 
+	<div class="row flashes">
+		[#if showAskTranslators??]
+			[#if showAskTranslators==true]
+			<div class="alert alert-dismissible text-center active" role="alert" style="margin-bottom:4px;">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				Some questions are not translated in your language yet.. Please consider helping us: <a href="/platform"><strong>register</strong></a> as a <em>Platform Partner</em> and you may translate questions, as well as propose your own.
+			</div>
+			[/#if]
+		[/#if]
+
+		[#if pendingValidation??]
+			[#if pendingValidation==true]
+			<div class="alert alert-dismissible text-center active" role="alert" style="margin-bottom:4px;">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				Before your votes are counted, you need to validate your identity. Please click the validation link in the email we sent you.
+			</div>
+			[/#if]
+		[/#if]
+
+		[#if flasher??] [#-- flash-based messages --]
+
+		[#if flasher.justValidatedCitizen??]
+			[#if flasher.justValidatedCitizen==true]
+			<div class="alert alert-dismissible text-center active" role="alert" style="margin-bottom:4px;">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				Congratulations on validating your identity! Now you may vote freely. Thank you civic spirit!
+			</div>
+			[/#if]
+		[/#if]
+
+
+		[/#if]
+
+	</div>
+
+
 </div>

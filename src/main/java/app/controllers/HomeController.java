@@ -128,13 +128,6 @@ public class HomeController extends QuestionsListController {
 				fpq.canVote = !(fpq.isArch);
 			}
 		}
-		Cookie msg1 = cookie("YV4EUMSG1");
-		if (msg1 == null) {
-			msg1 = new Cookie("YV4EUMSG1", "ask-citizens-help-translations", true);
-			msg1.setMaxAge(60 * 60 * 24);//one day
-			sendCookie(msg1);
-			view("showAskTranslators", showAskTranslators);
-		}
 
 		boolean validatedCitizen = citizen != null && citizen.getBoolean("validated");
 		view("validatedCitizen", validatedCitizen);
@@ -145,6 +138,20 @@ public class HomeController extends QuestionsListController {
 			view("pendingValidation", false);
 		}
 
+		////
+		// Alert messages:
+		////
+		Cookie msg01 = cookie("YV4EUMSG01");
+		if (msg01 == null) {
+			msg01 = new Cookie("YV4EUMSG01", "ask-citizens-help-translations", true);
+			msg01.setMaxAge(60 * 60 * 24);//one day
+			//			sendCookie(msg01);
+			view("showAskTranslators", showAskTranslators);
+		}
+
+		////
+		//Render the result
+		////
 		if (asJson) {
 			String json = JsonHelper.toListJson(questions);
 			respond(json).contentType("application/json").status(200);
@@ -498,6 +505,7 @@ public class HomeController extends QuestionsListController {
 		Base.commitTransaction();
 
 		view("validatedCitizen", true);
+		flash("justValidatedCitizen", true);
 		redirect("/home");
 
 	}

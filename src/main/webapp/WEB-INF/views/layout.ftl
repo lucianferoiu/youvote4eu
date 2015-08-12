@@ -18,7 +18,6 @@
 <body>
 
 	[#include "header.ftl"]
-	[#include "flashes.ftl"]
 
 	${page_content}
 
