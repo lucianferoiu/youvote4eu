@@ -91,6 +91,7 @@ public class PartnersController extends PlatformController {
 		}
 		atts.remove("first_login");
 		atts.remove("last_login");
+		atts.remove("email");//prevent a smarty-pants from manipulating the POST payload and changing the email
 		partner.fromMap(atts);
 		boolean succ = partner.save();
 		if (succ) {
@@ -112,6 +113,58 @@ public class PartnersController extends PlatformController {
 		redirect("/platform/partners/list");
 	}
 
+	@POST
+	public void ban() {
+		Map atts = Collections.emptyMap();
+		Long id = null;
+
+		try {
+			atts = JsonHelper.toMap(getRequestString());
+			if (atts != null && atts.containsKey("id")) {
+				id = Long.decode(atts.get("id").toString());
+			}
+		}
+		catch (IOException e) {
+			log.warn("Cannot ban partner.. POST payload corrupted");
+
+		}
+		catch (NumberFormatException nfe) {
+			log.warn("Cannot bsn partner - malformed id={}", atts.get("id"));
+			json_400("Malformed partner id");
+		}
+
+		if (atts == null) json_400("Cannot read POST payload");
+
+		Partner partner = new Partner();
+		if (id != null) {//update
+			partner = Partner.findById(id);
+			if (partner == null) {
+				log.debug("Cannot find a partner with id={}", id);
+				json_404(String.format("No existing partner with id: %d", id));
+			}
+		}
+
+		String message = atts.containsKey("message") ? (String) atts.get("message")
+				: "Your activity as Platform Partner on YouVoteForEurope has been restricted.";
+
+		partner.setBoolean("enabled", false);
+		partner.setDate("banned_at", new Date());
+		partner.setString("ban_reason", message);
+		boolean succ = partner.save();
+		if (succ) {
+			sendMessageToPartner(partner.getString("email"), "/other/mail/message_partner", "Your access has been restricted", message);
+			json_200(String.format("banned partner with id: %d", partner.getLongId()));
+		} else {
+			log.warn("Cannot save partner with id={} - db errors: {}", id, partner.errors().toString());
+			json_400("cannot update (ban) partner details");
+		}
+
+	}
+
+	public void message() {
+
+	}
+
 	protected void sendVerificationMailToNewPartner(String email, String template) {
 		String validationCode = tokenGenerator.generateToken().trim();
 		String url = hostname() + "/platform/auth/validate?code=" + validationCode;
@@ -124,16 +177,26 @@ public class PartnersController extends PlatformController {
 
 		LocalDateTime now = LocalDateTime.now();
 		Date tomorrow = Date.from(now.plusHours(24).toInstant(ZoneOffset.UTC));
-		EmailValidation validation = EmailValidation
-				.create("email", email, "token", validationCode, "validated", false);
+		EmailValidation validation = EmailValidation.create("email", email, "token", validationCode, "validated", false);
 		validation.setTimestamp("valid_until", tomorrow).saveIt();
 		Partner me = (Partner) session(Const.AUTHENTICATED_PARTNER);
 		if (me == null) return;
 		validation.setLong("added_by", me.getId());
 
 		mailer.sendMail(email, subj, writer.toString(), true);
-		log.debug("Partner added: created email validation {} and sent the validation email for URL {}", validation,
-				url);
+		log.debug("Partner added: created email validation {} and sent the validation email for URL {}", validation, url);
+	}
+
+	protected void sendMessageToPartner(String email, String template, String subject, String message) {
+		Map<String, Object> vals = new HashMap<String, Object>();
+		vals.put("url", hostname() + "/platform");
+		vals.put("message", message);
+
+		StringWriter writer = new StringWriter();
+		Configuration.getTemplateManager().merge(vals, template, null, null, writer);
+		mailer.sendMail(email, subject, writer.toString(), true);
+		log.debug("Sent email '{}' to partner {}", subject, email);
+
 	}
 
 }
