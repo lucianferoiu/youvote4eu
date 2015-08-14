@@ -1,7 +1,7 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 
 <div class="container" [#-- ng-show="vm.ctx.panel==='list'" --]>
-	
+
 	<div class="row">
 		<div class="">
 			<ul class="nav nav-pills">
@@ -17,7 +17,7 @@
 	</div>
 	<hr/>
 	<div class="row">
-		
+
 		<table class="table table-hover table-responsive">
 			<thead>
 				<tr>
@@ -60,7 +60,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="p in vm.partners" ng-click="vm.editPartner(p.id)">
+				<tr class="open-partner" ng-repeat="p in vm.partners" ng-click="vm.editPartner(p.id)" ng-class="{'bg-danger':!p.enabled}">
 					<td>{{p.email}} <small class="text-uppercase text-muted" ng-show="p.name!==null && p.name.length>1"> &nbsp;&nbsp;&nbsp;[ {{p.name}} ]</small></td>
 					<td><span ng-show="p.verified===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
 					<td><span ng-show="p.enabled===true" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
@@ -70,7 +70,7 @@
 				</tr>
 			</tbody>
 		</table>
-	
+
 		<div class="text-center">
 			<ul class="pagination">
 				<li ng-class="{'disabled': (vm.ctx.crtPage<=1)} ">
@@ -88,8 +88,3 @@
 	</div>
 
 </div>
-
-
-
-
-

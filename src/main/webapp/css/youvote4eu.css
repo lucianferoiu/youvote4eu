@@ -69,6 +69,11 @@ body {
 	line-height: 38px;
 }
 
+/* partners */
+.open-partner {
+	cursor: pointer;
+}
+
 /* questions */
 .q-info-cell {
 	vertical-align: middle;
@@ -117,8 +122,8 @@ body {
 
 .q-pill {
 	border-width: 1px;
-	border-color:#D6E0EB; 
-	border-style:solid; 
+	border-color:#D6E0EB;
+	border-style:solid;
 	margin:6px;
 }
 
@@ -164,7 +169,7 @@ body {
 	border-color: #ddd;
 }
 .tags-cloud {
-	
+
 }
 
 .tags-cloud .label, .flags-cloud .label {
