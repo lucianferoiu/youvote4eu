@@ -1,6 +1,6 @@
 [#ftl] [#-- use the square brackets syntax to avoid clashes with js templates etc. --]
 <div class="container">
-	<div id="editPartnerModel" class="modal editing-dialog" ng-class="{'show': vm.ctx.panel==='edit'}" tabindex="-1" role="dialog" aria-hidden="true">
+	<div id="editPartnerModel" class="modal editing-dialog" ng-class="{'in': vm.ctx.panel==='edit'}" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -135,8 +135,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Send Email &hellip;</button>
-					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()"><span class="text-danger">Ban Partner &hellip;</span></button>
+					[#-- <button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Send Email &hellip;</button> --]
+					<button type="button" class="btn btn-danger" ng-click="vm.ctx.banPartnerDialog=true">Ban Partner &hellip;</button>
 					<button type="button" class="btn btn-primary" ng-click="vm.savePartner()">Save changes</button>
 					&nbsp;&nbsp;
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
@@ -144,4 +144,32 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="banPartnerModal" ng-class="{'in':vm.ctx.banPartnerDialog==true}">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.ctx.banPartnerDialog=false"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Ban Partner: deny access to the Platform</h4>
+	      </div>
+	      <div class="modal-body">
+					<div class="form" action="/platform/partner/ban" method="post">
+						<div class="form-group">
+    					<label for="banReason">Reason for restricting the access to this Partner:</label>
+							<textarea class="form-control" name="banReason" rows="2" required></textarea>
+						</div>
+	        	<p>The Partner will be marked as disabled and his/her login access will be denied further on. An email with the above reason will be sent to him/her.</p>
+						<p class="small">
+							<em>NB: the ban can be lifted by simply checking the <em>Account Enabled</em> flag</em>
+						</p>
+					</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.ctx.banPartnerDialog=false">Close</button>
+	        <button type="submit" class="btn btn-danger">Ban Partner</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
 </div>
