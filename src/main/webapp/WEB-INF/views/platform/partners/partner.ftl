@@ -136,9 +136,10 @@
 				</div>
 				<div class="modal-footer">
 					[#-- <button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Send Email &hellip;</button> --]
+					<button type="button" class="btn btn-default" ng-click="vm.ctx.messagePartnerDialog=true">Send Message &hellip;</button>
 					<button type="button" class="btn btn-danger" ng-click="vm.ctx.banPartnerDialog=true">Ban Partner &hellip;</button>
 					<button type="button" class="btn btn-primary" ng-click="vm.savePartner()">Save changes</button>
-					&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
 				</div>
 			</div>
@@ -160,7 +161,7 @@
 						</div>
 	        	<p>The Partner will be marked as disabled and his/her login access will be denied further on. An email with the above reason will be sent to him/her.</p>
 						<p class="small">
-							<em>NB: the ban can be lifted by simply checking the <em>Account Enabled</em> flag</em>
+							<em>NB: The ban can be lifted by simply checking the <em>Account Enabled</em> flag</em>
 						</p>
 					</div>
 	      </div>
@@ -171,5 +172,33 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+
+	<div class="modal fade" id="messagePartnerModal" ng-class="{'in':vm.ctx.messagePartnerDialog==true}">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.ctx.messagePartnerDialog=false"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Send a message to the Partner</h4>
+	      </div>
+	      <div class="modal-body">
+					<div class="form" action="/platform/partner/ban" method="post">
+						<div class="form-group">
+    					<label for="partnerMessage">Content of the message:</label>
+							<textarea class="form-control" name="partnerMessage" rows="2" required></textarea>
+						</div>
+	        	<p>An email with the above message will be sent to the partner.</p>
+						<p class="small">
+							<em>NB: The message will clearly indicate to the recipient that it comes from you. Also, you may directly use the email address from the partner's details to freely exchange emails outside the YouVote platform...</em>
+						</p>
+					</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.ctx.messagePartnerDialog=false">Close</button>
+	        <button type="submit" class="btn btn-primary">Send Message</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
 
 </div>
