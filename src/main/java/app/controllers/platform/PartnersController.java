@@ -136,12 +136,26 @@ public class PartnersController extends PlatformController {
 		if (atts == null) json_400("Cannot read POST payload");
 
 		Partner partner = new Partner();
-		if (id != null) {//update
+		if (id != null) {
 			partner = Partner.findById(id);
 			if (partner == null) {
 				log.debug("Cannot find a partner with id={}", id);
 				json_404(String.format("No existing partner with id: %d", id));
+				return;
 			}
+		} else {
+			log.debug("Missing partner id - don't know who to ban");
+			json_404(String.format("Missing partner id"));
+			return;
+
+		}
+
+		Partner authenticatedPartner = (Partner) session(Const.AUTHENTICATED_PARTNER);
+		if (authenticatedPartner == null) {
+			log.debug("The ban initiator cannot be annonymous - how did you access this anyway!?", id);
+			json_403();
+			return;
+
 		}
 
 		String message = atts.containsKey("message") ? (String) atts.get("message")
@@ -149,6 +163,7 @@ public class PartnersController extends PlatformController {
 
 		partner.setBoolean("enabled", false);
 		partner.setDate("banned_at", new Date());
+		partner.setDate("banned_by", authenticatedPartner.getLongId());
 		partner.setString("ban_reason", message);
 		boolean succ = partner.save();
 		if (succ) {
