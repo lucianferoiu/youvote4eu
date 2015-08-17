@@ -146,7 +146,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="banPartnerModal" ng-class="{'in':vm.ctx.banPartnerDialog==true}">
+	<div class="modal fade" id="banPartnerModal" ng-class="{'in':vm.ctx.banPartnerDialog==true && vm.ctx.crtPartner.enabled}">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
