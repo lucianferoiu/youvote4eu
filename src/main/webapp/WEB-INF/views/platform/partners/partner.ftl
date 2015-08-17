@@ -137,7 +137,7 @@
 				<div class="modal-footer">
 					[#-- <button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Send Email &hellip;</button> --]
 					<button type="button" class="btn btn-default" ng-click="vm.ctx.messagePartnerDialog=true">Send Message &hellip;</button>
-					<button type="button" class="btn btn-danger" ng-click="vm.ctx.banPartnerDialog=true">Ban Partner &hellip;</button>
+					<button type="button" class="btn btn-danger" ng-click="vm.ctx.banPartnerDialog=true" ng-disabled="!vm.ctx.crtPartner.enabled">Ban Partner &hellip;</button>
 					<button type="button" class="btn btn-primary" ng-click="vm.savePartner()">Save changes</button>
 					&nbsp;&nbsp;&nbsp;
 					<button type="button" class="btn btn-default" ng-click="vm.cancelEdit()">Close</button>
