@@ -157,7 +157,7 @@
 					<div class="form" action="/platform/partner/ban" method="post">
 						<div class="form-group">
     					<label for="banReason">Reason for restricting the access to this Partner:</label>
-							<textarea class="form-control" name="banReason" rows="2" required></textarea>
+							<textarea class="form-control" ng-model="vm.ctx.banReason" rows="2" required></textarea>
 						</div>
 	        	<p>The Partner will be marked as disabled and his/her login access will be denied further on. An email with the above reason will be sent to him/her.</p>
 						<p class="small">
@@ -167,7 +167,7 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.ctx.banPartnerDialog=false">Close</button>
-	        <button type="submit" class="btn btn-danger">Ban Partner</button>
+	        <button type="button" class="btn btn-danger" ng-click="vm.m">Ban Partner</button>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
