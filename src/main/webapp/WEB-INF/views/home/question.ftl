@@ -92,10 +92,10 @@
 						<div class="q-already-voted">
 							[#if voted??]
 								[#if voted==1]
-								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value">YES</span></div>
+								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value-q">YES</span></div>
 								[/#if]
 								[#if voted==0]
-								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value">NO</span></div>
+								<div class="q-citizen-voted text-center">You voted: <span class="citizen-vote-value-q">NO</span></div>
 								[/#if]
 							[/#if]
 							[#if closedVoting??]

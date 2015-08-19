@@ -99,17 +99,20 @@
 			<div class="row">
 				[#assign cnt=rand(1,7)]
 				[#list last3ArchivedQuestions as q]
-				<div id="aq${q.id}" class="q aq col-md-4 q-bg-${(cnt)}" data-q-id="${q.id}">
-						<div class="q-title">${q.title}</div>
-						<div class="aq-votes-tally">
-							<div class="q-votes"><span>${q.votesCount}</span> votes</div>
-							<div class="q-tally"><span>Yes: ${((q.voteTally)*100)?string["0.##"]}% <strong> — </strong> No: ${((1-(q.voteTally))*100)?string["0.##"]}%</span></div>
-						</div>
-						<blockquote class="aq-milestones">
-							[#if q.archivedOn??]<footer>Archived on ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
-							<footer>Published on ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</footer>
-						</blockquote>
-						<div class="trailing-space"><br/></div>
+				<div class="col-md-4 aq-wrap">
+					<div id="aq${q.id}" class="q aq q-bg-${(cnt)}" data-q-id="${q.id}">
+							<div class="q-title">${q.title}</div>
+							<div class="aq-votes-tally">
+								<div class="q-votes"><span>${q.votesCount}</span> votes</div>
+								<div class="q-tally"><span>Yes: ${((q.voteTally)*100)?string["0.##"]}% <strong> — </strong>
+									No: ${((1-(q.voteTally))*100)?string["0.##"]}%</span></div>
+							</div>
+							<blockquote class="aq-milestones">
+								[#if q.archivedOn??]<footer>Archived on ${q.archivedOn?string["dd/MM/yyyy HH:mm"]}</footer>[/#if]
+								<footer>Published on ${q.publishedOn?string["dd/MM/yyyy HH:mm"]}</footer>
+							</blockquote>
+							<div class="trailing-space"><br/></div>
+					</div>
 				</div>
 				[#assign cnt=cnt+1]
 				[/#list]

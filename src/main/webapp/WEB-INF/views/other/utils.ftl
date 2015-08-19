@@ -16,6 +16,6 @@
 	[#else]
 		[#assign _rand = randomNum /]
 	[/#if]
-	[#return (min + ((max - min) * _rand))?round /]
+	[#return (min + ((max - min - 1) * _rand))?round /]
 [/#function]
 [#assign _rand = 0.36 /]

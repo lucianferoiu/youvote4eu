@@ -317,6 +317,11 @@ a:hover, a:focus {
 	padding-right: 1.4em;
 */}
 
+.aq-cont .aq-wrap .aq {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
 /* ----- q-cont-static... */
 .q-cont-static {
 	padding: 1em;
@@ -587,7 +592,7 @@ a.carousel-control {
 	color: white;
 	border: none;
 /*	background-image: linear-gradient(to bottom, #DAC0C1, #C2C0C1);*/
-	background-image: radial-gradient(#A80818 0,#6D000D 63%);
+	/*background-image: radial-gradient(#A80818 0,#6D000D 63%);*/
 	text-shadow: 2px 1px 1px rgba(109,0,13,0.8);
 
 }
@@ -786,6 +791,12 @@ a.carousel-control {
 }
 
 .citizen-vote-value {
+	font-weight:900;
+	font-size: 1.4em;
+	color: white;
+}
+
+.citizen-vote-value-q {
 	font-weight:900;
 	font-size: 1.4em;
 	color: #990012;
