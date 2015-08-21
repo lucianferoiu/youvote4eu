@@ -23,6 +23,7 @@
 		vm.editPartner = editPartner;
 		vm.cancelEdit = cancelEdit;
 		vm.savePartner = savePartner;
+		vm.messagePartner = messagePartner;
 
 		//----------------------------------------------//
 
