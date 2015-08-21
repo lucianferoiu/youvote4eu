@@ -24,6 +24,7 @@
 		vm.cancelEdit = cancelEdit;
 		vm.savePartner = savePartner;
 		vm.messagePartner = messagePartner;
+		vm.banPartner = banPartner;
 
 		//----------------------------------------------//
 
@@ -103,9 +104,23 @@
 		function messagePartner() {
 			var pId = vm.ctx.crtPartner.id;
 			if (pId>0) {
-				var msg = vm.ctx.banReason;
+				var msg = vm.ctx.partnerMessage;
 				if (msg && msg.length>0) {
 					partnersDS.messagePartner(pId,msg,function () {
+							vm.ctx.messagePartnerDialog=false;
+						}, function () {
+							vm.ctx.messagePartnerDialog=false;
+					});
+				}
+			}
+		}
+
+		function banPartner() {
+			var pId = vm.ctx.crtPartner.id;
+			if (pId>0) {
+				var msg = vm.ctx.banReason;
+				if (msg && msg.length>0) {
+					partnersDS.banPartner(pId,msg,function () {
 							vm.ctx.banReason='';
 							vm.ctx.banPartnerDialog=false;
 						}, function () {
@@ -115,6 +130,7 @@
 				}
 			}
 		}
+
 		//----------------------------------------------//
 
 		function swapPanel(panel) {
