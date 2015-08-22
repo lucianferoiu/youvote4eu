@@ -12,8 +12,9 @@
 				countPartners:countPartners,
 				getPartners: getPartners,
 				getPartnerById: getPartnerById,
-				savePartner: savePartner
-
+				savePartner: savePartner,
+				messagePartner: messagePartner,
+				banPartner: banPartner
 			};
 		//----------------------------------------------//
 
