@@ -121,11 +121,11 @@
 				var msg = vm.ctx.banReason;
 				if (msg && msg.length>0) {
 					partnersDS.banPartner(pId,msg,function () {
-							vm.ctx.banReason='';
 							vm.ctx.banPartnerDialog=false;
+							vm.ctx.banReason='';
 						}, function () {
-							vm.ctx.banReason='';
 							vm.ctx.banPartnerDialog=false;
+							vm.ctx.banReason='';
 					});
 				}
 			}
