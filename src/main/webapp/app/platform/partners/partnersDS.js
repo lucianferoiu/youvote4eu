@@ -64,7 +64,6 @@
 					});
 			}
 
-
 			function savePartner(partner,onSuccess,onError) {
 				var cfg = {};
 				$http.post('/platform/partners/save',partner,cfg)
