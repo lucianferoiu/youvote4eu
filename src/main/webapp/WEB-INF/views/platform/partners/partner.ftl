@@ -171,7 +171,7 @@
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+	</div><!-- /.modal ban -->
 
 	<div class="modal fade" id="messagePartnerModal" ng-class="{'in':vm.ctx.messagePartnerDialog==true}">
 	  <div class="modal-dialog">
@@ -198,7 +198,7 @@
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+	</div><!-- /.modal message -->
 
 
 </div>

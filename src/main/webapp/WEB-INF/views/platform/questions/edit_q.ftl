@@ -435,9 +435,8 @@
 						</div>
 
 						<br/>
-
 						<h4><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp; Statistics</h4>
-
+						<!-- TODO -->
 					</div>
 				</div>
 				<div class="modal-footer">
