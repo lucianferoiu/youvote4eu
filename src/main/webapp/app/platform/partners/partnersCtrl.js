@@ -101,6 +101,7 @@
 
 		//----------------------------------------------//
 
+
 		function messagePartner() {
 			var pId = vm.ctx.crtPartner.id;
 			if (pId>0) {
@@ -114,6 +115,7 @@
 				}
 			}
 		}
+
 
 		function banPartner() {
 			var pId = vm.ctx.crtPartner.id;

@@ -18,6 +18,7 @@
 			};
 		//----------------------------------------------//
 
+
 			function getPartners(page,sort,onSuccess,onError) {
 				var cfg = {
 					params: {
@@ -36,9 +37,11 @@
 					});
 			}
 
+
 			function countPages() {
 				return Math.ceil(ds.total/ds.PAGE_SIZE);
 			}
+
 
 			function countPartners() {
 				return Math.max(ds.total,0);
@@ -72,6 +75,8 @@
 						onError(data);
 					});
 				}
+
+					//----------------------------------------------//
 
 				function messagePartner(partnerId,message,onSuccess,onError) {
 					var cfg = {
