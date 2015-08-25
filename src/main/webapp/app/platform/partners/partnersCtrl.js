@@ -4,6 +4,7 @@
 
 	function PartnersCtrl(partnersDS) {
 		var vm = this;
+
 		//----------------------------------------------//
 		vm.ctx = {
 			panel: 'list',
