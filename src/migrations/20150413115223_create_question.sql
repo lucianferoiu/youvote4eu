@@ -31,12 +31,12 @@ CREATE TABLE IF NOT EXISTS questions (
 	parliament_vote_tally NUMERIC(6,3),							/* YES vote percentage of the European Parliament vote (if public agenda topic) */
 	parliament_voted_on TIMESTAMP WITH TIME ZONE,		/* the EP decision was made on the specified datetime */
 	parliament_vote_link VARCHAR(1024),							/* the EP decision is available at this link */
-	council_vote_tally NUMERIC(6,3),							/* YES vote percentage of the European Council vote (if public agenda topic) */
-	council_voted_on TIMESTAMP WITH TIME ZONE,		/* the Council decision was made on the specified datetime */
-	council_vote_link VARCHAR(1024),							/* the Council decision is available at this link */
-	commission_decision BOOLEAN,									/* YES/NO decision of the European Commission (if public agenda topic) */
+	council_vote_tally NUMERIC(6,3),								/* YES vote percentage of the European Council vote (if public agenda topic) */
+	council_voted_on TIMESTAMP WITH TIME ZONE,			/* the Council decision was made on the specified datetime */
+	council_vote_link VARCHAR(1024),								/* the Council decision is available at this link */
+	commission_decision BOOLEAN,										/* YES/NO decision of the European Commission (if public agenda topic) */
 	commission_decided_on TIMESTAMP WITH TIME ZONE,	/* the Commission decision was made on the specified datetime */
-	commission_decision_link VARCHAR(1024),			/* the Commission decision is available at this link */
+	commission_decision_link VARCHAR(1024),					/* the Commission decision is available at this link */
 
 	/* - */
 	created_at TIMESTAMP WITH TIME ZONE,
