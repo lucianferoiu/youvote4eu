@@ -26,15 +26,15 @@ CREATE TABLE IF NOT EXISTS questions (
 	twitter_hashtag VARCHAR(64),					/* dedicated Twitter #hashtag */
 	correspondence_email VARCHAR(120),		/* dedicated email addres for correspondence on this topic */
 	/* - */
-	is_public_agenda BOOLEAN,						/* is this question a public-agenda topic (i.e. EU Parliament, etc.)? or an ancilary question */
-	official_vote_tally NUMERIC(6,3),				/* summary of the YES votes percentage of the official/institutional vote (if public agenda topic) */
-	parliament_vote_tally NUMERIC(6,3),				/* YES vote percentage of the European Parliament vote (if public agenda topic) */
-	parliament_voted_on TIMESTAMP WITH TIME ZONE,	/* the EP decision was made on the specified datetime */
-	parliament_vote_link VARCHAR(1024),				/* the EP decision is available at this link */
-	council_vote_tally NUMERIC(6,3),				/* YES vote percentage of the European Council vote (if public agenda topic) */
+	is_public_agenda BOOLEAN,							/* is this question a public-agenda topic (i.e. EU Parliament, etc.)? or an ancilary question */
+	official_vote_tally NUMERIC(6,3),			/* summary of the YES votes percentage of the official/institutional vote (if public agenda topic) */
+	parliament_vote_tally NUMERIC(6,3),							/* YES vote percentage of the European Parliament vote (if public agenda topic) */
+	parliament_voted_on TIMESTAMP WITH TIME ZONE,		/* the EP decision was made on the specified datetime */
+	parliament_vote_link VARCHAR(1024),							/* the EP decision is available at this link */
+	council_vote_tally NUMERIC(6,3),							/* YES vote percentage of the European Council vote (if public agenda topic) */
 	council_voted_on TIMESTAMP WITH TIME ZONE,		/* the Council decision was made on the specified datetime */
-	council_vote_link VARCHAR(1024),				/* the Council decision is available at this link */
-	commission_decision BOOLEAN,					/* YES/NO decision of the European Commission (if public agenda topic) */
+	council_vote_link VARCHAR(1024),							/* the Council decision is available at this link */
+	commission_decision BOOLEAN,									/* YES/NO decision of the European Commission (if public agenda topic) */
 	commission_decided_on TIMESTAMP WITH TIME ZONE,	/* the Commission decision was made on the specified datetime */
 	commission_decision_link VARCHAR(1024),			/* the Commission decision is available at this link */
 
