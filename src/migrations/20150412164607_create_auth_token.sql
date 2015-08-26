@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS tokens (
 	id BIGSERIAL PRIMARY KEY,
 	/* - */
-	citizen_id BIGINT NOT NULL,						/* the citizen tracked by this token - add FK constraint here */
+	citizen_id BIGINT NOT NULL,							/* the citizen tracked by this token - add FK constraint here */
 	token VARCHAR(250) NOT NULL,						/* a randomly-generated unique string (should be strong enough to avoid collision) */
 	validated BOOLEAN DEFAULT false,				/* the token was validated (i.e. via email) as belonging to a real user */
 	/* - */
