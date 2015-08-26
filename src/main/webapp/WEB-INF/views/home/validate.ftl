@@ -19,12 +19,12 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="citizen-country" class="col-xs-4">Your Country</label> 
+							<label for="citizen-country" class="col-xs-4">Your Country</label>
 							<select class="col-xs-8 selectpicker show-tick" name="citizen-country" data-size="7" data-live-search="true" data-show-subtext="true">
 								[#list euCountries as c] <option value="${c.code}" data-content="<img src='/img/blank.gif' class='flag flag-${c.code}'/>&nbsp;<span class='text-muted'>[${c.code?upper_case}]</span>&nbsp;&nbsp;${c.label} " [#if (c.code==guessedCountry)] selected="selected" [/#if] data-subtext="${c.code?upper_case}">${c.label}</option>[/#list]
 							</select>
 						</div>
-						
+
 						<div class="col-xs-12">
 							<p  style="color:#990012;">
 								Before your votes are counted, we need you to validate your <em>anonymous</em> identity via email.
@@ -51,16 +51,6 @@
 						</div>
 					</form>
 
-						[#-- <a data-toggle="collapse" href="#terms-of-use2" aria-expanded="false" aria-controls="terms-of-use2">terms of use</a>
-						<div class="collapse" id="terms-of-use2">
-							<div class="col-sm-12">
-								<h4>ss</h4>
-								<p>
-									sd
-								</p>
-
-							</div>
-						</div> --]
 				</div>
 			</div><!-- modal body -->
 		</div><!-- /.modal-content -->
@@ -88,6 +78,3 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
