@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS partners (
 	can_add_question BOOLEAN DEFAULT true,					/* adding a question on whatever topic */
 	can_edit_own_question BOOLEAN DEFAULT true,			/* in case we need to restrict access to only questions that were added by each partner */
 	can_edit_any_question BOOLEAN DEFAULT false,		/* accredited editor */
-	can_delete_any_question BOOLEAN DEFAULT false,
-	can_archive_any_question BOOLEAN DEFAULT false,
+	can_delete_any_question BOOLEAN DEFAULT false,	/* accredited censor */
+	can_archive_any_question BOOLEAN DEFAULT false, /* accredited archivist */
 	can_change_translation BOOLEAN DEFAULT false,		/* this should be combined (AND-ed) with the edit any/own questions */
 	can_approve_question BOOLEAN DEFAULT false,			/* for questions vetting/approval */
-	can_view_statistics BOOLEAN DEFAULT true,
+	can_view_statistics BOOLEAN DEFAULT true,				/* consult statistics */
 	can_manage_partners BOOLEAN DEFAULT false,			/* sysadmin-like */
 	/* - */
 	created_at TIMESTAMP WITH TIME ZONE,
