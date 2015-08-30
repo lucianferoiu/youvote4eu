@@ -1,8 +1,6 @@
 [#ftl]
 <html>
 	<body>
-		<p>
-		</p>
 		<div class="content">
 			<p>
 				Hello and thank you for registering to <i>YouVoteForEurope</i>!
