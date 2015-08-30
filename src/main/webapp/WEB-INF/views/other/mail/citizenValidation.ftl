@@ -1,8 +1,6 @@
 [#ftl]
 <html>
 	<body>
-		<p>
-		</p>
 		<div class="content">
 			<p>
 				Hello and thank you for your civic attitude to vote <i>YouVoteForEurope</i>!
@@ -18,7 +16,7 @@
 				in the address bar of your browser.
 			</p>
 			<p>
-				Why do we need to do this? We try to limit enthusiastic citizens to vote multiple times.. But do not worry, safeguarding your privacy is our priority and in order to protect your identity, we don't store your personal details anywhere - as soon as we sent you this email, we already forgot your address. 
+				Why do we need to do this? We try to limit enthusiastic citizens to vote multiple times.. But do not worry, safeguarding your privacy is our priority and in order to protect your identity, we don't store your personal details anywhere - as soon as we sent you this email, we already forgot your address.
 				<br/>
 				If you are unsure about how this works or you'd like more details, please visit our <i>Help</i> or <i>Privacy</i> pages.
 			</p>
