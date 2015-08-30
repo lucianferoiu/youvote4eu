@@ -200,5 +200,4 @@
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal message -->
 
-
 </div>

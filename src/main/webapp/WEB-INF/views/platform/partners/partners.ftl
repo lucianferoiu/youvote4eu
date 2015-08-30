@@ -59,6 +59,7 @@
 					</th>
 				</tr>
 			</thead>
+
 			<tbody>
 				<tr class="open-partner" ng-repeat="p in vm.partners" ng-click="vm.editPartner(p.id)" ng-class="{'bg-danger':!p.enabled}">
 					<td>{{p.email}} <small class="text-uppercase text-muted" ng-show="p.name!==null && p.name.length>1"> &nbsp;&nbsp;&nbsp;[ {{p.name}} ]</small></td>
