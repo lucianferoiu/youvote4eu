@@ -1,13 +1,11 @@
 [#ftl]
 <html>
 	<body>
-		<p>
-		</p>
 		<div class="content">
 			<p>
 				Hello !
 				<br/>
-				Someone endorsed you as Partner for the <i>YouVoteForEurope</i> website! 
+				Someone endorsed you as Partner for the <i>YouVoteForEurope</i> website!
 			</p>
 			<p>
 				You have been registered and you may readily add questions and manage translations as soon as you finish the registration process. <a href="${url}">Please click here</a> and choose a password so you can authenticate yourself in the future.
