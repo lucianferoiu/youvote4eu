@@ -1,8 +1,6 @@
 [#ftl]
 <html>
 	<body>
-		<p>
-		</p>
 		<div class="content">
 			<p>
 				Hello and thank you for coming back to <i>YouVoteForEurope</i>!
@@ -11,8 +9,8 @@
 				You asked us to reset your password and you provided a new one. But to finalize the process, you need to confirm to us the reset.
 			</p>
 			<p>
-				If it was not you who attempted the reset, please <strong>do not click the link bellow</strong>! 
-				It may mean someone tryed to hijack your account! 
+				If it was not you who attempted the reset, please <strong>do not click the link bellow</strong>!
+				It may mean someone tryed to hijack your account!
 				Please go to <em>YouVoteForEurope</em> and <strong>re-reset</strong> the password yourself, because the old one may be compromised.
 				<br/>
 				If this suspicious password reset happends again, please contact us so we can investigate...
