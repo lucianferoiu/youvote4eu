@@ -11,9 +11,9 @@
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="">
 				<div class="">
-					<span class="text-primary">[ {{q.id|pad:3}} ] </span> 
+					<span class="text-primary">[ {{q.id|pad:3}} ] </span>
 					&nbsp;&nbsp;
-					<span class="glyphicon glyphicon-star-empty text-primary"></span> 
+					<span class="glyphicon glyphicon-star-empty text-primary"></span>
 					&nbsp;&nbsp;
 					<strong class="leading">{{q.title}}</strong>
 				</div>
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 
 	<!-- pagination -->
 	<div class="text-center">
@@ -39,5 +39,5 @@
 			</li>
 		</ul>
 	</div>
-	
+
 </div>

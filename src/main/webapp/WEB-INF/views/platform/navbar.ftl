@@ -11,12 +11,13 @@
 			</button>
 			<a class="navbar-brand" href="${context_path}/platform/home">[@yield to="title"/]</a>
 		</div>
+
 		<!-- authenticated partner -->
 		<div id="navbar" class="navbar-collapse collapse pull-right">
 			<ul class="nav navbar-nav">
 				<li class="[#if crtMenu=='home']active[/#if]"><a href="${context_path}/platform/home">Home</a></li>
 				<li class="[#if crtMenu=='questions']active[/#if]"><a href="${context_path}/platform/questions">Questions</a></li>
-				<li class="[#if crtMenu=='statistics']active[/#if]"><a href="${context_path}/platform/statistics">Statistics</a></li>				
+				<li class="[#if crtMenu=='statistics']active[/#if]"><a href="${context_path}/platform/statistics">Statistics</a></li>
 				<li class="[#if crtMenu=='partners']active[/#if]"><a href="${context_path}/platform/partners">Partners</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello ${session.authPartner.email} <span class="caret"></span></a>
