@@ -160,8 +160,6 @@
 			var carouselIndicators = $('#qCarousel .carousel-indicators').first();
 			$('#qCarousel .carousel-inner .item').remove();
 			$(carouselIndicators).empty();
-			// var qTempl = $('#qContainerFlow .q').first().clone(true,true);
-
 			var idx=0;
 			var pagesCount=0;
 			var questionsInPageCount=0;
