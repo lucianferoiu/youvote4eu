@@ -18,6 +18,7 @@
 	});
 
 	function init() {
+
 		onResize();
 
 		$('#tallyPieChart').highcharts({

@@ -26,6 +26,7 @@
 	});
 
 	function init() {
+
 		onResize();
 
 		$.getJSON("/aq/tally/by/country/" + App.qId, function(data) {
