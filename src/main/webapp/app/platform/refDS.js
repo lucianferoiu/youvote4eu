@@ -29,7 +29,6 @@
 							var lang = data[i];
 							ds.cache.langs[lang.code] = lang;
 						}
-
 						if (fn) {
 							fn(data);
 						}
