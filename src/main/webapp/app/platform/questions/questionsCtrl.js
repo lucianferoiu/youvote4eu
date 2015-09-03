@@ -614,6 +614,7 @@
 
 		//----------------------------------------------//
 
+
 		function updateSlider(sel,fld) {
 			var tally = vm.crtQuestion[fld]>0?Math.floor(vm.crtQuestion[fld] * 100):0;
 			$(('#'+sel+'Results')).slider('setValue',tally);
