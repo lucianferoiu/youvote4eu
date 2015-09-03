@@ -2,6 +2,7 @@
 	angular.module('app.questions')
 		.controller('QuestionsCtrl',['questionsDS','refDS',QuestionsCtrl]);
 
+
 	function QuestionsCtrl(questionsDS,refDS) {
 
 		//setup view model
@@ -613,7 +614,6 @@
 		}
 
 		//----------------------------------------------//
-
 
 		function updateSlider(sel,fld) {
 			var tally = vm.crtQuestion[fld]>0?Math.floor(vm.crtQuestion[fld] * 100):0;
