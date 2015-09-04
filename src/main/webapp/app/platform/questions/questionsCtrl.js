@@ -2,7 +2,6 @@
 	angular.module('app.questions')
 		.controller('QuestionsCtrl',['questionsDS','refDS',QuestionsCtrl]);
 
-
 	function QuestionsCtrl(questionsDS,refDS) {
 
 		//setup view model
