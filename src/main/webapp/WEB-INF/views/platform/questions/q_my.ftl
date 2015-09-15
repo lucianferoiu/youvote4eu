@@ -47,7 +47,6 @@
 		</div>
 	</div>
 
-
 	<!-- pagination -->
 	<div class="text-center">
 		<ul class="pagination">
