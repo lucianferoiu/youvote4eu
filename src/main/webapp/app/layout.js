@@ -67,7 +67,8 @@
 			var square = $(q).data('q-square');
 			var x=square[0]*qCellWidth;var y=square[1]*qCellHeight;var sz=square[2];
 			var w = sz*qCellWidth;var h = sz*qCellHeight;
-			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px').css('height',''+(h-15)+'px').css('width',''+(w-15)+'px').show();
+			$(q).css('top',''+(y+5)+'px').css('left',''+(x+5)+'px')
+				.css('height',''+(h-15)+'px').css('width',''+(w-15)+'px').show();
 		});
 
 		$('.aq').height((qGridWidth-20)/4);
@@ -159,8 +160,6 @@
 			var carouselIndicators = $('#qCarousel .carousel-indicators').first();
 			$('#qCarousel .carousel-inner .item').remove();
 			$(carouselIndicators).empty();
-			// var qTempl = $('#qContainerFlow .q').first().clone(true,true);
-
 			var idx=0;
 			var pagesCount=0;
 			var questionsInPageCount=0;
