@@ -8,7 +8,6 @@
 		<link rel="shortcut icon" href="${context_path}/img/favicon.ico" type="image/x-icon">
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/bootstrap.min.css' rel="stylesheet" media="screen">
-		[#-- <link href='${context_path}/css/bootstrap-theme.min.css' rel="stylesheet" media="screen"> --]
 		<!--
 		<link href='${context_path}/css/flatstrap.min.css' rel="stylesheet" media="screen">
 		<link href='${context_path}/css/flatstrap-theme.min.css' rel="stylesheet" media="screen">
