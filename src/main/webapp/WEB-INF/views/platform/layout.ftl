@@ -8,7 +8,6 @@
 		<link rel="shortcut icon" href="${context_path}/img/favicon.ico" type="image/x-icon">
 		<title>[@yield to="title"/]</title>
 		<link href='${context_path}/css/bootstrap.min.css' rel="stylesheet" media="screen">
-		-->
 		[@yield to="header_css"/]
 		<link href='${context_path}/css/youvote4eu.css' rel="stylesheet" media="screen">
 		<!--[if lt IE 9]>
