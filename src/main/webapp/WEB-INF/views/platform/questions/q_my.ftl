@@ -29,8 +29,6 @@
 		</div>
 
 
-
-
 		<div class="col-sm-10 q-text-cell" ng-click="vm.editQuestion(q.id)">
 			<div class="">
 				<div class="">
