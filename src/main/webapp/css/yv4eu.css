@@ -1,4 +1,4 @@
-
+/*************/
 /*** Setup ***/
 
 .hover {
@@ -6,8 +6,9 @@
 	-webkit-touch-callout: none;
 }
 
-
+/*************************/
 /*** Dropdown submenu ***/
+
 .dropdown-submenu {
 	position: relative;
 }
