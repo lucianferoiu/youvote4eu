@@ -29,14 +29,12 @@ public class MessageDigesterSpec extends JSpecSupport {
 
 	@Test
 	public void mdConsistency() {
-
 		String msg = "reference message that should be identically digested every time";
 		String digest = md.digest(msg, false);
 		log.debug("Digest of message \"{}\" is {}", msg, digest);
 		for (int i = 0; i < 12345; i++) {
 			a(digest).shouldBeEqual(md.digest(msg, false));
 		}
-
 	}
 
 }
