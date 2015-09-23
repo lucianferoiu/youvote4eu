@@ -20,3 +20,4 @@ INSERT INTO tags(text,created_at) VALUES('TTIP-Awareness Campain',current_timest
 INSERT INTO tags(text,created_at) VALUES('GMO',current_timestamp);
 INSERT INTO tags(text,created_at) VALUES('G8',current_timestamp);
 
+/**/
