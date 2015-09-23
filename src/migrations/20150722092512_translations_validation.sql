@@ -5,3 +5,5 @@ ALTER TABLE partners
 /* A flag marking a translation as verified */
 ALTER TABLE translations
 	ADD COLUMN verified BOOLEAN DEFAULT false;
+
+/**/
