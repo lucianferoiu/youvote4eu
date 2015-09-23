@@ -29,3 +29,4 @@ INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES(26,true,'Suomi/
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES(27,true,'Sverige','se','sv');
 INSERT INTO countries(id,is_eu,label,code,preferred_lang) VALUES(28,true,'United Kingdom','uk','en');
 
+/**/
