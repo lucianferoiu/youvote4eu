@@ -10,3 +10,5 @@ CREATE TABLE IF NOT EXISTS comments (
 	created_at TIMESTAMP WITH TIME ZONE,
 	updated_at TIMESTAMP WITH TIME ZONE
 );
+
+/**/
