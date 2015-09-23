@@ -7,3 +7,5 @@ ALTER TABLE partners
 
 ALTER TABLE partners
 	ADD COLUMN banned_by BIGINT;
+
+/**/
