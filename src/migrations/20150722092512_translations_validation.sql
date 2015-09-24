@@ -6,4 +6,4 @@ ALTER TABLE partners
 ALTER TABLE translations
 	ADD COLUMN verified BOOLEAN DEFAULT false;
 
-/**/
+/* - */
