@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS upvotes (
 	created_at TIMESTAMP WITH TIME ZONE,
 	updated_at TIMESTAMP WITH TIME ZONE
 );
-/**/
+/* - */
