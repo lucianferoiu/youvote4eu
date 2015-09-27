@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS questions_tags (
 	updated_at TIMESTAMP WITH TIME ZONE
 );
 
-/**/
+/* - */
