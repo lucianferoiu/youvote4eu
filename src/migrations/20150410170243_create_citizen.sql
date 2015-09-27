@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS citizens (
 	updated_at TIMESTAMP WITH TIME ZONE
 );
 
-/**/
+/* - */
