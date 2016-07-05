@@ -11,6 +11,7 @@
 		<jetty.scan-interval>10000</jetty.scan-interval>
 	</properties>
 
+
 	<!-- profiles for the different environments -->
 	<profiles>
 		<profile>
@@ -335,4 +336,5 @@
 		</pluginRepository> 
 		-->
 	</pluginRepositories>
+
 </project>
